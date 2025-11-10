@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "init": "^0.1.2",
+    "mongoose": "^8.19.3",
     "mongoosh": "^0.0.7"
   },
   "name": "backend",
@@ -10,7 +12,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "nodemon --exec ts-node src/app.ts",
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
@@ -23,5 +29,16 @@
   "bugs": {
     "url": "https://github.com/dhyyan/WORKORA/issues"
   },
-  "homepage": "https://github.com/dhyyan/WORKORA#readme"
+  "homepage": "https://github.com/dhyyan/WORKORA#readme",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^24.10.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
 }
