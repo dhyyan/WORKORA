@@ -4,5 +4,24 @@
     "express": "^5.1.0",
     "init": "^0.1.2",
     "mongoosh": "^0.0.7"
-  }
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhyyan/WORKORA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dhyyan/WORKORA/issues"
+  },
+  "homepage": "https://github.com/dhyyan/WORKORA#readme"
 }
