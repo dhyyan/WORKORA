@@ -1,0 +1,28 @@
+import NodeCache from "node-cache";
+import { IOtpService } from "../../domain/interface/serviceInterface/IOtpService";
+
+export class OtpSerrvice implements IOtpService {
+private _cache : NodeCache
+    constructor(){
+this._cache = new NodeCache({ stdTTL: 300 });
+    }
+    generateOtp(): string {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    async storeOtp(email: string, otp: string): Promise<void> {
+        this._cache.set(email,otp,300)
+    }
+
+    async verifyOtp(email: string, otp: string): Promise<boolean> {
+        console.log(email,otp,'emailotp')
+        const cachedOtp = this._cache.get(email);
+         console.log(cachedOtp,'cachedOtp')
+        if (cachedOtp && cachedOtp == otp) {
+            this._cache.del(email); 
+            console.log("otp matched")
+            return true;
+        }
+        return false;
+    }
+}
