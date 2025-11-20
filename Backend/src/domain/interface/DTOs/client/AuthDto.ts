@@ -50,3 +50,27 @@ export interface ForgotpasswordOutPutDto {
     success: boolean;
     message: string;
 }
+
+//forgotOtpPass
+
+export interface ForgotOtpPasswordInputDto {
+    email: string,
+    otp: string
+}
+
+export interface ForgotOtpPasswordOutPutDto {
+    success: boolean;
+    message: string;
+    isValid: boolean;
+}
+
+//changePassword
+
+export interface ChangePasswordIputDtos{
+    email:string,
+    password:string
+}
+
+export interface ChangePasswordOutPutDtos extends BaseClientOutputDtos{
+_id:string
+}

@@ -8,7 +8,7 @@ export class SendOtpForgotPasswordController {
     constructor(forgotPasswordUseCase: IForgotPasswordUseCase) {
         this._forgotPasswordUseCase = forgotPasswordUseCase
     }
-    async handleForgotPassword(req: Request, res: Response) {
+    async handleForgotPassword(req: Request, res: Response):Promise<void>{
         const { email } = req.body
         try {
             const exist = await this._forgotPasswordUseCase.excute({ email })
