@@ -33,6 +33,7 @@ export class ClientLogin {
                 status: createdUser.isBlocked,
                 googleVerification: createdUser.googleId
             }
+            console.log("logged success")
             res.status(HttpStatus.OK).json({ message: 'login success', user: clientField, accessToken })
         } catch (error) {
                 console.log('error while login client', error)
