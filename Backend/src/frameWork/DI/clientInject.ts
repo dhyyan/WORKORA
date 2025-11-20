@@ -3,6 +3,7 @@ import { ClientLogin } from "../../adapters/controllers/client/clientLoginContro
 import { SendOtpForgotPasswordController } from "../../adapters/controllers/client/forgotPasswordController";
 import { SendOtpController } from "../../adapters/controllers/client/otpController";
 import { ClientRegisterController } from "../../adapters/controllers/client/registerController";
+import { ResendOtpController } from "../../adapters/controllers/client/resendOptController";
 import { VerifyOtpPassword } from "../../adapters/controllers/client/verifyOtpForgotPasswordController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
 import { ClientLogiUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
@@ -10,6 +11,7 @@ import { ChangePassowrdUseCase } from "../../useCase/client /auth/password/chang
 import { ForgotOtpPasswordUseCase } from "../../useCase/client /auth/password/forgotOtpPasswordUseCase";
 import { ForgotPasswordUseCase } from "../../useCase/client /auth/password/ForgotPasswordUseCase";
 import { RegisterClientUseCase } from "../../useCase/client /auth/register/clientRegisterUseCase";
+import { ResendOtpUseCase } from "../../useCase/client /auth/register/resendOtpUseCase";
 import { SendOtpClientUseCase } from "../../useCase/client /auth/register/sendOtpClientUseCase";
 import { VerifyOtpUseCase } from "../../useCase/client /auth/register/verifyOtpUseCase";
 import { EmailService } from "../service/emailService";
@@ -49,3 +51,8 @@ export const verifyOtpPassword= new VerifyOtpPassword(forgotOtpPasswordUseCase)
 
 const changePassowrdUseCase= new ChangePassowrdUseCase(clientRepository,hashPasswordService)
 export const newPasswordController=new NewPasswordController(changePassowrdUseCase)
+
+//resendOtp
+
+const resendOptUseCase= new ResendOtpUseCase(clientRepository,otpService,emailService)
+export const resendOtpController=new ResendOtpController(resendOptUseCase)

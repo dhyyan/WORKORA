@@ -24,8 +24,6 @@ export interface ClientLoginOutputdDto {
 }
 
 
-
-
 //signUp
 
 export interface ClientRegisterInputDto {
@@ -73,4 +71,13 @@ export interface ChangePasswordIputDtos{
 
 export interface ChangePasswordOutPutDtos extends BaseClientOutputDtos{
 _id:string
+}
+
+//resendOtp
+export interface ResendOtpInputDto{
+    email:string
+}
+
+export interface ResendOtpOutPutDto{
+    succes:boolean
 }
