@@ -26,9 +26,15 @@ export class ClientRepository implements IClientRepository {
         return await clietModel.findById(_id)
     }
 
-    async changePassword(id: string | undefined, password: string): Promise<Client | null> {
-        return await clietModel.findByIdAndUpdate(id)
-    }
+    async changePassword(id: string | undefined, hashedPassword: string): Promise<Client | null> {
+    if (!id) return null;
+
+    return await clietModel.findByIdAndUpdate(
+        id,
+        { password: hashedPassword },
+        { new: true }
+    );
+}
     async updateProfile(email: string, phone: string, name: string, profile_image: string): Promise<Client | null> {
         return await clietModel.findOneAndUpdate({ email })
     }
