@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { clientLogin, clientRegisterController, newPasswordController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { clientLogin, clientRegisterController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
 
 export class UserRoutes {
     public UserRoutes: Router
@@ -38,7 +38,7 @@ export class UserRoutes {
         })
 
         this.UserRoutes.post('/resendOtp',(req:Request,res:Response)=>{
-            
+            resendOtpController.resendOtp(req,res)
         })
     }
 
