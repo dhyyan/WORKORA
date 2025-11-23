@@ -1,7 +1,7 @@
 import axios from "axios"
 import store from "../store/store"
 
-
+console.log("evvvvvv", import.meta.env.VITE_API_BASEURL)
 // import {clientAddToken} from "../store/slice/client/clientTokenSlice"
 
 const createAxiosInstance=(type:"client"|"freelancer"|"admin")=>{
