@@ -10,7 +10,7 @@ export const clientToken=createSlice({
     name: "clientToken",
     initialState,
     reducers:{
-        addToken:(state,action)=>{
+        clientAddToken:(state,action)=>{
             state.token=action.payload
         },
         removeToken:(state)=>{
@@ -20,5 +20,5 @@ export const clientToken=createSlice({
 
 })
 
-export const {addToken,removeToken}=clientToken.actions
+export const {clientAddToken,removeToken}=clientToken.actions
 export default clientToken.reducer
