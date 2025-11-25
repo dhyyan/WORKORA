@@ -12,7 +12,7 @@ export class RegisterClientUseCase implements IRegisterClientUseCase {
         this._hashPassword = hashPassword
     }
     async createClient(client: ClientRegisterInputDto): Promise<ClientRegisteroutputDto> {
-        const exist = await this._clientRepository.fidByEmail(client.email)
+        const exist = await this._clientRepository.findByEmail(client.email)
         if (exist) throw new Error("user in this email already exist")
         const { password, email, name, phone } = client
 

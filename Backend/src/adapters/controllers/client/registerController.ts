@@ -30,7 +30,7 @@ export class ClientRegisterController {
                 }
                 res.status(HttpStatus.CREATED).json({ message: "new user created successfully", resUser })
             } else {
-                res.status(HttpStatus.BAD_REQUEST).json({ error: 'Invalid OTP' });
+                res.status(HttpStatus.NOT_FOUND).json({ error: 'Invalid OTP',message:"Invalid OTP"});
             }
 
         } catch (error) {

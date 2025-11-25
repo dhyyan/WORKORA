@@ -14,7 +14,7 @@ export class ForgotOtpPasswordUseCase implements IForgotOtpPasswordUseCase {
     async valid(input: ForgotOtpPasswordInputDto): Promise<ForgotOtpPasswordOutPutDto> {
         const {email,otp}=input
 
-        const exist= await this._clientRepository.fidByEmail(email)
+        const exist= await this._clientRepository.findByEmail(email)
         if(!exist)throw new Error("User not found at this email")
             console.log("emai otp from frogotOtp",email,otp)
         const verifyOtp=await this._otpService.verifyOtp(email,otp)

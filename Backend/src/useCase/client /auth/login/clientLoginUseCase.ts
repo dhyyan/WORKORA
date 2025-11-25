@@ -27,7 +27,7 @@ export class ClientLogiUseCase implements IClientLoginUseCase {
             throw new Error("email and password are required");
         }
 
-        const user = await this._clientRepository.fidByEmail(email);
+        const user = await this._clientRepository.findByEmail(email);
         if (!user) {
             throw new Error("User with this email does not exist");
         }

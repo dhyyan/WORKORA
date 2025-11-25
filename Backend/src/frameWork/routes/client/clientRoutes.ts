@@ -16,7 +16,7 @@ export class UserRoutes {
             sendOtpController.sendOtp(req, res)
         })
 
-        this.UserRoutes.post("/verifyOtp", (req: Request, res: Response) => {
+        this.UserRoutes.post("/verifyotp", (req: Request, res: Response) => {
             clientRegisterController.register(req, res)
         })
 
@@ -29,7 +29,7 @@ export class UserRoutes {
             sendOtpForgotPasswordController.handleForgotPassword(req, res)
         })
 
-        this.UserRoutes.post('/forgotpassword/verifyOtp',(req:Request,res:Response)=>{
+        this.UserRoutes.post('/forgotpassword/verifyotp',(req:Request,res:Response)=>{
             verifyOtpPassword.verifyOtp(req,res)
         })
 
@@ -37,7 +37,7 @@ export class UserRoutes {
             newPasswordController.updatePassword(req,res)
         })
 
-        this.UserRoutes.post('/resendOtp',(req:Request,res:Response)=>{
+        this.UserRoutes.post('/resendotp',(req:Request,res:Response)=>{
             resendOtpController.resendOtp(req,res)
         })
     }

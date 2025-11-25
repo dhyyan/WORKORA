@@ -3,8 +3,8 @@ export interface Client {
     name: string;
     email: string;
     password: string;
-    role:string
     phone?: string;
+    role:string
     profileImage?: string;
     isBlocked?: boolean;
     isSubscribed?: boolean;
