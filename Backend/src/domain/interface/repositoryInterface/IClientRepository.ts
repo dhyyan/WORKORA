@@ -4,7 +4,6 @@ import { IBaseRepository } from "./IBaseRepository";
 export interface IClientRepository {
     create(data: Client): Promise<Client | null>
     deleteById(id: string): Promise<Client | null>
-    fidByEmail(email: string): Promise<Client | null>
     findByEmail(email: string): Promise<Client | null>
     findById(_id: string): Promise<Client | null>
     // googleLogin(user:Client):Promise<Client|null>

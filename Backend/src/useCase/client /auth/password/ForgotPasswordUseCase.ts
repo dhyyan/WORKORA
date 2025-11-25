@@ -18,7 +18,7 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase{
     async excute(input: ForgotPasswordInputDto): Promise<ForgotpasswordOutPutDto> {
         const {email}=input
 
-        const exist=await this._clientRepository.fidByEmail(email)
+        const exist=await this._clientRepository.findByEmail(email)
         if(!exist)throw new Error("user in this email not found")
             const otp = await this._otpService.generateOtp()
         console.log("forgot Otp",otp)

@@ -3,13 +3,7 @@ import { IClientRepository } from "../../../domain/interface/repositoryInterface
 import { clietModel } from "../../../frameWork/database/models/client.model";
 
 export class ClientRepository implements IClientRepository {
-    findByEmail(email: string): Promise<Client | null> {
-        throw new Error("Method not implemented.");
-    }
 
-    // constructor(){
-    //     super(clietModel);
-    // }
     async create(data: Client): Promise<Client | null> {
         return await clietModel.create(data)
     }
@@ -18,7 +12,7 @@ export class ClientRepository implements IClientRepository {
         return await clietModel.findByIdAndDelete(id)
     }
 
-    async fidByEmail(email: string): Promise<Client | null> {
+    async findByEmail(email: string): Promise<Client | null> {
         return await clietModel.findOne({ email })
     }
 
@@ -27,14 +21,14 @@ export class ClientRepository implements IClientRepository {
     }
 
     async changePassword(id: string | undefined, hashedPassword: string): Promise<Client | null> {
-    if (!id) return null;
+        if (!id) return null;
 
-    return await clietModel.findByIdAndUpdate(
-        id,
-        { password: hashedPassword },
-        { new: true }
-    );
-}
+        return await clietModel.findByIdAndUpdate(
+            id,
+            { password: hashedPassword },
+            { new: true }
+        );
+    }
     async updateProfile(email: string, phone: string, name: string, profile_image: string): Promise<Client | null> {
         return await clietModel.findOneAndUpdate({ email })
     }
