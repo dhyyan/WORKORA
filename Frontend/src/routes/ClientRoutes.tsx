@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom"
-import Login from "../pages/auth/Login"
-import SignUp from "../pages/auth/SignUp";
+import Login from "../pages/client/auth/Login";
+import SignUp from "../pages/client/auth/SignUp";
+import ForgotPass from "../pages/client/auth/ForgotPass";
+
 
 
 export function ClientRoutes() {
@@ -9,6 +11,7 @@ export function ClientRoutes() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp/>}/>
+        <Route path="/forgotpassword" element={<ForgotPass/>}/>
       </Routes>
     </>
   );

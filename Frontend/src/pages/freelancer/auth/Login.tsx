@@ -1,17 +1,17 @@
 import { LogInIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import type { LoginFormInputs } from '../../types/client/auth/Tlogin';
-import { clientLoginService } from '../../service/client/authService';
-
 import { motion, type Variants } from 'framer-motion';
 import { useDispatch } from 'react-redux';
-import { addClient } from '../../store/slice/client/clientSlice';
+import type { LoginFormInputs } from '../../../types/auth/Tlogin';
+// import { clientLoginService } from '../../../service/client/authService';
+// import { addClient } from '../../../store/slice/client/clientSlice';
+
 
 const Login = () => {
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const navigate = useNavigate()
-  const dispatch=useDispatch()
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
@@ -97,7 +97,7 @@ const Login = () => {
             Welcome Back to Workora
           </h2>
           <p className="text-xl opacity-90 leading-relaxed">
-            Manage your projects, hire top freelancers, and grow your business — all in one place.
+            Manage your projects, explore new opportunites — all in one place.
           </p>
         </motion.div>
 
@@ -107,7 +107,7 @@ const Login = () => {
           transition={{ delay: 0.8 }}
           className="text-sm opacity-80"
         >
-          © 2024 Workora. All rights reserved.
+          © 2026 Workora. All rights reserved.
         </motion.p>
       </motion.div>
 
@@ -136,8 +136,8 @@ const Login = () => {
             className="bg-white rounded-2xl shadow-xl p-8 space-y-8"
           >
             <motion.div variants={itemVariants} className="space-y-2">
-              <h2 className="text-3xl font-bold text-gray-900">Login to Your Account</h2>
-              <p className="text-gray-600">Access your Workora client dashboard.</p>
+              <h2 className="text-3xl font-bold text-gray-900">Freelancer Login</h2>
+              <p className="text-gray-600">Sign in to access your dashboard, projects, and. message</p>
             </motion.div>
 
             <motion.form
@@ -204,7 +204,7 @@ const Login = () => {
 
             <motion.p variants={itemVariants} className="text-center text-gray-600">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-green-600 hover:text-green-700 font-semibold">
+              <Link to="/freelancer/signup" className="text-green-600 hover:text-green-700 font-semibold">
                 Sign Up
               </Link>
             </motion.p>

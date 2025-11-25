@@ -1,14 +1,25 @@
 import { BuildingIcon, EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import type { ISignUp } from '../../types/client/auth/ISignUp';
-import { useNavigate } from 'react-router-dom';
-import { clientSignUpService } from '../../service/client/authService';
+import type { ISignUp } from '../../../types/auth/ISignUp';
+// import { useNavigate } from 'react-router-dom';
+
+
+import { Link } from 'react-router-dom';
+import OtpModal from '../../../components/modal/client/OtpModal';
+import { freelancerSignUp } from '../../../service/freelancer/authService';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const navigate = useNavigate()
+    const [isOpen, setOpen] = useState(false)
+    const [data, setData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: ""
+    })
     const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     const {
@@ -19,12 +30,13 @@ const SignUp = () => {
     } = useForm<ISignUp>();
 
     const onSubmit: SubmitHandler<ISignUp> = async (data) => {
-        console.log("login datas", data);
-        const response = await clientSignUpService(data);
-        console.log(response);
-        navigate('/')
-        console.log("work")
+        console.log("sign Up data", data);
+        setData({ ...data })
+        const response = await freelancerSignUp(data);
+        console.log("otp page ", response);
+        setOpen(true)
     };
+
 
     return (
         <div className="min-h-screen w-full flex">
@@ -35,11 +47,12 @@ const SignUp = () => {
                 </div>
                 <div className="text-white max-w-md">
                     <h2 className="text-4xl font-bold mb-6 leading-tight">
-                        Start Hiring Top Freelancers Today
+                        Start Your Freelance Journey Today
                     </h2>
                     <p className="text-lg text-white/90">
-                        Join thousands of clients who use Workora to find, hire, and manage
-                        the best talent for their projects.
+                        Join thousands of freelancers and clients who trust
+                        Workora to connect, collaborate, and grow their
+                        businesses.
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -59,10 +72,11 @@ const SignUp = () => {
                     <div className="bg-white rounded-2xl shadow-lg p-8">
                         <div className="mb-8">
                             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                                Create Your Client Account
+                                Create Your Frellancer Account
                             </h2>
                             <p className="text-gray-600">
-                                Join Workora and start building your dream team today.
+                                Join Workora and start your freelance journey today.
+
                             </p>
                         </div>
                         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
@@ -259,15 +273,15 @@ const SignUp = () => {
                                 {isSubmitting ? "Logging in..." : "Sign Up"}
                             </button>
                             {/* Login Link */}
-                            <p className="text-center text-gray-600 text-sm">
-                                Already have an account?{' '}
-                                <a
-                                    href="#"
-                                    className="text-green-600 font-semibold hover:text-green-700"
-                                >
-                                    Login
-                                </a>
-                            </p>
+
+                            <Link to="/frellancer/login" className="text-green-600 hover:text-green-700 font-semibold">
+
+
+                                <p className="text-center text-gray-600 text-sm">
+                                    Already have an account?{' '}
+                                    <h4 className="text-green-600 font-semibold hover:text-green-700">Login</h4>
+                                </p>
+                            </Link>
                             {/* Divider */}
                             <div className="relative my-6">
                                 <div className="absolute inset-0 flex items-center">
@@ -308,6 +322,7 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
+            {isOpen ? <OtpModal data={data} /> : <></>}
         </div>
     )
 }
