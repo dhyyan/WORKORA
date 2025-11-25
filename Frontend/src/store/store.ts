@@ -1,0 +1,15 @@
+import { configureStore } from "@reduxjs/toolkit";
+import clientReducer from "./slice/client/clientSlice"
+import clientTokenReducer from "./slice/client/clientTokenSlice"
+const store= configureStore({
+    reducer:{
+        clietnAuth:clientReducer,
+        clientToken:clientTokenReducer
+
+    }
+})
+
+export default store
+// types
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
