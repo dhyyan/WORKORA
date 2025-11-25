@@ -77,9 +77,12 @@ export function Hero() {
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-600 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           </Link>
+
+          <Link to="/freelancer/login">
             <button className="group px-8 py-4 bg-white text-teal-600 border-2 border-teal-500 rounded-xl font-semibold text-lg hover:bg-teal-50 transition-all duration-300 hover:scale-105 w-full sm:w-auto">
               I'm a Freelancer
             </button>
+          </Link>
           </motion.div>
           {/* Trust indicators */}
           <motion.div initial={{
