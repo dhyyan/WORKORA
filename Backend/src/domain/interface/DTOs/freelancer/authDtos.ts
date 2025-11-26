@@ -2,8 +2,8 @@ export interface BaseFreelancerOutputDtos {
     _id?: string,
     name: string,
     email: string,
-    phone?: string
-    role:"freelancer"
+    phone?: string,
+    role:"freelancer",
     gitHubUrl?: string,
     linkedInUrl?: string,
     skills?: string[],
@@ -76,3 +76,36 @@ export interface FreelancerResendOtpInputDtos{
 export interface FreelancerResendOtpOutputDtos{
     success:boolean
 }
+
+//frogot password
+export interface FreelancerForgotPassInputDtos{
+    email:string
+}
+
+export interface FreelancerForgotPassOutputDtos{
+   success: boolean;
+}
+
+//forgot Pass otp check
+
+export interface FreelancerForgotPassOtpInputDtos{
+    email:string,
+    otp:string
+}
+
+export interface FreelancerForgotPassOtpOutputDtos{
+   success: boolean;
+}
+
+//changePass
+
+export interface FreelancerChangePassInputDtos{
+    email:string,
+    password:string
+}
+
+export interface FreelancerChangePassOutputDtos extends BaseFreelancerOutputDtos{
+   _id:string
+}
+
+

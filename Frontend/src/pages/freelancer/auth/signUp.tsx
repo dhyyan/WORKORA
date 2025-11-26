@@ -5,9 +5,10 @@ import type { ISignUp } from '../../../types/auth/ISignUp';
 // import { useNavigate } from 'react-router-dom';
 
 
-import { Link } from 'react-router-dom';
-import OtpModal from '../../../components/modal/client/OtpModal';
-import { freelancerSignUp } from '../../../service/freelancer/authService';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { freelacerOtpService, freelancerSignUp } from '../../../service/freelancer/authService';
+import OtpModal from '../../../components/modal/freelancer/OtpModal';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false)
@@ -20,6 +21,8 @@ const SignUp = () => {
         password: "",
         confirmPassword: ""
     })
+    const navigate=useNavigate()
+
     const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     const {
@@ -37,6 +40,21 @@ const SignUp = () => {
         setOpen(true)
     };
 
+
+    const handleSubmitOtp=async(otp:string)=>{
+        if (otp.length !== 6) return
+                    const val = {
+                      name: data.name,
+                      email: data.email,
+                      phone: data.phone,
+                      password: data.password,
+                      otp
+                    }
+                    const response = await freelacerOtpService(val)
+                
+                    navigate('/freelancer/login')
+                    console.log("otp respone", response)
+    }
 
     return (
         <div className="min-h-screen w-full flex">
@@ -322,7 +340,7 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
-            {isOpen ? <OtpModal data={data} /> : <></>}
+            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp} /> : <></>}
         </div>
     )
 }

@@ -4,6 +4,9 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { motion, type Variants } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import type { LoginFormInputs } from '../../../types/auth/Tlogin';
+import { freelancerLogin } from '../../../service/freelancer/authService';
+import { addFreelancer } from '../../../store/slice/freelancer/FreelanceSlice';
+import { freelancerAddToken } from '../../../store/slice/freelancer/FreelancerToken';
 // import { clientLoginService } from '../../../service/client/authService';
 // import { addClient } from '../../../store/slice/client/clientSlice';
 
@@ -20,9 +23,11 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     console.log("login datas", data);
-    const response = await clientLoginService(data);
-    console.log(response);
-    dispatch(addClient(response))
+    const response = await freelancerLogin(data);
+    console.log("freelancer login success",response.user);
+    dispatch(addFreelancer(response.user))
+    dispatch(freelancerAddToken(response.accessToken))
+
     navigate('/')
     console.log("work")
   };
@@ -185,9 +190,12 @@ const Login = () => {
                 variants={itemVariants}
                 whileHover={{ x: 4 }}
                 className="block text-right text-sm text-green-600 hover:text-green-700 font-medium"
-              >
-                Forgot Password?
-              </motion.a>
+                >
+                
+                <Link to="/freelancer/forgotpassword">
+                  Forgot Password?
+                </Link>
+                </motion.a>
 
               <motion.button
                 variants={itemVariants}
