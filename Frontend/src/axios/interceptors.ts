@@ -17,6 +17,8 @@ const createAxiosInstance=(type:"client"|"freelancer"|"admin")=>{
             let token=null
             if(type=="client"){
                 token=store.getState().clientToken.token
+            }else if(type=="freelancer"){
+                token=store.getState().freelancerToken.token
             }
 
             if(token){

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import type { LoginFormInputs } from '../../../types/auth/Tlogin';
 import { clientLoginService } from '../../../service/client/authService';
 import { addClient } from '../../../store/slice/client/clientSlice';
+import { clientAddToken } from '../../../store/slice/client/clientTokenSlice';
 
 
 const Login = () => {
@@ -22,7 +23,9 @@ const Login = () => {
     console.log("login datas", data);
     const response = await clientLoginService(data);
     console.log(response);
-    dispatch(addClient(response))
+    dispatch(addClient(response.user))
+    dispatch(clientAddToken(response.accessToken))
+
     navigate('/')
     console.log("work")
   };

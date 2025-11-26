@@ -1,54 +1,17 @@
-import { useState, type FormEvent } from "react"
-import OtpModal from "../../../components/modal/freelancer/OtpModal"
-import { freelacerForgotOtpVerify, freelancerforgotpass, freelecrForgotNewPass } from "../../../service/freelancer/authService"
-import NewPassword from "../../../components/modal/freelancer/NewPassModal"
-import { useNavigate } from "react-router-dom"
+import { useState } from 'react'
 
-const ForgotPass = () => {
 
-    const [email,setEmail]=useState("")
-    const [isOtp,setIsOtp]=useState(false)
-    const [isPass,setIsPass]=useState(false)
-    const navigate=useNavigate()
+type NewPassModalProps = {
+  handleSubmitNewPass: (password: string, confirmPassword: string) => void;
+};
+const NewPassword = ({handleSubmitNewPass}:NewPassModalProps) => {
 
-    const handleSubmit=async(e:FormEvent)=>{
-        e.preventDefault()
-        const response=await freelancerforgotpass({email})
-        console.log('response :>> ', response);
-        setIsOtp(true)
-    }
+    const [password,setPassword]=useState("")
+    const [confirmPassword,setConfirmPassword]=useState("")
 
-    const handleSubmitOtp=async(otp:string)=>{
-        const val={
-            email,
-            otp
-        }
-        const response=await freelacerForgotOtpVerify(val)
-        console.log('response :>> ', response);
-        setIsPass(true)
-        setIsOtp(false)
-
-    }
-
-    const handleSubmitNewPass=async(password:string,confirmPassword:string)=>{
-
-        if(!password||!confirmPassword)throw new Error("fields are missing")
-            if(password!==confirmPassword)throw new Error("password not match")
-        const val={
-            email,
-            password
-        }
-        const response=await freelecrForgotNewPass(val)
-        console.log('response :>> ', response);
-
-        navigate('/freelancer/login')
-        setIsOtp(false)
-        setIsPass(false)
-
-    }
     
-    return (
-        <div className="min-h-screen flex">
+  return (
+        <div className="min-h-screen z-50 fixed inset-0 flex">
             {/* Left Side - Green Gradient */}
             <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#00C16A] to-[#00A86B] p-12 flex-col justify-between text-white">
                 <div>
@@ -66,7 +29,7 @@ const ForgotPass = () => {
                 </div>
 
                 <div className="text-sm text-gray-200">
-                    © 2024 Workora. All rights reserved.
+                    © 2026 Workora. All rights reserved.
                 </div>
             </div>
 
@@ -80,28 +43,36 @@ const ForgotPass = () => {
 
                     <div className="mb-8">
                         <h2 className="text-3xl font-bold text-gray-900 mb-3">
-                            Forgot Password
+                            Create new password 
                         </h2>
-                        <p className="text-gray-600">
-                            We'll send you a 6-digit verification code.
-                        </p>
+                        
                     </div>
 
-                    <form className="space-y-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    {/* <form className="space-y-6"> */}
+                        <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
                         <input
-                            type="email"
-                            value={email}
-                            onChange={(e)=>setEmail(e.target.value)}
+                            type="password"
+                            value={password}
+                            onChange={(e)=>setPassword(e.target.value)}
                             placeholder="Enter your email"
                             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition"
                         />
+
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e)=>setConfirmPassword(e.target.value)}
+                            placeholder="Enter your email"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition"
+                        />
+                        
                         <button
                             type="submit"
-                            onClick={handleSubmit}
+                            onClick={()=>handleSubmitNewPass(password,confirmPassword)}
                             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg shadow-green-500/30"
                         >
-                            Send OTP
+                             Verify
 
                         </button>
 
@@ -114,13 +85,12 @@ const ForgotPass = () => {
                                 Login
                             </a>
                         </div>
-                    </form>
+                    {/* </form> */}
                 </div>
             </div>
-            {isOtp?<OtpModal handleSubmitOtp={handleSubmitOtp}/>:<></>}
-            {isPass?<NewPassword handleSubmitNewPass={handleSubmitNewPass}/>:<></>}
+            
         </div>
     )
 }
 
-export default ForgotPass
+export default NewPassword
