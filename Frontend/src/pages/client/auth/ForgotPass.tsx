@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from "react"
-import { clientForgotPass, clientForgotPassOtpVerify, clientNewPassword } from "../../../service/client/authService"
+import { clientForgotPass, clientForgotPassOtpVerify, clientNewPassword, clientResendOtp } from "../../../service/client/authService"
 import OtpModal from "../../../components/modal/client/OtpModal"
 import { useNavigate } from "react-router-dom"
 import NewPassword from "../../../components/modal/client/NewPassword"
+import toast from "react-hot-toast"
 
 
 
@@ -16,6 +17,7 @@ const ForgotPass = () => {
     const handleSubmit=async (e:FormEvent)=>{
         e.preventDefault()
         setIsOpen(true)
+        
         const respone=await clientForgotPass({email})
         console.log("response from forgotPass",respone)
         
@@ -29,10 +31,22 @@ const ForgotPass = () => {
               otp
             }
             const response = await clientForgotPassOtpVerify(val)
-            setIsOpen(false)
-            setIsNewPass(true)
-            console.log("otp respone", response)
+            if(response){
+                setIsOpen(false)
+                toast.success("otp verifyied")
+                setIsNewPass(true)
+                console.log("otp respone", response)
+
+            }else{
+                toast.error("otp not match")
+            }
         
+    }
+
+    const handleSubmitResendOtp=async()=>{
+        toast.success("resend otp sended")
+        const response=await clientResendOtp({email})
+        console.log('response :>> ', response);
     }
 
     const handleSubmitNewPass=async(password:string,confirmPassword:string)=>{
@@ -120,7 +134,7 @@ const ForgotPass = () => {
                     </form>
                 </div>
             </div>
-            {isOpen?<OtpModal handleSubmitOtp={handleSubmitOtp}/>:<></>}
+            {isOpen?<OtpModal handleSubmitOtp={handleSubmitOtp} handleSubmitResendOtp={handleSubmitResendOtp}/>:<></>}
             {/* {isOpen?<NewPassword/>:<></>} */}
             {isNewPass?<NewPassword handleSubmitNewPass={handleSubmitNewPass}/>:<></>}
         </div>

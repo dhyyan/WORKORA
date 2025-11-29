@@ -1,23 +1,27 @@
 import { Client } from "../../../../domain/entities/client.entity";
 import { BaseClientOutputDtos, ClientLoginInputdDto, ClientLoginOutputdDto } from "../../../../domain/interface/DTOs/client/AuthDto";
 import { IClientRepository } from "../../../../domain/interface/repositoryInterface/IClientRepository";
+import { IFreelancerRepository } from "../../../../domain/interface/repositoryInterface/IFreelancerRepository";
 import { IHashPassword } from "../../../../domain/interface/serviceInterface/IHashPassword";
 import { IJwtService } from "../../../../domain/interface/serviceInterface/IJwtService";
 import { IClientLoginUseCase } from "../../../../domain/interface/useCaseInterface/client/auth/login/IClientLoginUseCase";
 
 export class ClientLogiUseCase implements IClientLoginUseCase {
 
-    private _hashedPassService: IHashPassword
+   private _hashedPassService: IHashPassword
     private _clientRepository: IClientRepository
+    private _freelancerRepo:IFreelancerRepository
     private _jwtService: IJwtService
 
     constructor(
         hashedPassService: IHashPassword,
         clientRepository: IClientRepository,
+        freelancerRepo:IFreelancerRepository,
         jwtService: IJwtService
     ) {
         this._hashedPassService = hashedPassService
         this._clientRepository = clientRepository
+        this._freelancerRepo=freelancerRepo
         this._jwtService = jwtService
     }
 
@@ -28,7 +32,8 @@ export class ClientLogiUseCase implements IClientLoginUseCase {
         }
 
         const user = await this._clientRepository.findByEmail(email);
-        if (!user) {
+        const fExist=await this._freelancerRepo.findByEmail(email)
+        if (!user||fExist) {
             throw new Error("User with this email does not exist");
         }
 

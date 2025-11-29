@@ -106,3 +106,16 @@ export const clientNewPassword = async ({ email, password }: IOtp) => {
         throw error;
     }
 }
+
+export const clientResendOtp=async({email}:IOtp)=>{
+    try {
+        const response=await clientAxios.post("/client/resendotp",{
+            email
+        })
+        return response .data
+        
+    } catch (error) {
+         console.error("resend password error:", error);
+        throw error;
+    }
+}

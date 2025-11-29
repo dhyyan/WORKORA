@@ -6,6 +6,7 @@ import { ClientRegisterController } from "../../adapters/controllers/client/regi
 import { ResendOtpController } from "../../adapters/controllers/client/resendOptController";
 import { VerifyOtpPassword } from "../../adapters/controllers/client/verifyOtpForgotPasswordController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
+import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
 import { ClientLogiUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
 import { ChangePassowrdUseCase } from "../../useCase/client /auth/password/changePasswordUseCase";
 import { ForgotOtpPasswordUseCase } from "../../useCase/client /auth/password/forgotOtpPasswordUseCase";
@@ -27,7 +28,8 @@ const otpService = new OtpSerrvice()
 const emailService = new EmailService()
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService)
 const hashPasswordService = new HashPasswordService()
-const registerClientUseCase = new RegisterClientUseCase(clientRepository, hashPasswordService)
+const freelancerRepo=new FreelancerRepository()
+const registerClientUseCase = new RegisterClientUseCase(clientRepository,freelancerRepo, hashPasswordService)
 const sendOtpClientUsecase = new SendOtpClientUseCase(clientRepository, otpService, emailService)
 export const sendOtpController = new SendOtpController(sendOtpClientUsecase)
 export const clientRegisterController = new ClientRegisterController(verifyOtpUseCase, registerClientUseCase)
@@ -35,21 +37,21 @@ export const clientRegisterController = new ClientRegisterController(verifyOtpUs
 
 //Login Client
 const jwtService = new JwtService()
-const clientLogiUseCase = new ClientLogiUseCase(hashPasswordService, clientRepository, jwtService)
+const clientLogiUseCase = new ClientLogiUseCase(hashPasswordService, clientRepository,freelancerRepo, jwtService)
 export const clientLogin = new ClientLogin(clientLogiUseCase)
 
 //ForgotPass
-const forgotpasswordUseCase = new ForgotPasswordUseCase(clientRepository, otpService, emailService)
+const forgotpasswordUseCase = new ForgotPasswordUseCase(freelancerRepo,clientRepository, otpService, emailService)
 export const sendOtpForgotPasswordController = new SendOtpForgotPasswordController(forgotpasswordUseCase)
 
 //ForgotPass Otp check
 
-const forgotOtpPasswordUseCase=new ForgotOtpPasswordUseCase(clientRepository,otpService)
+const forgotOtpPasswordUseCase=new ForgotOtpPasswordUseCase(freelancerRepo,clientRepository,otpService)
 export const verifyOtpPassword= new VerifyOtpPassword(forgotOtpPasswordUseCase)
 
 //new Pawssword
 
-const changePassowrdUseCase= new ChangePassowrdUseCase(clientRepository,hashPasswordService)
+const changePassowrdUseCase= new ChangePassowrdUseCase(freelancerRepo,clientRepository,hashPasswordService)
 export const newPasswordController=new NewPasswordController(changePassowrdUseCase)
 
 //resendOtp
