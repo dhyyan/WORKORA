@@ -10,6 +10,7 @@ export class SendOtpForgotPasswordController {
     }
     async handleForgotPassword(req: Request, res: Response):Promise<void>{
         const { email } = req.body
+        console.log("forgot email",email)
         try {
             const exist = await this._forgotPasswordUseCase.excute({ email })
             if (exist) {

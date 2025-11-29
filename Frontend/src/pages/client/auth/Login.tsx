@@ -7,6 +7,7 @@ import type { LoginFormInputs } from '../../../types/auth/Tlogin';
 import { clientLoginService } from '../../../service/client/authService';
 import { addClient } from '../../../store/slice/client/clientSlice';
 import { clientAddToken } from '../../../store/slice/client/clientTokenSlice';
+import toast from 'react-hot-toast';
 
 
 const Login = () => {
@@ -25,8 +26,8 @@ const Login = () => {
     console.log(response);
     dispatch(addClient(response.user))
     dispatch(clientAddToken(response.accessToken))
-
-    navigate('/')
+    toast.success("Login successful!");
+        navigate('/', { replace: true })
     console.log("work")
   };
 

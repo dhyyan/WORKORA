@@ -7,8 +7,9 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 // import OtpModal from '../../components/modal/OtpModal';
 import { Link, useNavigate } from 'react-router-dom';
 import type { ISignUp } from '../../../types/auth/ISignUp';
-import { clientOtpService, clientSignUpService } from '../../../service/client/authService';
+import { clientOtpService, clientResendOtp, clientSignUpService } from '../../../service/client/authService';
 import OtpModal from '../../../components/modal/client/OtpModal';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false)
@@ -55,6 +56,15 @@ const SignUp = () => {
             navigate('/client/login')
             console.log("otp respone", response)
         
+    }
+
+    const handleSubmitResendOtp=async()=>{
+        const val={
+            email:data.email
+        }
+        toast.success("resend otp sended")
+        const response=await clientResendOtp(val)
+        console.log('response :>> ', response);
     }
 
 
@@ -341,7 +351,7 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
-            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp} /> : <></>}
+            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp}  handleSubmitResendOtp={handleSubmitResendOtp}/> : <></>}
         </div>
     )
 }
