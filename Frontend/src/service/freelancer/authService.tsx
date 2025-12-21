@@ -72,3 +72,16 @@ export const freelecrForgotNewPass=async({email,password}:IOtp)=>{
     })
     return respone.data
 }
+
+
+export const freelancerResendOtp=async({email}:IOtp)=>{
+    try {
+        const response=await freelancerAxios.post("/freelancer/resendotp",{
+            email
+        })
+        return response.data
+    } catch (error) {
+        console.error("Resend Otp error:", error);
+        throw error;
+    }
+}

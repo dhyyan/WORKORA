@@ -3,5 +3,6 @@ export interface IOtp{
     name?: string,
     phone?: string,
     password?: string,
+    profileImage?:string
     otp?: string
 }

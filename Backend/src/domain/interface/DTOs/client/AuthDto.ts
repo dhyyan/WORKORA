@@ -3,7 +3,7 @@ export interface BaseClientOutputDtos {
     name: string,
     email: string,
     phone?: string,
-    role: 'client'
+    role: "client"|"admin",
     profileImage?: string,
     googleId?: string,
     isBlocked?: boolean,

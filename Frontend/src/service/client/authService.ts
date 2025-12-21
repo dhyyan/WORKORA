@@ -27,7 +27,9 @@ export const clientLoginService = async ({ email, password }: LoginFormInputs) =
 
 //signUp service
 export const clientSignUpService = async ({ name, email, phone, password }: ISignUp) => {
+    console.log("service signup ",name,email,phone,password)
     try {
+        console.log("olaa olaa olaaa")
         const response = await clientAxios.post("/client/signup", {
             name,
             email,
@@ -116,6 +118,23 @@ export const clientResendOtp=async({email}:IOtp)=>{
         
     } catch (error) {
          console.error("resend password error:", error);
+        throw error;
+    }
+}
+
+export const updateProfile=async({name,email,phone,profileImage}:IOtp)=>{
+    console.log("service data of update profile",name,email,phone)
+    try {
+        const response=await clientAxios.post("/client/updateprofile",{
+            name,
+            email,
+            phone,
+            profileImage
+        })
+        console.log("response of update profile",response.data)
+        return response.data
+    } catch (error) {
+        console.error("update profile error:", error);
         throw error;
     }
 }

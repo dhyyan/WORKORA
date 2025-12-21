@@ -34,36 +34,48 @@ const SignUp = () => {
     const onSubmit: SubmitHandler<ISignUp> = async (data) => {
         console.log("sign Up data", data);
         setData({ ...data })
-        const response = await clientSignUpService(data);
-        console.log("otp page ", response);
-        setOpen(true)
+        try {
+            const response = await clientSignUpService(data);
+            console.log("otp page ", response);
+            setOpen(true)
+
+        } catch (error) {
+            console.error("error in signUp",error)
+            toast.error("user in this email already exist")
+        }
     };
 
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
-    const handleSubmitOtp=async(otp:string)=>{
+    const handleSubmitOtp = async (otp: string) => {
         console.log('worked :>>');
         if (otp.length !== 6) return
-            const val = {
-              name: data.name,
-              email: data.email,
-              phone: data.phone,
-              password: data.password,
-              otp
-            }
+        const val = {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            password: data.password,
+            otp
+        }
+        try {
             const response = await clientOtpService(val)
-        
+            toast.success("user created success")
             navigate('/client/login')
             console.log("otp respone", response)
-        
+
+        } catch (error) {
+            console.log(error)
+            toast.error("otp not valid")
+        }
+
     }
 
-    const handleSubmitResendOtp=async()=>{
-        const val={
-            email:data.email
+    const handleSubmitResendOtp = async () => {
+        const val = {
+            email: data.email
         }
         toast.success("resend otp sended")
-        const response=await clientResendOtp(val)
+        const response = await clientResendOtp(val)
         console.log('response :>> ', response);
     }
 
@@ -351,7 +363,7 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
-            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp}  handleSubmitResendOtp={handleSubmitResendOtp}/> : <></>}
+            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp} handleSubmitResendOtp={handleSubmitResendOtp} /> : <></>}
         </div>
     )
 }
