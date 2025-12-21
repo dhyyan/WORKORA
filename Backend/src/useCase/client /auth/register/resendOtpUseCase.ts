@@ -18,8 +18,8 @@ export class ResendOtpUseCase implements IResendOtpUseCase{
     async resendOtp(input: ResendOtpInputDto): Promise<ResendOtpOutPutDto> {
         const {email}=input
         console.log("email from resendOtp useCase",email)
-        const client=await this._clientRepository.findByEmail(email)
-        if(!client)throw new Error("user in this email already exist")
+        // const client=await this._clientRepository.findByEmail(email)
+        // if(client)throw new Error("user in this email already exist")
 
             const otp =  this._otpService.generateOtp()
             console.log("new resend Otp",otp)

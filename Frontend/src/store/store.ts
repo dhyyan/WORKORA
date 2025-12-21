@@ -6,7 +6,7 @@ import freelancerToken from "./slice/freelancer/FreelancerToken";
 
 const store= configureStore({
     reducer:{
-        clietnAuth:clientReducer,
+        clientAuth:clientReducer,
         clientToken:clientTokenReducer,
         freelancerAuth:freelancerReducer,
         freelancerToken:freelancerToken
@@ -18,5 +18,5 @@ const store= configureStore({
 
 export default store
 // types
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

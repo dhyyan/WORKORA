@@ -7,8 +7,9 @@ import type { ISignUp } from '../../../types/auth/ISignUp';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-import { freelacerOtpService, freelancerSignUp } from '../../../service/freelancer/authService';
+import { freelacerOtpService, freelancerResendOtp, freelancerSignUp } from '../../../service/freelancer/authService';
 import OtpModal from '../../../components/modal/freelancer/OtpModal';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false)
@@ -21,7 +22,7 @@ const SignUp = () => {
         password: "",
         confirmPassword: ""
     })
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
     const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -35,25 +36,52 @@ const SignUp = () => {
     const onSubmit: SubmitHandler<ISignUp> = async (data) => {
         console.log("sign Up data", data);
         setData({ ...data })
-        const response = await freelancerSignUp(data);
-        console.log("otp page ", response);
-        setOpen(true)
+        try {
+            const response = await freelancerSignUp(data);
+            console.log("otp page ", response);
+            toast.success("success")
+            setOpen(true)
+
+        } catch (error) {
+            console.log(error)
+            toast.error("user in this email already exist")
+        }
     };
 
 
-    const handleSubmitOtp=async(otp:string)=>{
+    const handleSubmitOtp = async (otp: string) => {
         if (otp.length !== 6) return
-                    const val = {
-                      name: data.name,
-                      email: data.email,
-                      phone: data.phone,
-                      password: data.password,
-                      otp
-                    }
-                    const response = await freelacerOtpService(val)
-                
-                    navigate('/freelancer/login')
-                    console.log("otp respone", response)
+        const val = {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            password: data.password,
+            otp
+        }
+        try {
+
+            const response = await freelacerOtpService(val)
+            toast.success("otp success")
+            navigate('/freelancer/login')
+            console.log("otp respone", response)
+        } catch (error) {
+            console.log(error)
+            toast.error("invalid otp")
+        }
+    }
+
+    const handleResendOtp = async () => {
+        const val = {
+            email: data.email
+        }
+
+        try {
+            const response = await freelancerResendOtp(val)
+            console.log('response :>> ', response);
+        } catch (error) {
+            console.log(error)
+            toast.error("invalid otp")
+        }
     }
 
     return (
@@ -292,7 +320,7 @@ const SignUp = () => {
                             </button>
                             {/* Login Link */}
 
-                            <Link to="/frellancer/login" className="text-green-600 hover:text-green-700 font-semibold">
+                            <Link to="/freelancer/login" className="text-green-600 hover:text-green-700 font-semibold">
 
 
                                 <p className="text-center text-gray-600 text-sm">
@@ -340,7 +368,7 @@ const SignUp = () => {
                     </div>
                 </div>
             </div>
-            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp} /> : <></>}
+            {isOpen ? <OtpModal handleSubmitOtp={handleSubmitOtp} handleResendOtp={handleResendOtp} /> : <></>}
         </div>
     )
 }

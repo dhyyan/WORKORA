@@ -11,6 +11,7 @@ type OtpModalProps = {
 const OtpModal = ({ handleSubmitOtp,handleSubmitResendOtp }:OtpModalProps) => {
 
   const [otp, setOtp] = useState("")
+  
 
 
   //   if (!isOpen) return null

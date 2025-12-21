@@ -29,7 +29,7 @@ export class ClientRepository implements IClientRepository {
             { new: true }
         );
     }
-    async updateProfile(email: string, phone: string, name: string, profile_image: string): Promise<Client | null> {
-        return await clietModel.findOneAndUpdate({ email })
+    async updateProfile(id: string, user: Partial<Client>): Promise<Client | null> {
+        return await clietModel.findByIdAndUpdate(id,user,{new:true})
     }
 }

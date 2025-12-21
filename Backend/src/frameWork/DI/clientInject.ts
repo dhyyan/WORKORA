@@ -1,5 +1,6 @@
 import { NewPasswordController } from "../../adapters/controllers/client/changePasswordController";
 import { ClientLogin } from "../../adapters/controllers/client/clientLoginController";
+import { ClientProfileUpdateController } from "../../adapters/controllers/client/Dashboard/Profile/profileController";
 import { SendOtpForgotPasswordController } from "../../adapters/controllers/client/forgotPasswordController";
 import { SendOtpController } from "../../adapters/controllers/client/otpController";
 import { ClientRegisterController } from "../../adapters/controllers/client/registerController";
@@ -15,6 +16,7 @@ import { RegisterClientUseCase } from "../../useCase/client /auth/register/clien
 import { ResendOtpUseCase } from "../../useCase/client /auth/register/resendOtpUseCase";
 import { SendOtpClientUseCase } from "../../useCase/client /auth/register/sendOtpClientUseCase";
 import { VerifyOtpUseCase } from "../../useCase/client /auth/register/verifyOtpUseCase";
+import { UpateProfileUseCase } from "../../useCase/client /Dashboard/Profile/UpdateProfileUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
@@ -58,3 +60,8 @@ export const newPasswordController=new NewPasswordController(changePassowrdUseCa
 
 const resendOptUseCase= new ResendOtpUseCase(clientRepository,otpService,emailService)
 export const resendOtpController=new ResendOtpController(resendOptUseCase)
+
+//updateProfile
+
+const updateProfileUseCase= new UpateProfileUseCase(clientRepository)
+export const clientProfileUpdateController= new ClientProfileUpdateController(updateProfileUseCase)

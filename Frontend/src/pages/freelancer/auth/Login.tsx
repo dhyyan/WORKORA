@@ -1,4 +1,4 @@
-import { LogInIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, LogInIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { motion, type Variants } from 'framer-motion';
@@ -7,11 +7,14 @@ import type { LoginFormInputs } from '../../../types/auth/Tlogin';
 import { freelancerLogin } from '../../../service/freelancer/authService';
 import { addFreelancer } from '../../../store/slice/freelancer/FreelanceSlice';
 import { freelancerAddToken } from '../../../store/slice/freelancer/FreelancerToken';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 // import { clientLoginService } from '../../../service/client/authService';
 // import { addClient } from '../../../store/slice/client/clientSlice';
 
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -23,13 +26,19 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     console.log("login datas", data);
-    const response = await freelancerLogin(data);
-    console.log("freelancer login success",response.user);
-    dispatch(addFreelancer(response.user))
-    dispatch(freelancerAddToken(response.accessToken))
+    try {
+      const response = await freelancerLogin(data);
+      console.log("freelancer login success", response.user);
+      dispatch(addFreelancer(response.user))
+      dispatch(freelancerAddToken(response.accessToken))
+      toast.success("login success")
+      navigate('/')
+      console.log("work")
 
-    navigate('/')
-    console.log("work")
+    } catch (error) {
+      console.log(error)
+      toast.error("user not found")
+    }
   };
 
   // Properly typed variants
@@ -166,10 +175,13 @@ const Login = () => {
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
               </motion.div>
 
+
+              {/* password */}
+
               <motion.div variants={itemVariants}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   {...register("password", {
                     required: "Password is required",
                     pattern: {
@@ -180,6 +192,17 @@ const Login = () => {
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition"
                 />
+                <button 
+                className="absolute right-65  pt-12 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                onClick={()=>setShowPassword(prev=>!prev)}>
+                  
+                  {showPassword ? (
+                    <EyeOffIcon className="w-5 h-5" />
+                  ) : (
+                    <EyeIcon className="w-5 h-5" />
+                  )}
+                </button>
+                
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                 )}
@@ -190,12 +213,12 @@ const Login = () => {
                 variants={itemVariants}
                 whileHover={{ x: 4 }}
                 className="block text-right text-sm text-green-600 hover:text-green-700 font-medium"
-                >
-                
+              >
+
                 <Link to="/freelancer/forgotpassword">
                   Forgot Password?
                 </Link>
-                </motion.a>
+              </motion.a>
 
               <motion.button
                 variants={itemVariants}
