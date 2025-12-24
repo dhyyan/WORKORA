@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { freelancerChangePassController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerVerifyOtpController } from "../../DI/freelancerInject";
+import { freelancerChangePassController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController } from "../../DI/freelancerInject";
 
 export class FreelancerRoutes{
     public FreelancerRoutes:Router
@@ -37,6 +37,10 @@ export class FreelancerRoutes{
 
         this.FreelancerRoutes.post('/forgotpassword/newpass',(req:Request,res:Response)=>{
             freelancerChangePassController.create(req,res)
+        })
+
+        this.FreelancerRoutes.post("/updateprofile",(req:Request,res:Response)=>{
+            freelancerUpdateProfileController.update(req,res)
         })
     }
 }

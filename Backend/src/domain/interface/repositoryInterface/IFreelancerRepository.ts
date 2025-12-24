@@ -8,5 +8,5 @@ export interface IFreelancerRepository {
     findById(_id: string): Promise<Freelancer | null>
     // googleLogin(user:Client):Promise<Client|null>
     changePassword(id: string | undefined, password: string): Promise<Freelancer | null>
-    updateProfile(email: string, phone: string, name: string, profile_image: string): Promise<Freelancer | null>
+    updateProfile(id:string, user:Partial<Freelancer>): Promise<Freelancer | null>
 }

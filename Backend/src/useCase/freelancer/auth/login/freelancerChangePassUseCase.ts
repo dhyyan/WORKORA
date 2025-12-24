@@ -40,7 +40,7 @@ export class FreelancerChangePassUseCase implements IFreelancerChangePassUseCase
             gitHubUrl: fExist.gitHubUrl,
             linkedInUrl: fExist.linkedInUrl,
             skills: fExist.skills,
-            experience: fExist.experience||[],
+            experience: fExist.experience||"",
             rating: fExist.rating,
             profileImage: fExist.profileImage,
             bio: fExist.bio,

@@ -31,5 +31,5 @@ export class ClientRepository implements IClientRepository {
     }
     async updateProfile(id: string, user: Partial<Client>): Promise<Client | null> {
         return await clietModel.findByIdAndUpdate(id,user,{new:true})
-    }
+    }  
 }
