@@ -50,7 +50,7 @@ export class FreelancerLoginUseCase implements IFreelancerLoginUseCase {
             gitHubUrl:user.gitHubUrl,
             linkedInUrl:user.linkedInUrl,
             skills:user.skills,
-            experience: [],
+            experience: user.experience??"",
             rating:user.rating,
             profileImage:user.profileImage,
             bio:user.bio,

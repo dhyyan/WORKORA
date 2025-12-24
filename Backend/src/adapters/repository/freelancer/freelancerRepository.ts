@@ -25,8 +25,8 @@ export class FreelancerRepository implements IFreelancerRepository{
                    { new: true }
                );
     }
-    async updateProfile(email: string, phone: string, name: string, profile_image: string): Promise<Freelancer | null> {
-         return await freelacerModel.findOneAndUpdate({ email })
+    async updateProfile(id:string,user:Partial<Freelancer>): Promise<Freelancer | null> {
+         return await freelacerModel.findByIdAndUpdate(id,user,{ new:true })
     }
     
 }

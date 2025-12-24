@@ -5,6 +5,7 @@ import { FreelancerLoginController } from "../../adapters/controllers/freelancer
 import { FreelancerSentOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerOtpController";
 import { FreelancerResendOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerResendOtpController";
 import { FreelancerVerifyOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerVerifyOtpController";
+import { FreelancerUpdateProfileController } from "../../adapters/controllers/freelancer/Dashboard/UpdateProfileController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
 import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
 import { FreelancerChangePassUseCase } from "../../useCase/freelancer/auth/login/freelancerChangePassUseCase";
@@ -15,6 +16,7 @@ import { FreelacerRegisterUseCase } from "../../useCase/freelancer/auth/register
 import { FreelancerResendOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerResendOtpUseCase";
 import { FreelancerSentOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerSentOtpUseCase";
 import { FreelancerVerifyOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerVerifyOtpUseCase";
+import { UpdateProfileUseCase } from "../../useCase/freelancer/dashBoard/profile/UpdateProfileUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
@@ -29,6 +31,7 @@ const emailService=new EmailService()
 const freelancerVerifyOtpUseCase=new FreelancerVerifyOtpUseCase(freelancerRepository,clientRepository,otpService)
 const freelancerSendOtpUseCase=new FreelancerSentOtpUseCase(freelancerRepository,clientRepository,otpService,emailService)
 const hashPassword=new HashPasswordService()
+
 const freelancerRegisterUseCase=new FreelacerRegisterUseCase(freelancerRepository,clientRepository,hashPassword)
 export const freelancerSendOtpController=new FreelancerSentOtpController(freelancerSendOtpUseCase)
 export const freelancerVerifyOtpController=new FreelancerVerifyOtpController(freelancerVerifyOtpUseCase,freelancerRegisterUseCase)
@@ -59,3 +62,9 @@ export const freelancerForgotPassOtpController=new FreelancerForgotPassOtpContro
 
 const freelancerChangePassUseCase=new FreelancerChangePassUseCase(freelancerRepository,clientRepository,hashPassword)
 export const freelancerChangePassController= new FreelancerChagePassController(freelancerChangePassUseCase)
+
+
+//update Profile
+
+const updateProfileUseCase=new UpdateProfileUseCase(freelancerRepository)
+export const freelancerUpdateProfileController=new FreelancerUpdateProfileController(updateProfileUseCase)
