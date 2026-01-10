@@ -9,4 +9,5 @@ export interface IFreelancerRepository {
     // googleLogin(user:Client):Promise<Client|null>
     changePassword(id: string | undefined, password: string): Promise<Freelancer | null>
     updateProfile(id:string, user:Partial<Freelancer>): Promise<Freelancer | null>
+    findAll():Promise<Freelancer[]|null>
 }
