@@ -9,4 +9,5 @@ export interface IClientRepository {
     // googleLogin(user:Client):Promise<Client|null>
     changePassword(id: string | undefined, password: string): Promise<Client | null>
     updateProfile(id: string, user: Partial<Client>): Promise<Client | null>
+    findAll():Promise<Client[]|null>
 }

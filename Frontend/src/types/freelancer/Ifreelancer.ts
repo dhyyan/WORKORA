@@ -8,7 +8,7 @@ export interface IFreelancer{
     gitHubUrl?:string,
     linkedInUrl?:string,
     skills?: string[],
-    experience?:string[],
+    experience?:string,
     rating?: number,
     profileImage?: string,
     bio?: string,

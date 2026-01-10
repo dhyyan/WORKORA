@@ -6,7 +6,7 @@ import { IHashPassword } from "../../../../domain/interface/serviceInterface/IHa
 import { IJwtService } from "../../../../domain/interface/serviceInterface/IJwtService";
 import { IClientLoginUseCase } from "../../../../domain/interface/useCaseInterface/client/auth/login/IClientLoginUseCase";
 
-export class ClientLogiUseCase implements IClientLoginUseCase {
+export class ClientLoginUseCase implements IClientLoginUseCase {
 
    private _hashedPassService: IHashPassword
     private _clientRepository: IClientRepository

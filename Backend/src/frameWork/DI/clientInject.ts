@@ -8,7 +8,7 @@ import { ResendOtpController } from "../../adapters/controllers/client/resendOpt
 import { VerifyOtpPassword } from "../../adapters/controllers/client/verifyOtpForgotPasswordController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
 import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
-import { ClientLogiUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
+import { ClientLoginUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
 import { ChangePassowrdUseCase } from "../../useCase/client /auth/password/changePasswordUseCase";
 import { ForgotOtpPasswordUseCase } from "../../useCase/client /auth/password/forgotOtpPasswordUseCase";
 import { ForgotPasswordUseCase } from "../../useCase/client /auth/password/ForgotPasswordUseCase";
@@ -39,8 +39,8 @@ export const clientRegisterController = new ClientRegisterController(verifyOtpUs
 
 //Login Client
 const jwtService = new JwtService()
-const clientLogiUseCase = new ClientLogiUseCase(hashPasswordService, clientRepository,freelancerRepo, jwtService)
-export const clientLogin = new ClientLogin(clientLogiUseCase)
+const clientLoginUseCase = new ClientLoginUseCase(hashPasswordService, clientRepository,freelancerRepo, jwtService)
+export const clientLogin = new ClientLogin(clientLoginUseCase)
 
 //ForgotPass
 const forgotpasswordUseCase = new ForgotPasswordUseCase(freelancerRepo,clientRepository, otpService, emailService)

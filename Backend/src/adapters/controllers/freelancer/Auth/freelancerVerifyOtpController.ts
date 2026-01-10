@@ -18,6 +18,7 @@ export class FreelancerVerifyOtpController{
         console.log("freelancer data from verify Otp controller",email,otp)
         try {
             const verify=await this._freelancerVerifyOtpUseCase.verifyOtp({email,otp})
+            console.log("otp veriffied",verify)
             if(verify){
                 const newUser=await this._freelancerRegisterUseCase.create({name,email,phone,password})
                 const returnUser={

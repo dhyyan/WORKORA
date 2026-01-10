@@ -5,6 +5,7 @@ import { FreelancerLoginController } from "../../adapters/controllers/freelancer
 import { FreelancerSentOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerOtpController";
 import { FreelancerResendOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerResendOtpController";
 import { FreelancerVerifyOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerVerifyOtpController";
+import { FreelancerDataController } from "../../adapters/controllers/freelancer/Dashboard/FreelancerDataController";
 import { FreelancerUpdateProfileController } from "../../adapters/controllers/freelancer/Dashboard/UpdateProfileController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
 import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
@@ -16,6 +17,7 @@ import { FreelacerRegisterUseCase } from "../../useCase/freelancer/auth/register
 import { FreelancerResendOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerResendOtpUseCase";
 import { FreelancerSentOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerSentOtpUseCase";
 import { FreelancerVerifyOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerVerifyOtpUseCase";
+import { GetUserUseCase } from "../../useCase/freelancer/dashBoard/profile/GetUserDetailsUseCase";
 import { UpdateProfileUseCase } from "../../useCase/freelancer/dashBoard/profile/UpdateProfileUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
@@ -68,3 +70,8 @@ export const freelancerChangePassController= new FreelancerChagePassController(f
 
 const updateProfileUseCase=new UpdateProfileUseCase(freelancerRepository)
 export const freelancerUpdateProfileController=new FreelancerUpdateProfileController(updateProfileUseCase)
+
+// FreelancerData
+
+const getUserUseCase=new GetUserUseCase(freelancerRepository)
+export const freelancerDataController=new FreelancerDataController(getUserUseCase)

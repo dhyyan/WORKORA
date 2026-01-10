@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { IClientLoginUseCase } from "../../../../domain/interface/useCaseInterface/client/auth/login/IClientLoginUseCase";
+import { HttpStatus } from "../../../../domain/entities/httpStatus";
 
 export class AdminLoginController{
     private _clientLoginUseCase:IClientLoginUseCase
@@ -12,7 +13,14 @@ export class AdminLoginController{
         console.log('req.body :>> ', req.body);
         if(!email||!password)console.log("required fields are missing")
         try {
-            const exist=await this._clientLoginUseCase.logiClient({email,password})
+            const {createdUser,accessToken,refreshToken}=await this._clientLoginUseCase.logiClient({email,password})
+            const data={
+                email:createdUser.email,
+                name:createdUser.name
+            }
+            if(createdUser){
+                res.status(HttpStatus.OK).json({message:"admin login success",data:data})
+            }
         
         } catch (error) {
             

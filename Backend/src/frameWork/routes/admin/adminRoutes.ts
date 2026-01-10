@@ -1,16 +1,22 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController } from "../../DI/adminInject";
+import { adminLoginController, clientListController } from "../../DI/adminInject";
 
-export class AdminROutes{
+export class AdminRoutes{
     public AdminRoutes:Router
     constructor(){
+        console.log("Admin routes success")
         this.AdminRoutes=Router()
-        this._SetROutes()
+        this._SetRoutes()
     }
 
-    private _SetROutes(){
+    private _SetRoutes(){
+        console.log("admin login route")
         this.AdminRoutes.post('/login',(req:Request,res:Response)=>{
             adminLoginController.login(req,res)
+        })
+
+        this.AdminRoutes.get("/listclient",(req:Request,res:Response)=>{
+            clientListController.listUser(req,res)
         })
     }
 }

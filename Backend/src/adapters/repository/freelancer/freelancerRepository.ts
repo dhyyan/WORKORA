@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Freelancer } from "../../../domain/entities/freelancerntity";
 import { IFreelancerRepository } from "../../../domain/interface/repositoryInterface/IFreelancerRepository";
 import { freelacerModel } from "../../../frameWork/database/models/freelancerModel";
@@ -14,7 +15,10 @@ export class FreelancerRepository implements IFreelancerRepository{
         return await freelacerModel.findOne({ email })
     }
     async findById(_id: string): Promise<Freelancer | null> {
-        return await freelacerModel.findById(_id)
+         if (!mongoose.Types.ObjectId.isValid(_id)) {
+        return null;
+    }
+    return await freelacerModel.findById(new mongoose.Types.ObjectId(_id));
     }
     async changePassword(id: string | undefined, hashedPassword: string): Promise<Freelancer | null> {
        if (!id) return null;

@@ -29,6 +29,7 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
         let hashPassword = await this._hashPassword.hashPassword(password)
 
         let newUser = await this._freelancerRepository.create({
+            
             name,
             email,
             phone,

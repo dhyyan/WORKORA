@@ -5,6 +5,7 @@ import express, { Application } from "express"
 import { ConnectMongoDB } from './frameWork/database/dbConnection/dbConnection'
 import { UserRoutes } from "./frameWork/routes/client/clientRoutes"
 import { FreelancerRoutes } from './frameWork/routes/freelancers/freelancerRoutes'
+import { AdminRoutes } from './frameWork/routes/admin/adminRoutes'
 
 
 export class App {
@@ -26,6 +27,7 @@ export class App {
         this._app.use(express.urlencoded({ extended: true }))
         this._setClientRoutes()
         this._setFreelancerRoutes()
+        this._setAdminRoutes()
         this.listen()
     }
     listen() {
@@ -43,6 +45,12 @@ export class App {
         console.log("freelancer Route called")
         this._app.use("/freelancer",new FreelancerRoutes().FreelancerRoutes)
     }
+
+      private _setAdminRoutes(){
+        console.log("Admin Route called")
+        this._app.use("/admin",new AdminRoutes().AdminRoutes)
+    }
+
 
 }
 
