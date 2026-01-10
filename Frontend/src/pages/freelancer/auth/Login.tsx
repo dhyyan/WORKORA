@@ -32,7 +32,7 @@ const Login = () => {
       dispatch(addFreelancer(response.user))
       dispatch(freelancerAddToken(response.accessToken))
       toast.success("login success")
-      navigate('/')
+      navigate('/freelancer')
       console.log("work")
 
     } catch (error) {

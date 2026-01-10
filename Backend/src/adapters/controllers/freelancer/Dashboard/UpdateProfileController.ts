@@ -9,21 +9,24 @@ export class FreelancerUpdateProfileController{
     }
 
     async update(req:Request,res:Response):Promise<void>{
-        const {name,email,phone,bio,experience,skill,profileImage}=req.body
+        const {name,email,phone,bio,experience,skills,gitHubUrl,linkedInUrl,profileImage}=req.body
         console.log("data of updated user", req.body)
 
         try {
-            const {updatedFreelancer,success}= await this._updateProfileUseCase.update({name,email,phone,bio,experience,skill,profileImage})
+            const {updatedFreelancer,success}= await this._updateProfileUseCase.update({name,email,phone,bio,experience,skills,gitHubUrl,linkedInUrl,profileImage})
             if(!updatedFreelancer){
              res.status(HttpStatus.BAD_REQUEST).json({message:"user while updating error",success:false})
             }
             const data={
+                _id:updatedFreelancer._id,
                 name:updatedFreelancer.name,
                 email:updatedFreelancer.email,
                 phone:updatedFreelancer.phone,
                 bio:updatedFreelancer.bio,
                 experience:updatedFreelancer.experience,
-                skill:updatedFreelancer.skills,
+                skills:updatedFreelancer.skills,
+                linkedInUrl:updatedFreelancer.linkedInUrl,
+                gitHubUrl:updatedFreelancer.gitHubUrl,
                 profileImage:updatedFreelancer.profileImage
 
             }

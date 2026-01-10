@@ -43,6 +43,7 @@ export class FreelancerLoginUseCase implements IFreelancerLoginUseCase {
         );
 
         const createdUser:BaseFreelancerOutputDtos={
+            _id:user._id,
             name: user.name,
             email: user.email,
             phone:user.phone,

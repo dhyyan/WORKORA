@@ -21,7 +21,7 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
             if (!update) throw new Error("error while updating profile")
             const updatedFreelancer: BaseFreelancerOutputDtos = {
                 _id: update?._id,
-                name: update.name,
+                name: update.name, 
                 email: update.email,
                 phone: update.phone,
                 role: "freelancer",
@@ -35,6 +35,7 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
                 isSubscribed: update.isSubscribed,
                 isBlocked: update.isBlocked,
             }
+            console.log("completed full data",updatedFreelancer)
 
             return {
                 updatedFreelancer,

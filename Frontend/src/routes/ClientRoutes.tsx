@@ -19,7 +19,7 @@ export function ClientRoutes() {
         <Route path="/forgotpassword" element={<ForgotPass/>}/>
         <Route path="/clientLanding" element={<ClientLandingPage/>}/>
         <Route path="/profile" element={<Dashboard/>}>
-            <Route path="profile" element={<ProfileView/>}/>
+            <Route index element={<ProfileView/>}/>
             <Route path="projects" element={<Wallet/>}/>
             <Route path="wallet" element={<Wallet/>}/>
             <Route path="password" element={<ChangePassword/>}/>

@@ -6,7 +6,9 @@ export interface UpdateProfileInputDtos{
     phone:string,
     bio:string,
     experience:string,
-    skill:string[],
+    skills:string[],
+    gitHubUrl:string,
+    linkedInUrl:string,
     profileImage:string
 }
 
@@ -15,3 +17,13 @@ export interface UpdateProfileOututDtos{
     success:boolean
 }
 
+
+//get user details
+
+export interface GetUserDetailsInputDtos{
+    userId:string
+}
+
+export interface GetUserDetailOutputDtos{
+    userDetails:BaseFreelancerOutputDtos
+}
