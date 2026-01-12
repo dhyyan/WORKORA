@@ -192,17 +192,17 @@ const Login = () => {
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition"
                 />
-                <button 
-                className="absolute right-65  pt-12 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                onClick={()=>setShowPassword(prev=>!prev)}>
-                  
+                <button
+                  className="absolute right-65  pt-12 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setShowPassword(prev => !prev)}>
+
                   {showPassword ? (
                     <EyeOffIcon className="w-5 h-5" />
                   ) : (
                     <EyeIcon className="w-5 h-5" />
                   )}
                 </button>
-                
+
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                 )}

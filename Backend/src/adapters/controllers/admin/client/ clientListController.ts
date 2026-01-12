@@ -13,7 +13,7 @@ export class ClientListController{
           const users=await this._clientListUseCase.listclients({})
           console.log("users datas from controller",users)
           if(users){
-            res.status(HttpStatus.OK).json({message:"user datas fetched success"})
+            res.status(HttpStatus.OK).json({message:"user datas fetched success",data:users})
           }
         } catch (error) {
             
