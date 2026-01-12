@@ -5,8 +5,8 @@ import type { LoginFormInputs } from "../../types/auth/Tlogin";
 
 
 //signup
-export const freelancerSignUp=async({name,email,phone,password}:ISignUp)=>{
-    const respone=await freelancerAxios.post("/freelancer/signup",{
+export const freelancerSignUp = async ({ name, email, phone, password }: ISignUp) => {
+    const respone = await freelancerAxios.post("/freelancer/signup", {
         name,
         email,
         phone,
@@ -15,8 +15,8 @@ export const freelancerSignUp=async({name,email,phone,password}:ISignUp)=>{
     return respone.data
 }
 
-export const freelacerOtpService=async ({name,email,phone,password,otp}:IOtp)=>{
-    const respone=await freelancerAxios.post("/freelancer/verifyotp",{
+export const freelacerOtpService = async ({ name, email, phone, password, otp }: IOtp) => {
+    const respone = await freelancerAxios.post("/freelancer/verifyotp", {
         name,
         email,
         phone,
@@ -27,23 +27,23 @@ export const freelacerOtpService=async ({name,email,phone,password,otp}:IOtp)=>{
 }
 
 //login
-export const freelancerLogin=async({email,password}:LoginFormInputs)=>{
+export const freelancerLogin = async ({ email, password }: LoginFormInputs) => {
     try {
-        const respone= await freelancerAxios.post("/freelancer/login",{
+        const respone = await freelancerAxios.post("/freelancer/login", {
             email,
             password
         })
         return respone.data
     } catch (error) {
-        console.error("error in login",error)
+        console.error("error in login", error)
         throw error
     }
 }
 
 //forgot pass
 
-export const freelancerforgotpass=async({email}:IOtp)=>{
-    const respone=await freelancerAxios.post('/freelancer/forgotpassword',{
+export const freelancerforgotpass = async ({ email }: IOtp) => {
+    const respone = await freelancerAxios.post('/freelancer/forgotpassword', {
         email
     })
 
@@ -53,8 +53,8 @@ export const freelancerforgotpass=async({email}:IOtp)=>{
 
 // forgot pass
 
-export const freelacerForgotOtpVerify=async({email,otp}:IOtp)=>{
-    const respone=await freelancerAxios.post("/freelancer/forgotpassword/verifyotp",{
+export const freelacerForgotOtpVerify = async ({ email, otp }: IOtp) => {
+    const respone = await freelancerAxios.post("/freelancer/forgotpassword/verifyotp", {
         email,
         otp
     })
@@ -64,9 +64,9 @@ export const freelacerForgotOtpVerify=async({email,otp}:IOtp)=>{
 
 //new password
 
-export const freelecrForgotNewPass=async({email,password}:IOtp)=>{
-     
-    const respone=await freelancerAxios.post('/freelancer/forgotpassword/newpass',{
+export const freelecrForgotNewPass = async ({ email, password }: IOtp) => {
+
+    const respone = await freelancerAxios.post('/freelancer/forgotpassword/newpass', {
         email,
         password
     })
@@ -74,9 +74,9 @@ export const freelecrForgotNewPass=async({email,password}:IOtp)=>{
 }
 
 
-export const freelancerResendOtp=async({email}:IOtp)=>{
+export const freelancerResendOtp = async ({ email }: IOtp) => {
     try {
-        const response=await freelancerAxios.post("/freelancer/resendotp",{
+        const response = await freelancerAxios.post("/freelancer/resendotp", {
             email
         })
         return response.data

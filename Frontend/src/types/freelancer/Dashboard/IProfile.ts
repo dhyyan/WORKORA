@@ -8,5 +8,7 @@ export interface IProfile{
     skills?:string[],
     gitHubUrl?:string,
     linkedInUrl?:string,
-    profileImage?:string
+    profileImage?:string,
+    isBlocked?:string,
+    createdAt?:string
 }

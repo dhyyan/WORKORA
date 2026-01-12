@@ -8,20 +8,20 @@ import { IClientLoginUseCase } from "../../../../domain/interface/useCaseInterfa
 
 export class ClientLoginUseCase implements IClientLoginUseCase {
 
-   private _hashedPassService: IHashPassword
+    private _hashedPassService: IHashPassword
     private _clientRepository: IClientRepository
-    private _freelancerRepo:IFreelancerRepository
+    private _freelancerRepo: IFreelancerRepository
     private _jwtService: IJwtService
 
     constructor(
         hashedPassService: IHashPassword,
         clientRepository: IClientRepository,
-        freelancerRepo:IFreelancerRepository,
+        freelancerRepo: IFreelancerRepository,
         jwtService: IJwtService
     ) {
         this._hashedPassService = hashedPassService
         this._clientRepository = clientRepository
-        this._freelancerRepo=freelancerRepo
+        this._freelancerRepo = freelancerRepo
         this._jwtService = jwtService
     }
 
@@ -32,11 +32,13 @@ export class ClientLoginUseCase implements IClientLoginUseCase {
         }
 
         const user = await this._clientRepository.findByEmail(email);
-        const fExist=await this._freelancerRepo.findByEmail(email)
-        if (!user||fExist) {
+        const fExist = await this._freelancerRepo.findByEmail(email)
+        if (!user || fExist) {
             throw new Error("User with this email does not exist");
         }
-
+        if (!user.password) {
+            throw new Error("Password authentication not available");
+        }
         const isMatch = await this._hashedPassService.comparePassword(password, user.password);
         if (!isMatch) throw new Error("Incorrect password");
 

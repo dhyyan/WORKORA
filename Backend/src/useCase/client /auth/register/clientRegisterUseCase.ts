@@ -33,6 +33,7 @@ export class RegisterClientUseCase implements IRegisterClientUseCase {
             phone,
             password: hashPassword ?? "",
             role: "client",
+            authProvider: "local",
             profileImage: "",
             isSubscribed: false,
             isBlocked: false,

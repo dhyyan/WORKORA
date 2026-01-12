@@ -12,7 +12,7 @@ export class FreelancerListController{
     async listFreelancer(req:Request,res:Response):Promise<void>{
         try {
             const users=await this._freelancerListUseCase.listFreelancer({})
-            res.status(HttpStatus.OK).json({message:"fetch freelancer Datas success"})
+            res.status(HttpStatus.OK).json({message:"fetch freelancer Datas success",data:users})
         } catch (error) {
             
         }

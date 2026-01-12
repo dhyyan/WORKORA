@@ -21,6 +21,9 @@ export class AmdinLoginUseCase implements IClientLoginUseCase {
 
             const adminExist = await this._clientRepository.findByEmail(email)
             if (!adminExist) throw new Error("admin in this email not found")
+                 if (!adminExist.password) {
+            throw new Error("Password authentication not available");
+        }
             let isMatch = await this._hashPasswordService.comparePassword(password, adminExist?.password)
 
             if (!isMatch) throw new Error("password not match")

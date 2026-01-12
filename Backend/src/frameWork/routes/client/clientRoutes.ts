@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { clientLogin, clientProfileUpdateController, clientRegisterController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
 
 export class UserRoutes {
     public UserRoutes: Router
@@ -44,6 +44,10 @@ export class UserRoutes {
         this.UserRoutes.post('/updateprofile',(req:Request,res:Response)=>{
             console.log("hy chellooo")
             clientProfileUpdateController.updateProfile(req,res)
+        })
+
+        this.UserRoutes.post("/google",(req:Request,res:Response)=>{
+            clientGoogleController.googleAuth(req,res)
         })
 
 

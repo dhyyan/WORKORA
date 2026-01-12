@@ -2,12 +2,14 @@
   "dependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/nodemailer": "^7.0.4",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "google-auth-library": "^10.5.0",
     "init": "^0.1.2",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.19.3",
     "mongoosh": "^0.0.7",
     "node-cache": "^5.1.2",
@@ -37,6 +39,7 @@
   },
   "homepage": "https://github.com/dhyyan/WORKORA#readme",
   "devDependencies": {
+    "@types/axios": "^0.9.36",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",

@@ -22,10 +22,10 @@ export class ClientListUseCase implements IClientListUseCase {
                 phone: user.phone,
                 role: "client",
                 profileImage: user.profileImage,
-                googleId: user.googleId,
                 isBlocked: user.isBlocked,
-                isSubscribed: user.isSubscribed,
                 createdAt: user.createdAt,
+                // googleId: user.googleId,
+                // isSubscribed: user.isSubscribed,
             }));
 
             return { clients };
