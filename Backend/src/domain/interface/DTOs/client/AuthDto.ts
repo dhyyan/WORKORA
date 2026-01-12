@@ -3,7 +3,7 @@ export interface BaseClientOutputDtos {
     name: string,
     email: string,
     phone?: string,
-    role: 'client'
+    role: "client" | "admin",
     profileImage?: string,
     googleId?: string,
     isBlocked?: boolean,
@@ -64,20 +64,32 @@ export interface ForgotOtpPasswordOutPutDto {
 
 //changePassword
 
-export interface ChangePasswordIputDtos{
-    email:string,
-    password:string
+export interface ChangePasswordIputDtos {
+    email: string,
+    password: string
 }
 
-export interface ChangePasswordOutPutDtos extends BaseClientOutputDtos{
-_id:string
+export interface ChangePasswordOutPutDtos extends BaseClientOutputDtos {
+    _id: string
 }
 
 //resendOtp
-export interface ResendOtpInputDto{
-    email:string
+export interface ResendOtpInputDto {
+    email: string
 }
 
-export interface ResendOtpOutPutDto{
-    succes:boolean
+export interface ResendOtpOutPutDto {
+    succes: boolean
+}
+
+//google auth
+
+export interface GoogeleAuthInputDtos {
+    token: string
+}
+
+export interface GoogeleAuthOutPutDtos {
+    client: BaseClientOutputDtos,
+    accessToken: string,
+    refreshToken: string
 }

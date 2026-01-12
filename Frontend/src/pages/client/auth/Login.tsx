@@ -1,14 +1,19 @@
-import { LogInIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, LogInIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { motion, type Variants } from 'framer-motion';
 import { useDispatch } from 'react-redux';
+import { useGoogleLogin } from '@react-oauth/google';
 import type { LoginFormInputs } from '../../../types/auth/Tlogin';
-import { clientLoginService } from '../../../service/client/authService';
+import { clientLoginService, clientGoogleAuth } from '../../../service/client/authService';
 import { addClient } from '../../../store/slice/client/clientSlice';
+import { clientAddToken } from '../../../store/slice/client/clientTokenSlice';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -18,14 +23,44 @@ const Login = () => {
     formState: { errors, isSubmitting }
   } = useForm<LoginFormInputs>();
 
+
+
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     console.log("login datas", data);
-    const response = await clientLoginService(data);
-    console.log(response);
-    dispatch(addClient(response))
-    navigate('/')
-    console.log("work")
+    try {
+      const response = await clientLoginService(data);
+      console.log(response);
+      dispatch(addClient(response.user))
+      dispatch(clientAddToken(response.accessToken))
+      toast.success("Login successful!");
+      navigate('/client/clientLanding', { replace: true })
+      console.log("work")
+
+    } catch (error) {
+      console.log(error)
+      toast.error("user not found")
+    }
   };
+
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const response = await clientGoogleAuth({ token: tokenResponse.access_token });
+        dispatch(addClient(response.data));
+        dispatch(clientAddToken(response.accessToken));
+        toast.success("Login successful!");
+        navigate('/client/clientLanding', { replace: true });
+      } catch (error: any) {
+        console.error("Google login error:", error);
+        toast.error(error.response?.data?.message || "Google login failed");
+      }
+    },
+    onError: () => {
+      toast.error("Google Login Failed");
+    }
+  });
+
 
   // Properly typed variants
   const heroVariants: Variants = {
@@ -152,6 +187,7 @@ const Login = () => {
                     required: "Email is required",
                     pattern: {
                       value: /^\S+@\S+$/i,
+
                       message: "Invalid email format"
                     }
                   })}
@@ -164,7 +200,7 @@ const Login = () => {
               <motion.div variants={itemVariants}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   {...register("password", {
                     required: "Password is required",
                     pattern: {
@@ -175,6 +211,16 @@ const Login = () => {
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition"
                 />
+                <button
+                  className="absolute right-65  pt-12 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setShowPassword(prev => !prev)}>
+
+                  {showPassword ? (
+                    <EyeOffIcon className="w-5 h-5" />
+                  ) : (
+                    <EyeIcon className="w-5 h-5" />
+                  )}
+                </button>
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
                 )}
@@ -223,6 +269,8 @@ const Login = () => {
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => handleGoogleLogin()}
+              type="button"
               className="w-full flex items-center justify-center gap-3 py-3 border-2 border-gray-300 hover:border-gray-400 rounded-xl font-semibold text-gray-700 transition"
             >
               <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

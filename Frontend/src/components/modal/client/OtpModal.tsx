@@ -6,14 +6,13 @@ import { useState } from "react"
 
 type OtpModalProps = {
   handleSubmitOtp: (otp: string) => void;
+  handleSubmitResendOtp:()=>void
 };
-const OtpModal = ({ handleSubmitOtp }:OtpModalProps) => {
+const OtpModal = ({ handleSubmitOtp,handleSubmitResendOtp }:OtpModalProps) => {
 
   const [otp, setOtp] = useState("")
+  
 
-  const handleResend = () => {
-
-  }
 
   //   if (!isOpen) return null
   return (
@@ -57,7 +56,7 @@ const OtpModal = ({ handleSubmitOtp }:OtpModalProps) => {
           Verify & Continue
         </button>
 
-        <button onClick={handleResend}>
+        <button onClick={handleSubmitResendOtp}>
           <p className="text-center mt-4 pl-37 text-[#00A86B] hover:underline cursor-pointer">
             Resend OTP
           </p>

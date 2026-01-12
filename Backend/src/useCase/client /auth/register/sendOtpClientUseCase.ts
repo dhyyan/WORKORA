@@ -15,7 +15,7 @@ export class SendOtpClientUseCase implements ISendOtpUseCase {
     async excute(email: string): Promise<{ message: string; success: boolean; }> {
         console.log("email from usecase", email)
         if (!email) throw new Error("email filed is empty")
-        const exist = await this._clientRepository.fidByEmail(email)
+        const exist = await this._clientRepository.findByEmail(email)
 
         if (exist) throw new Error("user in this email already exist")
         const otp = this._OtpSerrvice.generateOtp()

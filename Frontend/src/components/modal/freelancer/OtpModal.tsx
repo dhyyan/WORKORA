@@ -3,15 +3,13 @@ import { useState } from "react"
 
 type OtpModalProps = {
   handleSubmitOtp: (otp: string) => void;
+  handleResendOtp:()=>void
 };
-const OtpModal = ({ handleSubmitOtp }:OtpModalProps) => {
+
+
+const OtpModal = ({ handleSubmitOtp,handleResendOtp}:OtpModalProps) => {
 
   const [otp, setOtp] = useState("")
-
-  const handleResend = () => {
-
-  }
-
   return (
     <div className="fixed inset-0 bg-[#F5F7FA] flex justify-center items-center z-50">
       <div className="bg-white text-[#1A1A1A] rounded-2xl p-8 w-[90%] max-w-md shadow-lg">
@@ -53,7 +51,7 @@ const OtpModal = ({ handleSubmitOtp }:OtpModalProps) => {
           Verify & Continue
         </button>
 
-        <button onClick={handleResend}>
+        <button onClick={handleResendOtp}>
           <p className="text-center mt-4 pl-37 text-[#00A86B] hover:underline cursor-pointer">
             Resend OTP
           </p>

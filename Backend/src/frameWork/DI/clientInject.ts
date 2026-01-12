@@ -1,12 +1,16 @@
 import { NewPasswordController } from "../../adapters/controllers/client/changePasswordController";
+import { ClientGoogleController } from "../../adapters/controllers/client/clientGoogleAuthController";
 import { ClientLogin } from "../../adapters/controllers/client/clientLoginController";
+import { ClientProfileUpdateController } from "../../adapters/controllers/client/Dashboard/Profile/profileController";
 import { SendOtpForgotPasswordController } from "../../adapters/controllers/client/forgotPasswordController";
 import { SendOtpController } from "../../adapters/controllers/client/otpController";
 import { ClientRegisterController } from "../../adapters/controllers/client/registerController";
 import { ResendOtpController } from "../../adapters/controllers/client/resendOptController";
 import { VerifyOtpPassword } from "../../adapters/controllers/client/verifyOtpForgotPasswordController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
-import { ClientLogiUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
+import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
+import { ClientLoginUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
+import { GoogleAuthUseCase } from "../../useCase/client /auth/login/googleAuthUseCase";
 import { ChangePassowrdUseCase } from "../../useCase/client /auth/password/changePasswordUseCase";
 import { ForgotOtpPasswordUseCase } from "../../useCase/client /auth/password/forgotOtpPasswordUseCase";
 import { ForgotPasswordUseCase } from "../../useCase/client /auth/password/ForgotPasswordUseCase";
@@ -14,6 +18,7 @@ import { RegisterClientUseCase } from "../../useCase/client /auth/register/clien
 import { ResendOtpUseCase } from "../../useCase/client /auth/register/resendOtpUseCase";
 import { SendOtpClientUseCase } from "../../useCase/client /auth/register/sendOtpClientUseCase";
 import { VerifyOtpUseCase } from "../../useCase/client /auth/register/verifyOtpUseCase";
+import { UpateProfileUseCase } from "../../useCase/client /Dashboard/Profile/UpdateProfileUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
@@ -27,7 +32,8 @@ const otpService = new OtpSerrvice()
 const emailService = new EmailService()
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService)
 const hashPasswordService = new HashPasswordService()
-const registerClientUseCase = new RegisterClientUseCase(clientRepository, hashPasswordService)
+const freelancerRepo = new FreelancerRepository()
+const registerClientUseCase = new RegisterClientUseCase(clientRepository, freelancerRepo, hashPasswordService)
 const sendOtpClientUsecase = new SendOtpClientUseCase(clientRepository, otpService, emailService)
 export const sendOtpController = new SendOtpController(sendOtpClientUsecase)
 export const clientRegisterController = new ClientRegisterController(verifyOtpUseCase, registerClientUseCase)
@@ -35,24 +41,33 @@ export const clientRegisterController = new ClientRegisterController(verifyOtpUs
 
 //Login Client
 const jwtService = new JwtService()
-const clientLogiUseCase = new ClientLogiUseCase(hashPasswordService, clientRepository, jwtService)
-export const clientLogin = new ClientLogin(clientLogiUseCase)
+const clientLoginUseCase = new ClientLoginUseCase(hashPasswordService, clientRepository, freelancerRepo, jwtService)
+export const clientLogin = new ClientLogin(clientLoginUseCase)
 
 //ForgotPass
-const forgotpasswordUseCase = new ForgotPasswordUseCase(clientRepository, otpService, emailService)
+const forgotpasswordUseCase = new ForgotPasswordUseCase(freelancerRepo, clientRepository, otpService, emailService)
 export const sendOtpForgotPasswordController = new SendOtpForgotPasswordController(forgotpasswordUseCase)
 
 //ForgotPass Otp check
 
-const forgotOtpPasswordUseCase=new ForgotOtpPasswordUseCase(clientRepository,otpService)
-export const verifyOtpPassword= new VerifyOtpPassword(forgotOtpPasswordUseCase)
+const forgotOtpPasswordUseCase = new ForgotOtpPasswordUseCase(freelancerRepo, clientRepository, otpService)
+export const verifyOtpPassword = new VerifyOtpPassword(forgotOtpPasswordUseCase)
 
 //new Pawssword
 
-const changePassowrdUseCase= new ChangePassowrdUseCase(clientRepository,hashPasswordService)
-export const newPasswordController=new NewPasswordController(changePassowrdUseCase)
+const changePassowrdUseCase = new ChangePassowrdUseCase(freelancerRepo, clientRepository, hashPasswordService)
+export const newPasswordController = new NewPasswordController(changePassowrdUseCase)
 
 //resendOtp
 
-const resendOptUseCase= new ResendOtpUseCase(clientRepository,otpService,emailService)
-export const resendOtpController=new ResendOtpController(resendOptUseCase)
+const resendOptUseCase = new ResendOtpUseCase(clientRepository, otpService, emailService)
+export const resendOtpController = new ResendOtpController(resendOptUseCase)
+
+//updateProfile
+
+const updateProfileUseCase = new UpateProfileUseCase(clientRepository)
+export const clientProfileUpdateController = new ClientProfileUpdateController(updateProfileUseCase)
+
+//googleAuth
+const googleAuthUseCase = new GoogleAuthUseCase(freelancerRepo, clientRepository, jwtService)
+export const clientGoogleController = new ClientGoogleController(googleAuthUseCase)

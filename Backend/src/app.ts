@@ -1,8 +1,11 @@
 import dotenv from 'dotenv'
 dotenv.config()
+import cors from "cors"
 import express, { Application } from "express"
 import { ConnectMongoDB } from './frameWork/database/dbConnection/dbConnection'
 import { UserRoutes } from "./frameWork/routes/client/clientRoutes"
+import { FreelancerRoutes } from './frameWork/routes/freelancers/freelancerRoutes'
+import { AdminRoutes } from './frameWork/routes/admin/adminRoutes'
 
 
 export class App {
@@ -14,9 +17,17 @@ export class App {
         this._port = process.env.PORT || 3560
         this._database = new ConnectMongoDB()
         this._database.connectDB()
+        this._app.use(
+            cors({
+                origin: "http://localhost:5173",
+                credentials: true
+            })
+        )
         this._app.use(express.json())
         this._app.use(express.urlencoded({ extended: true }))
         this._setClientRoutes()
+        this._setFreelancerRoutes()
+        this._setAdminRoutes()
         this.listen()
     }
     listen() {
@@ -30,7 +41,20 @@ export class App {
         this._app.use('/client/', new UserRoutes().UserRoutes)
     }
 
+    private _setFreelancerRoutes(){
+        console.log("freelancer Route called")
+        this._app.use("/freelancer",new FreelancerRoutes().FreelancerRoutes)
+    }
+
+      private _setAdminRoutes(){
+        console.log("Admin Route called")
+        this._app.use("/admin",new AdminRoutes().AdminRoutes)
+    }
+
+
 }
 
 const app = new App()
+
+
 
