@@ -16,6 +16,7 @@ export class ClientGoogleController{
             if(client){
                 res.status(HttpStatus.OK).json({message:"google sign success",data:client,accessToken})
             }
+            res.status(HttpStatus.FORBIDDEN).json({message:"google sign failed"})
 
         } catch (error) {
             console.log("|error in google signIn",error)

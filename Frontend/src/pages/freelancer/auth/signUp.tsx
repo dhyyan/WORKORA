@@ -6,8 +6,11 @@ import type { ISignUp } from '../../../types/auth/ISignUp';
 
 
 import { Link, useNavigate } from 'react-router-dom';
-
-import { freelacerOtpService, freelancerResendOtp, freelancerSignUp } from '../../../service/freelancer/authService';
+import { useGoogleLogin } from '@react-oauth/google';
+import { useDispatch } from 'react-redux';
+import { freelancerGoogleAuth, freelacerOtpService, freelancerResendOtp, freelancerSignUp } from '../../../service/freelancer/authService';
+import { addFreelancer } from '../../../store/slice/freelancer/FreelanceSlice';
+import { freelancerAddToken } from '../../../store/slice/freelancer/FreelancerToken';
 import OtpModal from '../../../components/modal/freelancer/OtpModal';
 import toast from 'react-hot-toast';
 
@@ -23,6 +26,7 @@ const SignUp = () => {
         confirmPassword: ""
     })
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -83,6 +87,31 @@ const SignUp = () => {
             toast.error("invalid otp")
         }
     }
+
+    const handleGoogleSignup = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                const response = await freelancerGoogleAuth({ token: tokenResponse.access_token });
+                console.log("response from google", response);
+
+                toast.success("Google signup successful");
+                // Store token/user data as needed, similar to login if auto-login is desired
+                dispatch(addFreelancer(response.data));
+                dispatch(freelancerAddToken(response.accessToken));
+
+                navigate("/freelancer");
+
+            } catch (error: any) {
+                console.error("error in google auth", error);
+                toast.error(
+                    error.response?.data?.message || "Google signup failed"
+                );
+            }
+        },
+        onError: () => {
+            toast.error("Google Signup Failed");
+        }
+    });
 
     return (
         <div className="min-h-screen w-full flex">
@@ -342,6 +371,7 @@ const SignUp = () => {
                             {/* Google Sign Up */}
                             <button
                                 type="button"
+                                onClick={() => handleGoogleSignup()}
                                 className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-50 transition"
                             >
                                 <svg className="w-5 h-5" viewBox="0 0 24 24">

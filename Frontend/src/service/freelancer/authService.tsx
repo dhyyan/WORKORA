@@ -85,3 +85,17 @@ export const freelancerResendOtp = async ({ email }: IOtp) => {
         throw error;
     }
 }
+
+//google auth  
+export const freelancerGoogleAuth = async ({ token }: any) => {
+    try {
+        console.log("google token", token)
+        const response = await freelancerAxios.post("/freelancer/google", {
+            token
+        })
+        return response.data
+    } catch (error) {
+        console.error("error in google auth", error);
+        throw error;
+    }
+}
