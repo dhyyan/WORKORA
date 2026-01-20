@@ -1,22 +1,162 @@
+// import { useState, type FormEvent } from 'react'
+// import { Toaster } from 'react-hot-toast'
+// import { adminLoginService } from '../../../service/admin/adminAuthService'
+// import { useNavigate } from 'react-router-dom'
+
+// const AdminLogin = () => {
+//   const navigate=useNavigate()
+//   const [email,setEmail]=useState("")
+//   const [password,setPassword]=useState("")
+//   const handleSubmit=async(e: FormEvent)=>{
+//     e.preventDefault()
+//     const data={
+//       email,
+//       password
+//     }
+//     const response=await adminLoginService(data)
+//     navigate("/admin/dashboard")
+//     console.log(response)
+//   }
+//   return (
+//     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 p-4">
+//       <Toaster position="top-center"/>
+//       <div className="w-full max-w-md">
+//         <div className="backdrop-blur-lg bg-white/70 rounded-2xl shadow-xl border border-white/20 p-8">
+//           {/* Header */}
+//           <div className="text-center mb-8">
+//             <h1 className="text-3xl font-bold text-gray-900 mb-2">
+//               Workora Admin Login
+//             </h1>
+//               <p className="text-gray-600 text-sm">
+//               Sign in to manage freelancers, clients, and jobs
+//               </p>
+//           </div>
+//           {/* Form */}
+//           <form className="space-y-6" onSubmit={handleSubmit}>
+//             {/* Email Field */}
+//             <div>
+//               <label
+//                 htmlFor="email"
+//                 className="block text-sm font-medium text-gray-700 mb-2"
+//               >
+//                 Email 
+//               </label>
+//               <input
+//                 id="email"
+//                 name="email"
+//                 type="text"
+//                 value={email}
+//                 onChange={(e)=>setEmail(e.target.value)}
+//                 // className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-200'} bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+//                 placeholder="Enter your email"
+//               />
+    
+//             </div>
+//             {/* Password Field */}
+//             <div>
+//               <label
+//                 htmlFor="password"
+//                 className="block text-sm font-medium text-gray-700 mb-2"
+//               >
+//                 Password
+//               </label>
+//               <input
+//                 id="password"
+//                 name="password"
+//                 type="password"
+//                  value={password}
+//                 onChange={(e)=>setPassword(e.target.value)}
+//                 // className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-200'} bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+//                 placeholder="Enter your password"
+//               />
+              
+//             </div>
+//             {/* Remember Me & Forgot Password */}
+//             <div className="flex items-center justify-between">
+//               <label className="flex items-center space-x-2 cursor-pointer">
+//                 <input
+//                   type="checkbox"
+//                   name="rememberMe"
+                  
+//                   className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <span className="text-sm text-gray-700">Remember me</span>
+//               </label>
+//               <a
+//                 href="#"
+//                 className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
+//               >
+//                 Forgot password?
+//               </a>
+//             </div>
+//             {/* Login Button */}
+//             <button
+//               type="submit"
+              
+//               className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+//             >
+//               Login
+//             </button>
+//           </form>
+//           {/* Footer */}
+//           <div className="mt-8 text-center">
+//             <p className="text-xs text-gray-500">
+//               © 2025 Workora Admin Panel — All Rights Reserved
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default AdminLogin
+
 import { useState, type FormEvent } from 'react'
-import { Toaster } from 'react-hot-toast'
+import { Toaster, toast } from 'react-hot-toast'
 import { adminLoginService } from '../../../service/admin/adminAuthService'
+import { useNavigate } from 'react-router-dom'
 
 const AdminLogin = () => {
-  const [email,setEmail]=useState("")
-  const [password,setPassword]=useState("")
-  const handleSubmit=async(e: FormEvent)=>{
-    e.preventDefault()
-    const data={
-      email,
-      password
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+   const navigate=useNavigate()
+  const validate = () => {
+    const newErrors: { email?: string; password?: string } = {}
+
+    if (!email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Enter a valid email address'
     }
-    const response=await adminLoginService(data)
+
+    if (!password.trim()) {
+      newErrors.password = 'Password is required'
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters'
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+
+    if (!validate()) return
+
+    const data = { email, password }
+    const response = await adminLoginService(data)
+     navigate("/admin/dashboard")
+     toast.success("admin login success")
     console.log(response)
   }
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-violet-50 p-4">
-      <Toaster position="top-center"/>
+      <Toaster position="top-center" />
+
       <div className="w-full max-w-md">
         <div className="backdrop-blur-lg bg-white/70 rounded-2xl shadow-xl border border-white/20 p-8">
           {/* Header */}
@@ -24,83 +164,74 @@ const AdminLogin = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Workora Admin Login
             </h1>
-              <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm">
               Sign in to manage freelancers, clients, and jobs
-              </p>
+            </p>
           </div>
+
           {/* Form */}
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Email Field */}
+            {/* Email */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Email 
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email
               </label>
               <input
-                id="email"
-                name="email"
                 type="text"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
-                // className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-200'} bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  errors.email ? 'border-red-500' : 'border-gray-200'
+                } focus:ring-2 focus:ring-blue-500`}
                 placeholder="Enter your email"
               />
-    
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
-            {/* Password Field */}
+
+            {/* Password */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
               <input
-                id="password"
-                name="password"
                 type="password"
-                 value={password}
-                onChange={(e)=>setPassword(e.target.value)}
-                // className={`w-full px-4 py-3 rounded-lg border ${errors.password ? 'border-red-500' : 'border-gray-200'} bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  errors.password ? 'border-red-500' : 'border-gray-200'
+                } focus:ring-2 focus:ring-blue-500`}
                 placeholder="Enter your password"
               />
-              
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
             </div>
-            {/* Remember Me & Forgot Password */}
+
+            {/* Remember Me */}
             <div className="flex items-center justify-between">
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="rememberMe"
-                  
-                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-700">Remember me</span>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" className="w-4 h-4" />
+                <span className="text-sm">Remember me</span>
               </label>
-              <a
-                href="#"
-                className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
-              >
+              <a href="#" className="text-sm text-blue-600">
                 Forgot password?
               </a>
             </div>
-            {/* Login Button */}
+
+            {/* Button */}
             <button
               type="submit"
-              
-              className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              className="w-full py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-lg font-semibold"
             >
               Login
             </button>
           </form>
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <p className="text-xs text-gray-500">
-              © 2025 Workora Admin Panel — All Rights Reserved
-            </p>
-          </div>
+
+          <p className="text-xs text-center text-gray-500 mt-8">
+            © 2025 Workora Admin Panel — All Rights Reserved
+          </p>
         </div>
       </div>
     </div>
@@ -108,3 +239,4 @@ const AdminLogin = () => {
 }
 
 export default AdminLogin
+

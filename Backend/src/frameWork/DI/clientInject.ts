@@ -1,6 +1,7 @@
 import { NewPasswordController } from "../../adapters/controllers/client/changePasswordController";
 import { ClientGoogleController } from "../../adapters/controllers/client/clientGoogleAuthController";
 import { ClientLogin } from "../../adapters/controllers/client/clientLoginController";
+import { ClientDataController } from "../../adapters/controllers/client/Dashboard/Profile/clientData";
 import { ClientProfileUpdateController } from "../../adapters/controllers/client/Dashboard/Profile/profileController";
 import { SendOtpForgotPasswordController } from "../../adapters/controllers/client/forgotPasswordController";
 import { SendOtpController } from "../../adapters/controllers/client/otpController";
@@ -18,6 +19,7 @@ import { RegisterClientUseCase } from "../../useCase/client /auth/register/clien
 import { ResendOtpUseCase } from "../../useCase/client /auth/register/resendOtpUseCase";
 import { SendOtpClientUseCase } from "../../useCase/client /auth/register/sendOtpClientUseCase";
 import { VerifyOtpUseCase } from "../../useCase/client /auth/register/verifyOtpUseCase";
+import { ClientDataUseCasse } from "../../useCase/client /Dashboard/Profile/clientDataUseCase";
 import { UpateProfileUseCase } from "../../useCase/client /Dashboard/Profile/UpdateProfileUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
@@ -71,3 +73,7 @@ export const clientProfileUpdateController = new ClientProfileUpdateController(u
 //googleAuth
 const googleAuthUseCase = new GoogleAuthUseCase(freelancerRepo, clientRepository, jwtService)
 export const clientGoogleController = new ClientGoogleController(googleAuthUseCase)
+
+
+const clientDataUseCase=new ClientDataUseCasse(clientRepository)
+export const clientDataController=new ClientDataController(clientDataUseCase)

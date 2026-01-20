@@ -1,6 +1,17 @@
 import { Bell, Menu, MessageSquare, Search } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { removeFreelancer } from '../../../store/slice/freelancer/FreelanceSlice'
+import { freelancerRemoveToken } from '../../../store/slice/freelancer/FreelancerToken'
 
 const Navbar = () => {
+  const navigate=useNavigate()
+  const dispatch =useDispatch()
+  const handleLogout=()=>{
+      navigate('/freelancer/login')
+      dispatch(removeFreelancer())
+      dispatch(freelancerRemoveToken())
+    }
   return (
     <>
         <nav className="h-16 bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-20 px-4 md:px-6 flex items-center justify-between">
@@ -46,14 +57,48 @@ const Navbar = () => {
 
         <div className="h-8 w-px bg-gray-200 mx-2 hidden md:block"></div>
 
-        <button className="flex items-center space-x-3 p-1 hover:bg-gray-50 rounded-full transition-colors border border-transparent hover:border-gray-200">
+        {/* <button className="flex items-center space-x-3 p-1 hover:bg-gray-50 rounded-full transition-colors border border-transparent hover:border-gray-200">
           <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium text-sm border-2 border-white shadow-sm">
             SJ
           </div>
           <span className="hidden md:block text-sm font-medium text-gray-700 pr-2">
             Sarah J.
           </span>
-        </button>
+        </button> */}
+
+    <div className="relative group">
+  <div className="flex items-center space-x-3 p-1 cursor-pointer hover:bg-gray-50 rounded-full transition-colors border border-transparent hover:border-gray-200">
+    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium text-sm border-2 border-white shadow-sm">
+      SJ
+    </div>
+    <span className="hidden md:block text-sm font-medium text-gray-700 pr-2">
+      Sarah J.
+    </span>
+  </div>
+
+  {/* Hover Dropdown */}
+  <div
+    className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg
+               opacity-0 invisible group-hover:opacity-100 group-hover:visible
+               transition-all duration-150 z-50"
+  >
+    <a
+      href="/profile"
+      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+    >
+      Profile
+    </a>
+
+    <button
+      onClick={handleLogout}
+      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 rounded-b-lg"
+    >
+      Logout
+    </button>
+  </div>
+</div>
+
+
       </div>
     </nav>
     </>

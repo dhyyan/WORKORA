@@ -54,12 +54,13 @@ const Login = () => {
         toast.success("Google login successful");
         navigate("/freelancer");
 
-      } catch (error: any) {
-        console.error("error in google auth", error);
-        toast.error(
-          error.response?.data?.message || "Google login failed"
-        );
+      }catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Google login failed")
       }
+    }
     },
     onError: () => {
       toast.error("Google Login Failed");

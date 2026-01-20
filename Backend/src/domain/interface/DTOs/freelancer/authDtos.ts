@@ -8,7 +8,7 @@ export interface BaseFreelancerOutputDtos {
     linkedInUrl?: string,
     skills?: string[],
     experience?: string,
-    rating?: number,
+    rating?: Number,
     profileImage?: string,
     bio?: string,
     isSubscribed?: boolean,

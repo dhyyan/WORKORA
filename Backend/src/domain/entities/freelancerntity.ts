@@ -9,7 +9,7 @@ export interface Freelancer {
     linkedInUrl?: string,
     skills?: string[],
     experience?: string,
-    rating?: number,
+    rating?: Number,
     profileImage?: string,
     bio?: string,
     isSubscribed?: boolean,

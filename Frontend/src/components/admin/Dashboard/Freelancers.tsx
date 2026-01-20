@@ -2,23 +2,43 @@ import { useEffect, useState } from "react";
 
 import type { IProfile } from "../../../types/freelancer/Dashboard/IProfile";
 import { listFreelancers } from "../../../service/admin/Dashboard/freelancer/freelancerService";
+import { blockUser } from "../../../service/admin/Dashboard/client/clientService";
 
 
 const Freelancers = () => {
   const [freelancers, setFreelancers] = useState<IProfile[]>([]);
-  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [loadingId] = useState<string | null>(null);
+  const [block, setBlock] = useState("")
 
   const refreshFreelancers = async () => {
     const res = await listFreelancers();
     setFreelancers(res.data.freelancers);
   };
 
+  const handleToggleStatus = async (id: string, isBlocked: boolean) => {
+    // console.log("claeedddd", id)
+    try {
+      if (isBlocked) {
+        const respone = await blockUser({ id, isBlocked })
+        console.log(respone.data)
+        setBlock("BLOCKED")
+
+      } else {
+        const respone = await blockUser({ id, isBlocked })
+        console.log(respone.data)
+        setBlock("UNBLOCKED")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     const loadFreelancers = async () => {
-            await refreshFreelancers()
-        }
-        loadFreelancers()
-  }, []);
+      await refreshFreelancers()
+    }
+    loadFreelancers()
+  }, [block]);
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -73,11 +93,10 @@ const Freelancers = () => {
                 {/* Status */}
                 <td className="px-4 py-3">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      user.isBlocked
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${user.isBlocked
                         ? "bg-red-100 text-red-600"
                         : "bg-green-100 text-green-600"
-                    }`}
+                      }`}
                   >
                     {user.isBlocked ? "Unlisted" : "Listed"}
                   </span>
@@ -93,24 +112,26 @@ const Freelancers = () => {
                 <td className="px-4 py-3">
                   <button
                     disabled={loadingId === user._id}
+                    onClick={() =>
+
+                      user._id && user.isBlocked !== undefined && handleToggleStatus(user._id, user.isBlocked)
+                    }
                     className={`px-4 py-1.5 rounded-md text-xs font-medium transition
-                      ${
-                        user.isBlocked
-                          ? "bg-green-600 text-white hover:bg-green-700"
-                          : "bg-red-600 text-white hover:bg-red-700"
+                      ${user.isBlocked
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-red-600 text-white hover:bg-red-700"
                       }
-                      ${
-                        loadingId === user._id
-                          ? "opacity-60 cursor-not-allowed"
-                          : ""
+                      ${loadingId === user._id
+                        ? "opacity-60 cursor-not-allowed"
+                        : ""
                       }
                     `}
                   >
                     {loadingId === user._id
                       ? "Updating..."
                       : user.isBlocked
-                      ? "List"
-                      : "Unlist"}
+                        ? "List"
+                        : "Unlist"}
                   </button>
                 </td>
               </tr>
