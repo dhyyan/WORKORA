@@ -9,6 +9,6 @@ export interface IProfile{
     gitHubUrl?:string,
     linkedInUrl?:string,
     profileImage?:string,
-    isBlocked?:string,
+    isBlocked?:boolean,
     createdAt?:string
 }

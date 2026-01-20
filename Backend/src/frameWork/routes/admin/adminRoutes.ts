@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, clientListController, freelancerListController } from "../../DI/adminInject";
+import { adminLoginController, clientListController, freelancerListController, userBlockController } from "../../DI/adminInject";
 
 export class AdminRoutes{
     public AdminRoutes:Router
@@ -22,6 +22,10 @@ export class AdminRoutes{
 
          this.AdminRoutes.get("/listfreelancer",(req:Request,res:Response)=>{
             freelancerListController.listFreelancer(req,res)
+         })
+
+         this.AdminRoutes.patch("/block/:id",(req:Request,res:Response)=>{
+            userBlockController.block(req,res)
          })
     }
 }

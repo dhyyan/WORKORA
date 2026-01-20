@@ -1,9 +1,20 @@
 import { motion } from 'framer-motion';
 import { Bell, MessageCircle, User } from 'lucide-react';
 import React from 'react'
-import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { removeClient } from '../../../store/slice/client/clientSlice';
+import { removeToken } from '../../../store/slice/client/clientTokenSlice';
 
 const Headder = () => {
+
+   const navigate=useNavigate()
+  const dispatch =useDispatch()
+  const handleLogout=()=>{
+      navigate('/client/login')
+      dispatch(removeClient())
+      dispatch(removeToken())
+    }
   return (
     <motion.header
       initial={{
@@ -31,7 +42,7 @@ const Headder = () => {
           label="Messages"
         />
         <div className="h-8 w-px bg-white/20 mx-2 hidden md:block" />
-        <button className="flex items-center gap-3 group">
+        {/* <button className="flex items-center gap-3 group">
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 p-0.5">
             <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
               <NavLink
@@ -41,7 +52,40 @@ const Headder = () => {
               </NavLink>
             </div>
           </div>
-        </button>
+        </button> */}
+
+        <div className="relative group">
+  <div className="flex items-center gap-3 cursor-pointer">
+    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 p-0.5">
+      <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+        <User className="w-5 h-5 text-emerald-100" />
+      </div>
+    </div>
+  </div>
+
+  {/* Hover Dropdown */}
+  <div
+    className="absolute right-0 mt-3 w-44 bg-slate-900/95 backdrop-blur-md
+               border border-white/10 rounded-xl shadow-xl
+               opacity-0 invisible group-hover:opacity-100 group-hover:visible
+               transition-all duration-200 z-50"
+  >
+    <NavLink
+      to="/client/profile"
+      className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/10 rounded-t-xl"
+    >
+      Profile
+    </NavLink>
+
+    <button
+      onClick={handleLogout}
+      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/10 rounded-b-xl"
+    >
+      Logout
+    </button>
+  </div>
+</div>
+
       </nav>
     </motion.header>
   )

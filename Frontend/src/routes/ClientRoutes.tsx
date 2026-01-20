@@ -17,7 +17,7 @@ export function ClientRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp/>}/>
         <Route path="/forgotpassword" element={<ForgotPass/>}/>
-        <Route path="/clientLanding" element={<ClientLandingPage/>}/>
+        <Route path="/" element={<ClientLandingPage/>}/>
         <Route path="/profile" element={<Dashboard/>}>
             <Route index element={<ProfileView/>}/>
             <Route path="projects" element={<Wallet/>}/>
