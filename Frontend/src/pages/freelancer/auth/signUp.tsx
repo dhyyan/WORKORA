@@ -81,6 +81,7 @@ const SignUp = () => {
 
         try {
             const response = await freelancerResendOtp(val)
+            toast.success("resend otp sended")
             console.log('response :>> ', response);
         } catch (error) {
             console.log(error)
@@ -101,11 +102,8 @@ const SignUp = () => {
 
                 navigate("/freelancer");
 
-            } catch (error: any) {
+            } catch (error: unknown) {
                 console.error("error in google auth", error);
-                toast.error(
-                    error.response?.data?.message || "Google signup failed"
-                );
             }
         },
         onError: () => {

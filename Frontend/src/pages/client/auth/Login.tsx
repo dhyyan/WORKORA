@@ -33,7 +33,7 @@ const Login = () => {
       dispatch(addClient(response.user))
       dispatch(clientAddToken(response.accessToken))
       toast.success("Login successful!");
-      navigate('/client/clientLanding', { replace: true })
+      navigate('/client', { replace: true })
       console.log("work")
 
     } catch (error) {
