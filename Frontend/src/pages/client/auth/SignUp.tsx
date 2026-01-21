@@ -77,6 +77,7 @@ const SignUp = () => {
             email: data.email
         }
         toast.success("resend otp sended")
+       
         const response = await clientResendOtp(val)
         console.log('response :>> ', response);
     }
@@ -93,10 +94,6 @@ const SignUp = () => {
                 console.log("response from google", response);
 
                 toast.success("Google signup successful");
-                // Store token/user data as needed, similar to login if auto-login is desired
-                // Assuming response contains user data and tokens similar to login
-                // dispatch(addClient(response.data)); 
-                // dispatch(clientAddToken(response.accessToken));
 
                 navigate("/client/clientLanding");
 

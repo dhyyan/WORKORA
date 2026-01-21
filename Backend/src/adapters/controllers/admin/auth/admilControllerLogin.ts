@@ -20,7 +20,7 @@ export class AdminLoginController{
     }
     console.log("wodkk",data)
             if(createdUser){
-                res.status(HttpStatus.OK).json({message:"admin login success",data:data})
+                res.status(HttpStatus.OK).json({message:"admin login success",data:data,accessToken})
             }
         
         } catch (error) {
