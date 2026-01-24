@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController } from "../../DI/freelancerInject";
+import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
+import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
 export class FreelancerRoutes {
     public FreelancerRoutes: Router
@@ -39,11 +41,11 @@ export class FreelancerRoutes {
             freelancerChangePassController.create(req, res)
         })
 
-        this.FreelancerRoutes.post("/updateprofile", (req: Request, res: Response) => {
+        this.FreelancerRoutes.post("/updateprofile",tokenVerifyMiddleware,authMiddleware, (req: Request, res: Response) => {
             freelancerUpdateProfileController.update(req, res)
         })
 
-        this.FreelancerRoutes.get("/userdata/:userId", (req: Request, res: Response) => {
+        this.FreelancerRoutes.get("/userdata/:userId",tokenVerifyMiddleware,authMiddleware, (req: Request, res: Response) => {
             freelancerDataController.userData(req, res)
         })
 

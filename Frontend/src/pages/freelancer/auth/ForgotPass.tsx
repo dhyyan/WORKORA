@@ -71,7 +71,7 @@ const ForgotPass = () => {
             const response = await freelecrForgotNewPass(val)
             console.log('response :>> ', response);
     
-            navigate('/freelancer/login')
+            navigate('/freelancer/login',{replace:true})
             setIsOtp(false)
             setIsPass(false)
             

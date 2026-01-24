@@ -95,7 +95,7 @@ const SignUp = () => {
 
                 toast.success("Google signup successful");
 
-                navigate("/client/clientLanding");
+                navigate("/client/clientLanding",{replace:true});
 
             } catch (error) {
                 console.error("error in google auth", error);

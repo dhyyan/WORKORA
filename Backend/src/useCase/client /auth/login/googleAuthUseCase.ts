@@ -36,6 +36,7 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     }
 
     let client = await this._clientRepository.findByEmail(email);
+    console.log("google id",client)
     if(client?.isBlocked)throw new Error("user in this email is blocked by admin")
 
     if (!client) {

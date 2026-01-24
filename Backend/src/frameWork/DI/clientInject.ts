@@ -29,7 +29,7 @@ import { OtpSerrvice } from "../service/otpService";
 
 
 //Register Client
-const clientRepository = new ClientRepository()
+export const clientRepository = new ClientRepository()
 const otpService = new OtpSerrvice()
 const emailService = new EmailService()
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService)
@@ -42,7 +42,7 @@ export const clientRegisterController = new ClientRegisterController(verifyOtpUs
 
 
 //Login Client
-const jwtService = new JwtService()
+export const jwtService = new JwtService()
 const clientLoginUseCase = new ClientLoginUseCase(hashPasswordService, clientRepository, freelancerRepo, jwtService)
 export const clientLogin = new ClientLogin(clientLoginUseCase)
 

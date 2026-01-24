@@ -40,7 +40,7 @@ const AdminLogin = () => {
 
     const data = { email, password }
     const response = await adminLoginService(data)
-    navigate("/admin/dashboard")
+    navigate("/admin/dashboard",{replace:true})
     dispatch(addAdmin(response.data))
     dispatch(adminAddToken(response.accessToken))
     toast.success("admin login success")

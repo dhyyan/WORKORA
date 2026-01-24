@@ -66,7 +66,7 @@ const SignUp = () => {
 
             const response = await freelacerOtpService(val)
             toast.success("otp success")
-            navigate('/freelancer/login')
+            navigate('/freelancer/login',{replace:true})
             console.log("otp respone", response)
         } catch (error) {
             console.log(error)

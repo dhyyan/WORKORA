@@ -28,7 +28,7 @@ import { OtpSerrvice } from "../service/otpService";
 
 
 //signup
-const freelancerRepository = new FreelancerRepository()
+export const freelancerRepository = new FreelancerRepository()
 const clientRepository = new ClientRepository()
 const otpService = new OtpSerrvice()
 const emailService = new EmailService()
