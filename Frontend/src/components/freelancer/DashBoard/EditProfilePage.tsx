@@ -98,7 +98,7 @@ const EditProfilePage = () => {
             console.log("responseeee", response.data)
             dispatch(addFreelancer(response.data))
             toast.success("update profile success")
-            navigate("/freelancer/dashboard")
+            navigate("/freelancer/dashboard",{replace:true})
 
         } catch (error) {
             console.error(error)

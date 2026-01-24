@@ -1,7 +1,7 @@
 import { Bell, Menu, MessageSquare } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../../../store/store"
-import { useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { removeClient } from "../../../store/slice/client/clientSlice"
 import { removeToken } from "../../../store/slice/client/clientTokenSlice"
 // import { useState } from "react"
@@ -14,7 +14,7 @@ const TopNavBar = () => {
   // const [open, setOpen] = useState(false)
 
   const handleLogout=()=>{
-    navigate('/client/login')
+    navigate('/client/login',{replace:true})
     dispatch(removeClient())
     dispatch(removeToken())
   }
@@ -28,7 +28,12 @@ const TopNavBar = () => {
           >
             <Menu className="w-6 h-6" />
           </button>
-          <span className="font-bold text-xl text-gray-800">Workora</span>
+          <span className="text-xl font-bold text-gray-900 tracking-tight">
+            <NavLink to="/client">
+
+            Workora
+            </NavLink>
+          </span>
         </div>
 
         <div className="flex items-center gap-6 ml-auto">
@@ -66,14 +71,7 @@ const TopNavBar = () => {
                   opacity-0 invisible group-hover:opacity-100 group-hover:visible 
                   transition-all duration-200 z-50">
 
-    <button
-      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-xl"
-      onClick={() => {
-        navigate("/profile")
-      }}
-    >
-      Profile
-    </button>
+   
 
     <button
       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 rounded-b-xl"

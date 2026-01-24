@@ -1,6 +1,6 @@
 import { Bell, Menu, MessageSquare, Search } from 'lucide-react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { removeFreelancer } from '../../../store/slice/freelancer/FreelanceSlice'
 import { freelancerRemoveToken } from '../../../store/slice/freelancer/FreelancerToken'
 
@@ -8,7 +8,7 @@ const Navbar = () => {
   const navigate=useNavigate()
   const dispatch =useDispatch()
   const handleLogout=()=>{
-      navigate('/freelancer/login')
+      navigate('/freelancer/login',{replace:true})
       dispatch(removeFreelancer())
       dispatch(freelancerRemoveToken())
     }
@@ -25,7 +25,10 @@ const Navbar = () => {
             <span className="text-white font-bold text-lg">W</span>
           </div>
           <span className="text-xl font-bold text-gray-900 tracking-tight">
+            <NavLink to="/freelancer">
+
             Workora
+            </NavLink>
           </span>
         </div>
       </div>
@@ -82,12 +85,7 @@ const Navbar = () => {
                opacity-0 invisible group-hover:opacity-100 group-hover:visible
                transition-all duration-150 z-50"
   >
-    <a
-      href="/profile"
-      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
-    >
-      Profile
-    </a>
+    
 
     <button
       onClick={handleLogout}
