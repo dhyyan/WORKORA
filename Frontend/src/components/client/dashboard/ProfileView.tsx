@@ -71,26 +71,6 @@ const ProfileView = () => {
     dispatch(addClient(respone.data))
 
   }
-
-  //  useEffect(() => {
-  //     console.log("refreshed page")
-  //     const userId = userData?._id;
-  //     console.log("user id",userId)
-  //     if (!userId) return;
-      
-  //     const fetchUser = async () => {
-  //       try {
-  //         const response = await getUserDetails({ userId });
-  //         console.log("refresh data from profil",response.data.userDetails)
-  //         setData(response.data.userDetails);
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-      
-  //     fetchUser();
-  //     console.log("calleddddd")
-  //   },[userData?._id]);
   useEffect(() => {
   const userId = userData?._id;
   if (!userId) return;
