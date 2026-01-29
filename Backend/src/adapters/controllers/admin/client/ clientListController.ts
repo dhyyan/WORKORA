@@ -15,6 +15,7 @@ export class ClientListController{
           if(users){
             res.status(HttpStatus.OK).json({message:"user datas fetched success",data:users})
           }
+          res.status(HttpStatus.NOT_FOUND).json({message:"user datas fetched failed"})
         } catch (error) {
             
         }

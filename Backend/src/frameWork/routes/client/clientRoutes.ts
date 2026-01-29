@@ -1,5 +1,5 @@
 import { Request, response, Response, Router } from "express";
-import { clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, jobCreateController, jobListController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -55,6 +55,14 @@ export class UserRoutes {
         this.UserRoutes.get("/userdata/:userId",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             console.log("tokeeeeeap") 
             clientDataController.data(req,res)
+        })
+
+        this.UserRoutes.post("/postjob",(req:Request,res:Response)=>{
+            jobCreateController.createJob(req,res)
+        })
+
+        this.UserRoutes.get("/jobs/:id",(req:Request,res:Response)=>{
+            jobListController.listJob(req,res)
         })
 
 
