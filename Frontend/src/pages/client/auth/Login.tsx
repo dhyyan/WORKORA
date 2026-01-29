@@ -33,7 +33,7 @@ const Login = () => {
       dispatch(addClient(response.user))
       dispatch(clientAddToken(response.accessToken))
       toast.success("Login successful!");
-      navigate('/client/clientLanding', { replace: true })
+      navigate('/client', { replace: true })
       console.log("work")
 
     } catch (error) {
@@ -50,11 +50,14 @@ const Login = () => {
         dispatch(addClient(response.data));
         dispatch(clientAddToken(response.accessToken));
         toast.success("Login successful!");
-        navigate('/client/clientLanding', { replace: true });
-      } catch (error: any) {
-        console.error("Google login error:", error);
-        toast.error(error.response?.data?.message || "Google login failed");
+        navigate('/client', { replace: true });
+      } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Google login failed")
       }
+    }
     },
     onError: () => {
       toast.error("Google Login Failed");

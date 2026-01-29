@@ -81,7 +81,7 @@ const ForgotPass = () => {
         try {
             const respone = await clientNewPassword(val)
             console.log(respone)
-            navigate("/client/login")
+            navigate("/client/login",{replace:true})
             
         } catch (error) {
             console.log(error)

@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type OtpModalProps = {
   handleSubmitOtp: (otp: string) => void;
@@ -9,7 +9,22 @@ type OtpModalProps = {
 
 const OtpModal = ({ handleSubmitOtp,handleResendOtp}:OtpModalProps) => {
 
+
+
   const [otp, setOtp] = useState("")
+   const [timeLeft, setTimeLeft] = useState(60)
+  
+    // countdown logic
+    useEffect(() => {
+      if (timeLeft === 0) return
+  
+      const timer = setInterval(() => {
+        setTimeLeft(prev => prev - 1)
+      }, 1000)
+  
+      return () => clearInterval(timer)
+    }, [timeLeft])
+  
   return (
     <div className="fixed inset-0 bg-[#F5F7FA] flex justify-center items-center z-50">
       <div className="bg-white text-[#1A1A1A] rounded-2xl p-8 w-[90%] max-w-md shadow-lg">
@@ -51,11 +66,23 @@ const OtpModal = ({ handleSubmitOtp,handleResendOtp}:OtpModalProps) => {
           Verify & Continue
         </button>
 
-        <button onClick={handleResendOtp}>
-          <p className="text-center mt-4 pl-37 text-[#00A86B] hover:underline cursor-pointer">
-            Resend OTP
-          </p>
-        </button>
+         <div className="text-center mt-4">
+          {timeLeft > 0 ? (
+            <p className="text-gray-500">
+              Resend OTP in <span className="font-medium">{timeLeft}s</span>
+            </p>
+          ) : (
+            <button
+              onClick={() => {
+                handleResendOtp()
+                setTimeLeft(60)
+              }}
+              className="text-[#00A86B] hover:underline"
+            >
+              Resend OTP
+            </button>
+          )}
+        </div>
 
 
 

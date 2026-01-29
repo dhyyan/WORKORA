@@ -1,5 +1,5 @@
-import { GoogeleAuthInputDtos, GoogeleAuthOutPutDtos } from "../../../../DTOs/client/AuthDto";
+import { GoogeleAuthInputDtos } from "../../../../DTOs/client/AuthDto";
 
-export interface IGoogleAuthUseCase{
-    googleSign(input:GoogeleAuthInputDtos):Promise<GoogeleAuthOutPutDtos>
+export interface IGoogleAuthUseCase {
+    googleSign(input: GoogeleAuthInputDtos): Promise<any>
 }

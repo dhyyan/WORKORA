@@ -1,21 +1,26 @@
 import type { RootState } from '../../../store/store'
 import { motion } from 'framer-motion'
 import { Mail, Save } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProfile } from '../../../service/client/authService'
 import { addClient } from '../../../store/slice/client/clientSlice'
 import axios from 'axios'
+import { getUserDetails } from '../../../service/client/Dashboard/ProfileService'
+import type { IClient } from '../../../types/client/IClient'
 
 const ProfileView = () => {
   const userData = useSelector((state: RootState) => state.clientAuth.client)
   const [name, setName] = useState(userData?.name)
   const [phone, setPhone] = useState(userData?.phone)
   const [imageUrl,setImageUrl]=useState(userData?.profileImage)
+ const [data, setData] = useState<IClient | null>(null);
   const dispatch = useDispatch()
 
 
+  console.log("userdfasndaarrtt",userData)
   
+
   const handleUpdateProfile = async(event) => {
     console.log("looooopp", event.target.files[0])
     
@@ -66,6 +71,24 @@ const ProfileView = () => {
     dispatch(addClient(respone.data))
 
   }
+  useEffect(() => {
+  const userId = userData?._id;
+  if (!userId) return;
+
+  const fetchUser = async () => {
+    try {
+      const response = await getUserDetails({ userId });
+      console.log("refresh page responsee",response)
+      setData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchUser();
+}, [userData]);
+
+  console.log("dataaaaa",data)
   return (
     <>
       <motion.div
@@ -114,16 +137,16 @@ const ProfileView = () => {
               </div>
               <div className="text-xl font-bold text-gray-800">
 
-                <h2 >{userData?.name}</h2>
+                <h2 >{data?.name}</h2>
               </div><br />
               {/* <p className="text-gray-500 text-sm mb-4">Senior UI/UX Designer</p> */}
               <div className="flex items-center text-sm text-gray-600">
                 <Mail className="w-4 h-4 mr-3 text-gray-400" />
-                {userData?.email}
+                {data?.email}
               </div>
 
               <div>
-                <h1>{userData?.phone}</h1>
+                <h1>{data?.phone}</h1>
               </div>
 
 

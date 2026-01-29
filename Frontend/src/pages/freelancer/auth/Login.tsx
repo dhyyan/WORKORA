@@ -4,7 +4,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { motion, type Variants } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import type { LoginFormInputs } from '../../../types/auth/Tlogin';
-import { freelancerLogin } from '../../../service/freelancer/authService';
+import { useGoogleLogin } from '@react-oauth/google';
+import { freelancerGoogleAuth, freelancerLogin } from '../../../service/freelancer/authService';
 import { addFreelancer } from '../../../store/slice/freelancer/FreelanceSlice';
 import { freelancerAddToken } from '../../../store/slice/freelancer/FreelancerToken';
 import toast from 'react-hot-toast';
@@ -32,7 +33,7 @@ const Login = () => {
       dispatch(addFreelancer(response.user))
       dispatch(freelancerAddToken(response.accessToken))
       toast.success("login success")
-      navigate('/freelancer')
+      navigate('/freelancer',{replace:true})
       console.log("work")
 
     } catch (error) {
@@ -40,6 +41,31 @@ const Login = () => {
       toast.error("user not found")
     }
   };
+
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const response = await freelancerGoogleAuth({ token: tokenResponse.access_token });
+        console.log("response from google", response);
+
+        dispatch(addFreelancer(response.data));
+        dispatch(freelancerAddToken(response.accessToken));
+        toast.success("Google login successful");
+        navigate("/freelancer");
+
+      }catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Google login failed")
+      }
+    }
+    },
+    onError: () => {
+      toast.error("Google Login Failed");
+    }
+  });
 
   // Properly typed variants
   const heroVariants: Variants = {
@@ -248,6 +274,7 @@ const Login = () => {
             </motion.div>
 
             <motion.button
+              onClick={() => handleGoogleLogin()}
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

@@ -13,13 +13,14 @@ export class AdminLoginController{
         console.log('req.body :>> ', req.body);
         if(!email||!password)console.log("required fields are missing")
         try {
-            const {createdUser,accessToken,refreshToken}=await this._clientLoginUseCase.logiClient({email,password})
-            const data={
-                email:createdUser.email,
-                name:createdUser.name
-            }
+    const {createdUser,accessToken,refreshToken}=await this._clientLoginUseCase.logiClient({email,password})
+    const data={
+        email:createdUser.email,
+        name:createdUser.name
+    }
+    console.log("wodkk",data)
             if(createdUser){
-                res.status(HttpStatus.OK).json({message:"admin login success",data:data})
+                res.status(HttpStatus.OK).json({message:"admin login success",data:data,accessToken})
             }
         
         } catch (error) {

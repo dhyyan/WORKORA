@@ -1,23 +1,42 @@
 import { useEffect, useState } from "react";
-import { listClients } from "../../../service/admin/Dashboard/client/clientService";
+import { blockUser, listClients } from "../../../service/admin/Dashboard/client/clientService";
 import type { IClient } from "../../../types/client/IClient";
 
 const Clients = () => {
     const [users, setUsers] = useState<IClient[]>([]);
-    const [loadingId, setLoadingId] = useState<string | null>(null);
+    const [block,setBlock]=useState("")
+    const [loadingId] = useState<string | null>(null);
 
     const refreshClients = async () => {
         const response = await listClients();
         setUsers(response.data.clients);
     };
 
+    
+    const handleToggleStatus = async (id: string, isBlocked: boolean) => {
+        // console.log("claeedddd", id)
+        try {
+            if (isBlocked) {
+                const respone = await blockUser({ id ,isBlocked})
+                console.log(respone.data)
+                setBlock("BLOCKED")
+                
+            } else {
+                const respone = await blockUser({ id,isBlocked })
+                console.log(respone.data)
+                setBlock("UNBLOCKED")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
     useEffect(() => {
         const loadClients = async () => {
             await refreshClients()
         }
         loadClients()
-    }, [])
-    
+    },[block])
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-6">Clients</h2>
@@ -85,7 +104,10 @@ const Clients = () => {
                                 <td className="px-4 py-3">
                                     <button
                                         disabled={loadingId === user._id}
-                                        // onClick={() => handleToggleStatus(user._id)}
+                                        onClick={() =>
+                                            
+                                            user._id&&user.isBlocked !== undefined && handleToggleStatus(user._id, user.isBlocked)
+                                        }
                                         className={`px-4 py-1.5 rounded-md text-xs font-medium transition
                       ${user.isBlocked
                                                 ? "bg-green-600 text-white hover:bg-green-700"

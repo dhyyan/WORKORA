@@ -1,5 +1,7 @@
-import { Request, Response, Router } from "express";
-import { clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { Request, response, Response, Router } from "express";
+import { clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, jobCreateController, jobListController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
+import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
 export class UserRoutes {
     public UserRoutes: Router
@@ -41,13 +43,26 @@ export class UserRoutes {
             resendOtpController.resendOtp(req,res)
         })
 
-        this.UserRoutes.post('/updateprofile',(req:Request,res:Response)=>{
+        this.UserRoutes.post('/updateprofile',tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             console.log("hy chellooo")
             clientProfileUpdateController.updateProfile(req,res)
         })
 
         this.UserRoutes.post("/google",(req:Request,res:Response)=>{
             clientGoogleController.googleAuth(req,res)
+        })
+
+        this.UserRoutes.get("/userdata/:userId",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
+            console.log("tokeeeeeap") 
+            clientDataController.data(req,res)
+        })
+
+        this.UserRoutes.post("/postjob",(req:Request,res:Response)=>{
+            jobCreateController.createJob(req,res)
+        })
+
+        this.UserRoutes.get("/jobs/:id",(req:Request,res:Response)=>{
+            jobListController.listJob(req,res)
         })
 
 

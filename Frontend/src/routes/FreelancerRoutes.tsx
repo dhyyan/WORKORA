@@ -6,14 +6,15 @@ import Profile from '../components/freelancer/DashBoard/Profile'
 import DashBoardLayout from '../pages/freelancer/Dashboard/DashBoardLayout'
 import FreelancerLandingPage from '../pages/freelancer/FreelancerLandingPage'
 import EditProfilePage from '../components/freelancer/DashBoard/EditProfilePage'
+import FreelancerProtectRoute from './ProtectRoute/FreelancerProtectRoute'
 
 const FreelancerRoutes = () => {
   return (
     <>
       <Routes>
-        <Route path='/signup' element={<SignUp />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/forgotpassword' element={<ForgotPass />} />
+        <Route path='/signup' element={<FreelancerProtectRoute> <SignUp /> </FreelancerProtectRoute>} />
+        <Route path='/login' element={<FreelancerProtectRoute> <Login /> </FreelancerProtectRoute>} />
+        <Route path='/forgotpassword' element={<FreelancerProtectRoute> <ForgotPass /> </FreelancerProtectRoute>} />
         <Route path='/' element={<FreelancerLandingPage />} />
         <Route path='/dashboard' element={<DashBoardLayout />}>
           <Route index element={<Profile />} />

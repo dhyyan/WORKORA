@@ -7,6 +7,9 @@ import Dashboard from "../pages/client/Dashboard/Dashboard";
 import ProfileView from "../components/client/dashboard/ProfileView";
 import Wallet from "../components/client/dashboard/Wallet";
 import ChangePassword from "../components/client/dashboard/ChangePassword";
+import ProjectList from "../pages/client/project/ProjectList";
+import ProjectDetails from "../pages/client/project/ProjectDetails";
+import ClientProtectRoute from "./ProtectRoute/ClientProtectRoute";
 
 
 
@@ -14,15 +17,16 @@ export function ClientRoutes() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp/>}/>
-        <Route path="/forgotpassword" element={<ForgotPass/>}/>
-        <Route path="/clientLanding" element={<ClientLandingPage/>}/>
-        <Route path="/profile" element={<Dashboard/>}>
-            <Route index element={<ProfileView/>}/>
-            <Route path="projects" element={<Wallet/>}/>
-            <Route path="wallet" element={<Wallet/>}/>
-            <Route path="password" element={<ChangePassword/>}/>
+        <Route path="/login" element={<ClientProtectRoute><Login /></ClientProtectRoute>} />
+        <Route path="/signup" element={<ClientProtectRoute><SignUp /></ClientProtectRoute>} />
+        <Route path="/forgotpassword" element={<ClientProtectRoute><ForgotPass /></ClientProtectRoute>} />
+        <Route path="/" element={<ClientLandingPage />} />
+        <Route path="/profile" element={<Dashboard />}>
+          <Route index element={<ProfileView />} />
+          <Route path="projects" element={<ProjectList />} />
+          <Route path="projects/:id" element={<ProjectDetails />} />
+          <Route path="wallet" element={<Wallet />} />
+          <Route path="password" element={<ChangePassword />} />
 
         </Route>
       </Routes>
@@ -30,4 +34,3 @@ export function ClientRoutes() {
   );
 }
 
- 

@@ -141,7 +141,7 @@ export const updateProfile = async ({ name, email, phone, profileImage }: IOtp) 
 
 //google Auth
 
-export const clientGoogleAuth=async({token}:any)=>{
+export const clientGoogleAuth=async({token}:{ token: string })=>{
     try {
         console.log("google token",token)
         const response=await clientAxios.post("/client/google",{

@@ -1,17 +1,29 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 // import { useNavigate } from "react-router-dom";
 // import { freelacerOtpService } from "../../../service/freelancer/authService";
 // import type { IOtp } from "../../../types/auth/IOtp";
 
 type OtpModalProps = {
   handleSubmitOtp: (otp: string) => void;
-  handleSubmitResendOtp:()=>void
+  handleSubmitResendOtp: () => void
 };
-const OtpModal = ({ handleSubmitOtp,handleSubmitResendOtp }:OtpModalProps) => {
+const OtpModal = ({ handleSubmitOtp, handleSubmitResendOtp }: OtpModalProps) => {
 
   const [otp, setOtp] = useState("")
-  
+  const [timeLeft, setTimeLeft] = useState(60)
+
+  // countdown logic
+  useEffect(() => {
+    if (timeLeft === 0) return
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1)
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [timeLeft])
+
 
 
   //   if (!isOpen) return null
@@ -49,19 +61,36 @@ const OtpModal = ({ handleSubmitOtp,handleSubmitResendOtp }:OtpModalProps) => {
         )}
 
         <button
-          onClick={()=>handleSubmitOtp(otp)}
+          onClick={() => handleSubmitOtp(otp)}
           className="w-full mt-6 bg-[#00A86B] hover:bg-[#008F5C] text-white py-3 rounded-md font-medium transition disabled:opacity-60"
           disabled={otp.length !== 6}
         >
           Verify & Continue
         </button>
 
-        <button onClick={handleSubmitResendOtp}>
+        {/* <button onClick={handleSubmitResendOtp}>
           <p className="text-center mt-4 pl-37 text-[#00A86B] hover:underline cursor-pointer">
             Resend OTP
           </p>
-        </button>
-
+        </button> */}
+        {/* Countdown / Resend OTP */}
+        <div className="text-center mt-4">
+          {timeLeft > 0 ? (
+            <p className="text-gray-500">
+              Resend OTP in <span className="font-medium">{timeLeft}s</span>
+            </p>
+          ) : (
+            <button
+              onClick={() => {
+                handleSubmitResendOtp()
+                setTimeLeft(60)
+              }}
+              className="text-[#00A86B] hover:underline"
+            >
+              Resend OTP
+            </button>
+          )}
+        </div>
 
 
 
