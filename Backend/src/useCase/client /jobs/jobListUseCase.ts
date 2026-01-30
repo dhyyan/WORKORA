@@ -18,6 +18,7 @@ export class JobListUseCase implements IJobListUseCase {
             console.log("lilst jobs",listJobs)
 
             const jobs: BaseJobOutPutDtos[] = listJobs.map((job) => ({
+                _id:job._id!,
                 clientId: job.clientId,
                 title: job.title,
                 summary: job.summary,
