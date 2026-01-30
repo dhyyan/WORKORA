@@ -5,7 +5,10 @@ import { ClientDataController } from "../../adapters/controllers/client/Dashboar
 import { ClientProfileUpdateController } from "../../adapters/controllers/client/Dashboard/Profile/profileController";
 import { SendOtpForgotPasswordController } from "../../adapters/controllers/client/forgotPasswordController";
 import { JobController } from "../../adapters/controllers/client/Job/jobController";
+import { JobDeleteController } from "../../adapters/controllers/client/Job/jobDeleteController";
 import { JobListController } from "../../adapters/controllers/client/Job/jobListController";
+import { JobUpdateController } from "../../adapters/controllers/client/Job/jobUpdateController";
+import { JobViewController } from "../../adapters/controllers/client/Job/jobViewController";
 import { SendOtpController } from "../../adapters/controllers/client/otpController";
 import { ClientRegisterController } from "../../adapters/controllers/client/registerController";
 import { ResendOtpController } from "../../adapters/controllers/client/resendOptController";
@@ -25,7 +28,10 @@ import { VerifyOtpUseCase } from "../../useCase/client /auth/register/verifyOtpU
 import { ClientDataUseCasse } from "../../useCase/client /Dashboard/Profile/clientDataUseCase";
 import { UpateProfileUseCase } from "../../useCase/client /Dashboard/Profile/UpdateProfileUseCase";
 import { JobCreateUseCase } from "../../useCase/client /jobs/jobCreateUseCase";
+import { JobDeleteUseCase } from "../../useCase/client /jobs/jobDeleteUseCase";
 import { JobListUseCase } from "../../useCase/client /jobs/jobListUseCase";
+import { JobUpdateUseCase } from "../../useCase/client /jobs/jobUpdateUseCase";
+import { JobViewUseCase } from "../../useCase/client /jobs/jobViewUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
@@ -90,5 +96,19 @@ const jobRepository=new JobRepository()
 const jobCreateUseCase=new JobCreateUseCase(jobRepository)
 export const jobCreateController=new JobController(jobCreateUseCase)
 
+//jobs list
 const jobListUseCase=new JobListUseCase(jobRepository)
 export const jobListController=new JobListController(jobListUseCase)
+
+//job view
+const jobViewUseCase=new JobViewUseCase(jobRepository)
+export const jobViewController=new JobViewController(jobViewUseCase)
+
+//update Job
+const jobUpdateUseCase=new JobUpdateUseCase(jobRepository)
+export const jobUpdateController=new JobUpdateController(jobUpdateUseCase)
+
+//delete job
+
+const jobDeleteUseCase=new JobDeleteUseCase(jobRepository)
+export const jobDeleteController=new JobDeleteController(jobDeleteUseCase)

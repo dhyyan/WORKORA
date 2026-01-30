@@ -1,5 +1,7 @@
 import { FilterQuery, Model } from "mongoose";
 import { IBaseRepository } from "../../../domain/interface/repositoryInterface/IBaseRepository";
+import { Job } from "../../../domain/entities/job.entity";
+import { jobModel } from "../../../frameWork/database/models/job.model";
 
 export class BaseRepository<T> implements IBaseRepository<T>{
      protected model: Model<T>;
@@ -21,5 +23,9 @@ export class BaseRepository<T> implements IBaseRepository<T>{
     findByEmail(email: string): Promise<T | null> {
         return this.model.findOne({email})
     }
+
+    async findByIdAndUpdate(id: string, job: Partial<Job>): Promise<Job | null> {
+            return await jobModel.findByIdAndUpdate(id, job, { new: true })
+        }
   
 }

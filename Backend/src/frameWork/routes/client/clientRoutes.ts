@@ -1,5 +1,5 @@
 import { Request, response, Response, Router } from "express";
-import { clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, jobCreateController, jobListController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, jobCreateController, jobDeleteController, jobListController, jobUpdateController, jobViewController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -57,14 +57,25 @@ export class UserRoutes {
             clientDataController.data(req,res)
         })
 
-        this.UserRoutes.post("/postjob",(req:Request,res:Response)=>{
+        this.UserRoutes.post("/postjob",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             jobCreateController.createJob(req,res)
         })
 
-        this.UserRoutes.get("/jobs/:id",(req:Request,res:Response)=>{
+        this.UserRoutes.get("/jobs/:id",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             jobListController.listJob(req,res)
         })
 
+        this.UserRoutes.get("/job/:id",(req:Request,res:Response)=>{
+            jobViewController.viewJob(req,res)
+        })
+         
+        this.UserRoutes.post("/updatejob",(req:Request,res:Response)=>{
+            jobUpdateController.updateJob(req,res)
+        })
+
+        this.UserRoutes.post("/delete/:id",(req:Request,res:Response)=>{
+            jobDeleteController.delete(req,res)
+        })
 
     }
 
