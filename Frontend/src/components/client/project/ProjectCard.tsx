@@ -8,7 +8,7 @@ interface ProjectCardProps {
     budget: string;
     status: "open" | "assigned" | "close";
     postedDate: string;
-    // onView: () => void;
+    onViewDetails: () => void;
     // onEdit: () => void;
     // onBids: () => void;
 }
@@ -20,7 +20,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     budget,
     status,
     postedDate,
-    // onView,
+    onViewDetails,
     // onEdit,
     // onBids
 }) => {
@@ -62,7 +62,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
                 <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
                     <button
-                        // onClick={onView}
+                        onClick={onViewDetails}
                         className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
                     >
                         <Eye size={16} />
