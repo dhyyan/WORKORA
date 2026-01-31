@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ProjectListHeader from '../../../components/client/project/ProjectListHeader';
 import ProjectCard from '../../../components/client/project/ProjectCard';
 import ProjectListEmptyState from '../../../components/client/project/ProjectListEmptyState';
@@ -17,7 +17,7 @@ import type { RootState } from '../../../store/store';
 
 
 const ProjectList = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     // Toggle this to see empty state during development
     const [projects, setProjects] = useState<IJob[]>([])
     const user = useSelector((state: RootState) => state.clientAuth.client)
@@ -42,9 +42,9 @@ const ProjectList = () => {
     //     setIsBidsModalOpen(true);
     // };
 
-    // const handleViewDetails = (id: number) => {
-    //     navigate(`${id}`);
-    // }
+    const handleViewDetails = (id: string) => {
+        navigate(`/client/profile/projects/${id}`);
+    };
 
 
     // const handleViewProposal = (bid: any) => {
@@ -82,14 +82,19 @@ const ProjectList = () => {
                     <div className="space-y-4">
                         {projects.map((project) => (
                             <ProjectCard
+
                                 key={project._id}
                                 title={project.title}
                                 description={project.summary}
                                 category={project.category}
                                 budget={project.price}
                                 status={project.status}
-                                postedDate={project.createdAt? new Date(project.createdAt).toLocaleDateString(): ""}
-                            // onView={() => handleViewDetails(project?._id)}
+                                postedDate={project.createdAt ? new Date(project.createdAt).toLocaleDateString() : ""}
+                                onViewDetails={() => {
+                                    if (project._id) {
+                                        handleViewDetails(project._id);
+                                    }
+                                }}
                             // onEdit={() => handleEdit(project)}
                             // onBids={() => handleViewBids(project)}
                             />
