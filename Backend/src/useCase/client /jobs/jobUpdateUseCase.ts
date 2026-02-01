@@ -14,7 +14,6 @@ export class JobUpdateUseCase implements IJobUpdateUseCase {
         try {
 
             const findJob = await this._jobRepository.findById(job._id!)
-
             console.log("findeeeyyyy", findJob)
             if (!findJob) throw new Error('job in this id not found')
 

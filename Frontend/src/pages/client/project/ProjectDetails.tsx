@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, DollarSign, Tag} from 'lucide-react';
+import { ArrowLeft, Clock, DollarSign, Tag } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { jobViewService } from '../../../service/client/Project/jobService';
 import { useEffect, useState } from 'react';
@@ -25,7 +25,7 @@ const ProjectDetails = () => {
 
         viewJobDetails();
     }, [id]);
-    console.log("project",project)
+    console.log("project", project)
     return (
         <div className="w-full max-w-4xl mx-auto py-8">
             <button
@@ -71,13 +71,13 @@ const ProjectDetails = () => {
                         <div className="font-semibold text-gray-900">{project?.deadline}</div>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-  <div className="flex items-center gap-2 text-gray-500 mb-1 text-sm">
-    <Clock size={16} /> Duration
-  </div>
-  <div className="font-semibold text-gray-900">
-    {project?.duration}
-  </div>
-</div>
+                        <div className="flex items-center gap-2 text-gray-500 mb-1 text-sm">
+                            <Clock size={16} /> Duration
+                        </div>
+                        <div className="font-semibold text-gray-900">
+                            {project?.duration}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="prose prose-gray max-w-none">
@@ -87,28 +87,28 @@ const ProjectDetails = () => {
                     </div>
                 </div>
                 <div className="mt-8">
-  <h3 className="text-lg font-semibold text-gray-900 mb-4">
-    Project Features
-  </h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                        Project Features
+                    </h3>
 
-  {project?.features && project.features.length > 0 ? (
-    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      {project.features.map((feature, index) => (
-        <li
-          key={index}
-          className="flex items-start gap-2 text-gray-700"
-        >
-          <span className="mt-1 h-2 w-2 rounded-full bg-gray-400" />
-          <span>{feature}</span>
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p className="text-gray-500 text-sm">
-      No features mentioned for this project.
-    </p>
-  )}
-</div>
+                    {project?.features && project.features.length > 0 ? (
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {project.features.map((feature, index) => (
+                                <li
+                                    key={index}
+                                    className="flex items-start gap-2 text-gray-700"
+                                >
+                                    <span className="mt-1 h-2 w-2 rounded-full bg-gray-400" />
+                                    <span>{feature}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-gray-500 text-sm">
+                            No features mentioned for this project.
+                        </p>
+                    )}
+                </div>
             </div>
         </div>
     );
