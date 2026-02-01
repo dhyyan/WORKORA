@@ -9,7 +9,7 @@ interface ProjectCardProps {
     status: "open" | "assigned" | "close";
     postedDate: string;
     onViewDetails: () => void;
-    // onEdit: () => void;
+    onEdit: () => void;
     // onBids: () => void;
 }
 
@@ -21,7 +21,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     status,
     postedDate,
     onViewDetails,
-    // onEdit,
+    onEdit,
     // onBids
 }) => {
     const getStatusColor = (status: string) => {
@@ -76,7 +76,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         <span>View Bids</span>
                     </button>
                     <button
-                        // onClick={onEdit}
+                        onClick={onEdit}
                         className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
                     >
                         <Edit size={16} />

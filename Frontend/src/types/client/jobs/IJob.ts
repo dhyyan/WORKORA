@@ -1,13 +1,13 @@
 export interface IJob {
   _id?: string;
-  clientId: string;
+  clientId?: string;
   title: string;
   category: string;
   price: string;
-  duration: string;
-  deadline: string;
+  duration?: string;
+  deadline?: string;
   summary: string;
   features?: string[];
-  status: "open" 
+  status?: "open" 
   createdAt?: Date;
 }

@@ -31,3 +31,15 @@ export const jobViewService = async ({ id }: { id: string }) => {
       throw error;
    }
 }
+
+
+export const updateJob=async(job:Partial<IJob>)=>{
+try {
+   console.log("hmmjob",job)
+   const response=await clientAxios.put('/client/updatejob',job)
+   return response.data
+} catch (error) { 
+    console.error("job update error: in service", error);
+      throw error;
+}
+}
