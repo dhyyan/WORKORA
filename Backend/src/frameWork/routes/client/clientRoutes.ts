@@ -73,7 +73,7 @@ export class UserRoutes {
             jobUpdateController.updateJob(req,res)
         })
 
-        this.UserRoutes.post("/delete/:id",(req:Request,res:Response)=>{
+        this.UserRoutes.delete("/deletejob/:id",(req:Request,res:Response)=>{
             jobDeleteController.delete(req,res)
         })
 
