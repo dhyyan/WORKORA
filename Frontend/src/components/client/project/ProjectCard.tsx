@@ -1,7 +1,9 @@
 import React from 'react';
 import { Eye, FileText, Edit, XCircle } from 'lucide-react';
+import { deleteJob } from '../../../service/client/Project/jobService';
 
 interface ProjectCardProps {
+    _id:string,
     title: string;
     description: string;
     category: string;
@@ -10,10 +12,12 @@ interface ProjectCardProps {
     postedDate: string;
     onViewDetails: () => void;
     onEdit: () => void;
+    refresh: () => void;
     // onBids: () => void;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
+    _id,
     title,
     description,
     category,
@@ -22,6 +26,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     postedDate,
     onViewDetails,
     onEdit,
+    refresh
     // onBids
 }) => {
     const getStatusColor = (status: string) => {
@@ -36,6 +41,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 return 'bg-gray-100 text-gray-600 border-gray-200';
         }
     };
+    const hanleDeleteJob = async() => {
+        console.log("delete job called")
+        try {
+            console.log("keyyy",_id)
+            if(!_id) return;
+            const response = await deleteJob({_id:_id})
+
+            console.log("response in delete", response)
+            // onClose()
+            refresh()            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="bg-white rounded-2xl p-6 mb-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
@@ -82,7 +101,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         <Edit size={16} />
                         <span>Edit</span>
                     </button>
-                    <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-red-600 bg-white border border-red-100 rounded-lg hover:bg-red-50 transition-colors whitespace-nowrap">
+                    <button
+                    onClick={hanleDeleteJob}
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-red-600 bg-white border border-red-100 rounded-lg hover:bg-red-50 transition-colors whitespace-nowrap">
                         <XCircle size={16} />
                         <span>Close Job</span>
                     </button>

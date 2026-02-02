@@ -66,11 +66,10 @@ const ProjectList = () => {
                 console.log(error);
             }
         };
-setRefresh(false);
+        setRefresh(false);
         refreshData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh]);
-
 
     console.log("dataaa", projects)
     return (
@@ -84,6 +83,7 @@ setRefresh(false);
                             <ProjectCard
 
                                 key={project._id}
+                                _id={project._id!}
                                 title={project.title}
                                 description={project.summary}
                                 category={project.category}
@@ -95,7 +95,8 @@ setRefresh(false);
                                         handleViewDetails(project._id);
                                     }
                                 }}
-                            onEdit={() => handleEdit(project)}
+                                refresh={() => setRefresh(prev => !prev)}
+                                onEdit={() => handleEdit(project)}
                             // onBids={() => handleViewBids(project)}
                             />
                         ))}
@@ -111,7 +112,7 @@ setRefresh(false);
                     onClose={() => setIsCreateModalOpen(false)}
                 />
 
-               <EditProjectModal
+                <EditProjectModal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                     refresh={() => setRefresh(true)}
@@ -124,11 +125,11 @@ setRefresh(false);
                                 price: selectedProject.price,
                                 summary: selectedProject.summary,
                                 features: selectedProject.features,
-                              }
+                            }
                             : null
                     }
                 />
-{/* 
+                {/* 
                 <ViewBidsModal
                     isOpen={isBidsModalOpen}
                     onClose={() => setIsBidsModalOpen(false)}

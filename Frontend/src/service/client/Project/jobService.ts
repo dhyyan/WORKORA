@@ -43,3 +43,16 @@ try {
       throw error;
 }
 }
+
+
+export const deleteJob=async({_id}:{_id:string})=>{
+   try {
+      console.log("delete id in service",_id)
+      const id= _id
+      const response=await clientAxios.delete(`/client/deletejob/${id}`)
+      return response.data
+   } catch (error) {
+      console.error("job delete error: in service", error);
+      throw error;
+   }
+}
