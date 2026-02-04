@@ -11,7 +11,7 @@ const Sidebar = () => {
 
   return (
     <aside className="hidden md:flex flex-col w-72 min-h-screen bg-[#f8fafc] border-r border-gray-200 px-6 py-6">
-      
+
       {/* Logo */}
       <div className="flex items-center gap-3 mb-10">
         <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center">
@@ -23,7 +23,7 @@ const Sidebar = () => {
       </div>
 
       {/* Section title */}
-    
+
       {/* Menu */}
       <nav className="flex-1 space-y-2">
         {menuItems.map(({ id, label, icon: Icon }) => (
@@ -32,10 +32,9 @@ const Sidebar = () => {
             to={id} // nested route
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl text-base transition-all
-              ${
-                isActive
-                  ? "bg-emerald-100 text-emerald-700 font-semibold"
-                  : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-600"
+              ${isActive
+                ? "bg-emerald-100 text-emerald-700 font-semibold"
+                : "text-gray-600 hover:bg-emerald-50 hover:text-emerald-600"
               }`
             }
           >

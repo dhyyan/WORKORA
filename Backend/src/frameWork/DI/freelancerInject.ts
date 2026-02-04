@@ -25,6 +25,12 @@ import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
 import { OtpSerrvice } from "../service/otpService";
+import { FreelancerJobListController } from "../../adapters/controllers/freelancer/jobs/freelancerJobListController";
+import { FreelancerJobListUseCase } from "../../useCase/freelancer/jobs/freelancerJobListUseCase";
+import { JobRepository } from "../../adapters/repository/client/jobRepository";
+import { BidCreateController } from "../../adapters/controllers/freelancer/bid/createBidController";
+import { CreateBidUseCase } from "../../useCase/freelancer/bid/createBidUseCase";
+import { BidRepository } from "../../adapters/repository/freelancer/bidRepository";
 
 
 //signup
@@ -80,3 +86,15 @@ export const freelancerUpdateProfileController = new FreelancerUpdateProfileCont
 
 const getUserUseCase = new GetUserUseCase(freelancerRepository)
 export const freelancerDataController = new FreelancerDataController(getUserUseCase)
+
+//freelancer list jobs
+
+const jobRepository=new JobRepository()
+const freelancerJobListUseCase=new FreelancerJobListUseCase(jobRepository)
+export const freelancerJobListController=new FreelancerJobListController(freelancerJobListUseCase)
+
+
+// bid create controller
+const bidRepository=new BidRepository()
+const createBidUseCase=new CreateBidUseCase(bidRepository)
+export const bidCreateController=new BidCreateController(createBidUseCase)

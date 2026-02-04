@@ -10,10 +10,10 @@ export class JobListController{
     async listJob(req:Request,res:Response):Promise<void>{
         try {
             const id=req.params.id
-            console.log("id ds",id)
+            
             const listJobs=await this._jobListUseCase.listJobs({id})
             if(!listJobs){
-                res.status(HttpStatus.NOT_FOUND).json({message:"user datas fetched failed",})
+                res.status(HttpStatus.NOT_FOUND).json({message:"jobs datas fetched failed",})
             }
             res.status(HttpStatus.OK).json({message:"job list success",jobs:listJobs})
         } catch (error) {
