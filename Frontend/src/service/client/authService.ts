@@ -9,6 +9,7 @@ import type { LoginFormInputs } from "../../types/auth/Tlogin";
 //login service
 export const clientLoginService = async ({ email, password }: LoginFormInputs) => {
     try {
+        console.log("login service",email,password)
         const response = await clientAxios.post('/client/login', {
             email,
             password

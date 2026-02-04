@@ -44,23 +44,22 @@ export class UserRoutes {
         })
 
         this.UserRoutes.post('/updateprofile',tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
-            console.log("hy chellooo")
             clientProfileUpdateController.updateProfile(req,res)
         })
-
+        
         this.UserRoutes.post("/google",(req:Request,res:Response)=>{
             clientGoogleController.googleAuth(req,res)
         })
-
+        
         this.UserRoutes.get("/userdata/:userId",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             console.log("tokeeeeeap") 
             clientDataController.data(req,res)
         })
-
+        
         this.UserRoutes.post("/postjob",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             jobCreateController.createJob(req,res)
         })
-
+        
         this.UserRoutes.get("/jobs/:id",tokenVerifyMiddleware,authMiddleware,(req:Request,res:Response)=>{
             jobListController.listJob(req,res)
         })
@@ -68,12 +67,13 @@ export class UserRoutes {
         this.UserRoutes.get("/job/:id",(req:Request,res:Response)=>{
             jobViewController.viewJob(req,res)
         })
-         
-        this.UserRoutes.post("/updatejob",(req:Request,res:Response)=>{
+        
+        this.UserRoutes.put("/updatejob",(req:Request,res:Response)=>{
+            console.log("hy chellooo")
             jobUpdateController.updateJob(req,res)
         })
 
-        this.UserRoutes.post("/delete/:id",(req:Request,res:Response)=>{
+        this.UserRoutes.delete("/deletejob/:id",(req:Request,res:Response)=>{
             jobDeleteController.delete(req,res)
         })
 

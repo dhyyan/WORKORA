@@ -14,7 +14,7 @@ export class JobListUseCase implements IJobListUseCase {
             }
             console.log("id in use case",input.id)
 
-            const listJobs = await this._jobRepository.findAll({ clientId: input.id });
+            const listJobs = await this._jobRepository.findAll({ clientId: input.id});
             console.log("lilst jobs",listJobs)
 
             const jobs: BaseJobOutPutDtos[] = listJobs.map((job) => ({

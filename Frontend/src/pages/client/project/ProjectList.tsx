@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ProjectListHeader from '../../../components/client/project/ProjectListHeader';
 import ProjectCard from '../../../components/client/project/ProjectCard';
 import ProjectListEmptyState from '../../../components/client/project/ProjectListEmptyState';
-// import EditProjectModal from '../../../components/client/project/EditProjectModal';
+import EditProjectModal from '../../../components/client/project/EditProjectModal';
 // import ViewBidsModal from '../../../components/client/project/ViewBidsModal';
 import CreateProjectModal from '../../../components/client/project/CreateProjectModal';
 // import ViewProposalModal from '../../../components/client/project/ViewProposalModal';
@@ -17,34 +17,34 @@ import type { RootState } from '../../../store/store';
 
 
 const ProjectList = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     // Toggle this to see empty state during development
     const [projects, setProjects] = useState<IJob[]>([])
     const user = useSelector((state: RootState) => state.clientAuth.client)
     const [refresh, setRefresh] = useState(false)
 
     // Modal State
-    // const [selectedProject, setSelectedProject] = useState<any>(null);
+    const [selectedProject, setSelectedProject] = useState<IJob | null>(null);
     // const [selectedBid, setSelectedBid] = useState<any>(null);
 
-    // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     // const [isBidsModalOpen, setIsBidsModalOpen] = useState(false);
     // const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    // const handleEdit = (project: any) => {
-    //     setSelectedProject(project);
-    //     setIsEditModalOpen(true);
-    // };
+    const handleEdit = (project: IJob) => {
+        setSelectedProject(project);
+        setIsEditModalOpen(true);
+    };
 
     // const handleViewBids = (project: any) => {
     //     setSelectedProject(project);
     //     setIsBidsModalOpen(true);
     // };
 
-    // const handleViewDetails = (id: number) => {
-    //     navigate(`${id}`);
-    // }
+    const handleViewDetails = (id: string) => {
+        navigate(`/client/profile/projects/${id}`);
+    };
 
 
     // const handleViewProposal = (bid: any) => {
@@ -66,11 +66,10 @@ const ProjectList = () => {
                 console.log(error);
             }
         };
-
+        setRefresh(false);
         refreshData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh]);
-
 
     console.log("dataaa", projects)
     return (
@@ -82,15 +81,22 @@ const ProjectList = () => {
                     <div className="space-y-4">
                         {projects.map((project) => (
                             <ProjectCard
+
                                 key={project._id}
+                                _id={project._id!}
                                 title={project.title}
                                 description={project.summary}
                                 category={project.category}
                                 budget={project.price}
-                                status={project.status}
-                                postedDate={project.createdAt? new Date(project.createdAt).toLocaleDateString(): ""}
-                            // onView={() => handleViewDetails(project?._id)}
-                            // onEdit={() => handleEdit(project)}
+                                status={project.status ?? "open"}
+                                postedDate={project.createdAt ? new Date(project.createdAt).toLocaleDateString() : ""}
+                                onViewDetails={() => {
+                                    if (project._id) {
+                                        handleViewDetails(project._id);
+                                    }
+                                }}
+                                refresh={() => setRefresh(prev => !prev)}
+                                onEdit={() => handleEdit(project)}
                             // onBids={() => handleViewBids(project)}
                             />
                         ))}
@@ -106,12 +112,24 @@ const ProjectList = () => {
                     onClose={() => setIsCreateModalOpen(false)}
                 />
 
-                {/* <EditProjectModal
+                <EditProjectModal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
-                    project={selectedProject}
+                    refresh={() => setRefresh(true)}
+                    project={
+                        selectedProject
+                            ? {
+                                _id: selectedProject._id ?? '',
+                                title: selectedProject.title,
+                                category: selectedProject.category,
+                                price: selectedProject.price,
+                                summary: selectedProject.summary,
+                                features: selectedProject.features,
+                            }
+                            : null
+                    }
                 />
-
+                {/* 
                 <ViewBidsModal
                     isOpen={isBidsModalOpen}
                     onClose={() => setIsBidsModalOpen(false)}
@@ -123,7 +141,7 @@ const ProjectList = () => {
                     isOpen={isProposalModalOpen}
                     onClose={() => setIsProposalModalOpen(false)}
                     bid={selectedBid}
-                /> */}
+                />  */}
             </div>
         </div>
     );

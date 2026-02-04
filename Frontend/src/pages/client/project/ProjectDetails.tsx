@@ -1,21 +1,31 @@
-import React from 'react';
-import { ArrowLeft, DollarSign, Tag, Clock } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Clock, DollarSign, Tag } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { jobViewService } from '../../../service/client/Project/jobService';
+import { useEffect, useState } from 'react';
+import type { IJob } from '../../../types/client/jobs/IJob';
 
-const ProjectDetails: React.FC = () => {
+const ProjectDetails = () => {
     const navigate = useNavigate();
 
-    // Dummy Data - In real app, fetch by ID
-    const project = {
-        title: "E-commerce Website Re-design",
-        description: "We are looking for an experienced UI/UX designer to redesign our core e-commerce platform with a focus on mobile conversion. The current site is built on Shopify but we are moving to a custom React-based solution. The ideal candidate should have a strong portfolio in e-commerce and a deep understanding of conversion rate optimization principles.\n\nKey Responsibilities:\n1. Conduct user research and analyze current pain points.\n2. Create wireframes and high-fidelity mockups for all core pages (Home, Category, Product, Cart, Checkout).\n3. Develop a comprehensive design system.\n\nRequirements:\n- 5+ years of experience in UI/UX design.\n- Proficiency in Figma and Adobe Suite.\n- Experience with e-commerce platforms.",
-        category: "Web Design",
-        budget: "$2,500 - $4,000",
-        postedDate: "2 days ago",
-        status: "Open",
-        deadline: "30 Days"
-    };
 
+    const [project, setProject] = useState<IJob>()
+    const { id } = useParams()
+    console.log("id param", id)
+
+    useEffect(() => {
+        const viewJobDetails = async () => {
+            try {
+                if (!id) return;
+                const response = await jobViewService({ id });
+                setProject(response.job.job);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        viewJobDetails();
+    }, [id]);
+    console.log("project", project)
     return (
         <div className="w-full max-w-4xl mx-auto py-8">
             <button
@@ -30,13 +40,13 @@ const ProjectDetails: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <h1 className="text-2xl font-bold text-gray-900">{project.title}</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">{project?.title}</h1>
                             <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
-                                {project.status}
+                                {project?.status}
                             </span>
                         </div>
                         <p className="text-gray-500 flex items-center gap-2 text-sm">
-                            Posted {project.postedDate}
+                            Posted {project?.createdAt?.toString()}
                         </p>
                     </div>
                 </div>
@@ -46,27 +56,58 @@ const ProjectDetails: React.FC = () => {
                         <div className="flex items-center gap-2 text-gray-500 mb-1 text-sm">
                             <Tag size={16} /> Category
                         </div>
-                        <div className="font-semibold text-gray-900">{project.category}</div>
+                        <div className="font-semibold text-gray-900">{project?.category}</div>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
                         <div className="flex items-center gap-2 text-gray-500 mb-1 text-sm">
                             <DollarSign size={16} /> Budget
                         </div>
-                        <div className="font-semibold text-gray-900">{project.budget}</div>
+                        <div className="font-semibold text-gray-900">{project?.price}</div>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
                         <div className="flex items-center gap-2 text-gray-500 mb-1 text-sm">
                             <Clock size={16} /> Deadline
                         </div>
-                        <div className="font-semibold text-gray-900">{project.deadline}</div>
+                        <div className="font-semibold text-gray-900">{project?.deadline}</div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                        <div className="flex items-center gap-2 text-gray-500 mb-1 text-sm">
+                            <Clock size={16} /> Duration
+                        </div>
+                        <div className="font-semibold text-gray-900">
+                            {project?.duration}
+                        </div>
                     </div>
                 </div>
 
                 <div className="prose prose-gray max-w-none">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Project Description</h3>
                     <div className="text-gray-600 whitespace-pre-line leading-relaxed">
-                        {project.description}
+                        {project?.summary}
                     </div>
+                </div>
+                <div className="mt-8">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                        Project Features
+                    </h3>
+
+                    {project?.features && project.features.length > 0 ? (
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {project.features.map((feature, index) => (
+                                <li
+                                    key={index}
+                                    className="flex items-start gap-2 text-gray-700"
+                                >
+                                    <span className="mt-1 h-2 w-2 rounded-full bg-gray-400" />
+                                    <span>{feature}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-gray-500 text-sm">
+                            No features mentioned for this project.
+                        </p>
+                    )}
                 </div>
             </div>
         </div>
@@ -74,3 +115,4 @@ const ProjectDetails: React.FC = () => {
 };
 
 export default ProjectDetails;
+
