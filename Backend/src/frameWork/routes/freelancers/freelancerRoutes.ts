@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController } from "../../DI/freelancerInject";
+import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController } from "../../DI/freelancerInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -41,16 +41,28 @@ export class FreelancerRoutes {
             freelancerChangePassController.create(req, res)
         })
 
-        this.FreelancerRoutes.post("/updateprofile",tokenVerifyMiddleware,authMiddleware, (req: Request, res: Response) => {
+        this.FreelancerRoutes.post("/updateprofile", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             freelancerUpdateProfileController.update(req, res)
         })
 
-        this.FreelancerRoutes.get("/userdata/:userId",tokenVerifyMiddleware,authMiddleware, (req: Request, res: Response) => {
+        this.FreelancerRoutes.get("/userdata/:userId", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             freelancerDataController.userData(req, res)
         })
 
         this.FreelancerRoutes.post("/google", (req: Request, res: Response) => {
             freelancerGoogleController.googleAuth(req, res)
+        })
+
+        this.FreelancerRoutes.get("/joblist", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            freelancerJobListController.listJob(req, res)
+        })
+
+        this.FreelancerRoutes.get("/job/:id", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            freelancerJobListController.getJobById(req, res);
+        });
+
+        this.FreelancerRoutes.post("/createbid",(req:Request,res:Response)=>{
+            bidCreateController.createBid(req,res)
         })
     }
 }

@@ -7,6 +7,7 @@ export interface IJob {
   duration?: string;
   deadline?: string;
   summary: string;
+  skill?:string[],
   features?: string[];
   status?: "open" 
   createdAt?: Date;

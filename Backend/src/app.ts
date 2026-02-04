@@ -41,14 +41,14 @@ export class App {
         this._app.use('/client/', new UserRoutes().UserRoutes)
     }
 
-    private _setFreelancerRoutes(){
+    private _setFreelancerRoutes() {
         console.log("freelancer Route called")
-        this._app.use("/freelancer",new FreelancerRoutes().FreelancerRoutes)
+        this._app.use("/freelancer", new FreelancerRoutes().FreelancerRoutes)
     }
 
-      private _setAdminRoutes(){
+    private _setAdminRoutes() {
         console.log("Admin Route called")
-        this._app.use("/admin",new AdminRoutes().AdminRoutes)
+        this._app.use("/admin", new AdminRoutes().AdminRoutes)
     }
 
 
