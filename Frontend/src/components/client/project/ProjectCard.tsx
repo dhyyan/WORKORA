@@ -13,7 +13,7 @@ interface ProjectCardProps {
     onViewDetails: () => void;
     onEdit: () => void;
     refresh: () => void;
-    // onBids: () => void;
+    onBids: () => void;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -26,8 +26,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     postedDate,
     onViewDetails,
     onEdit,
-    refresh
-    // onBids
+    refresh,
+    onBids
 }) => {
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -88,7 +88,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         <span>View Details</span>
                     </button>
                     <button
-                        // onClick={onBids}
+                        onClick={onBids}
                         className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
                     >
                         <FileText size={16} />
