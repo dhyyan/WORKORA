@@ -36,6 +36,10 @@ import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
 import { OtpSerrvice } from "../service/otpService";
+import { BidListUseCase } from "../../useCase/client /bid/bidListUseCase";
+import { IBidRepository } from "../../domain/interface/repositoryInterface/IBidRepository";
+import { BidRepository } from "../../adapters/repository/freelancer/bidRepository";
+import { BidViewController } from "../../adapters/controllers/client/bid/bidViewController";
 
 
 
@@ -112,3 +116,9 @@ export const jobUpdateController=new JobUpdateController(jobUpdateUseCase)
 
 const jobDeleteUseCase=new JobDeleteUseCase(jobRepository)
 export const jobDeleteController=new JobDeleteController(jobDeleteUseCase)
+
+//bid list for client
+
+const bidRepository:IBidRepository=new BidRepository()
+const bidListUseCase=new BidListUseCase(bidRepository)
+export const bidListController=new BidViewController(bidListUseCase)

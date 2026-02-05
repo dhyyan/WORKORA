@@ -4,13 +4,14 @@ import ProjectListHeader from '../../../components/client/project/ProjectListHea
 import ProjectCard from '../../../components/client/project/ProjectCard';
 import ProjectListEmptyState from '../../../components/client/project/ProjectListEmptyState';
 import EditProjectModal from '../../../components/client/project/EditProjectModal';
-// import ViewBidsModal from '../../../components/client/project/ViewBidsModal';
+import ViewBidsModal from '../../../components/client/project/ViewBidsModal';
 import CreateProjectModal from '../../../components/client/project/CreateProjectModal';
-// import ViewProposalModal from '../../../components/client/project/ViewProposalModal';
+import ViewProposalModal from '../../../components/client/project/ViewProposalModal';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import { jobListService } from '../../../service/client/Project/jobService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
+import type { IBid } from '../../../types/freelancer/bid/IBid';
 
 
 
@@ -25,11 +26,11 @@ const ProjectList = () => {
 
     // Modal State
     const [selectedProject, setSelectedProject] = useState<IJob | null>(null);
-    // const [selectedBid, setSelectedBid] = useState<any>(null);
+    const [selectedBid, setSelectedBid] = useState<IBid>("" as unknown as IBid);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    // const [isBidsModalOpen, setIsBidsModalOpen] = useState(false);
-    // const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
+    const [isBidsModalOpen, setIsBidsModalOpen] = useState(false);
+    const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     const handleEdit = (project: IJob) => {
@@ -37,21 +38,22 @@ const ProjectList = () => {
         setIsEditModalOpen(true);
     };
 
-    // const handleViewBids = (project: any) => {
-    //     setSelectedProject(project);
-    //     setIsBidsModalOpen(true);
-    // };
+    const handleViewBids = (project: IJob) => {
+        console.log("called bid")
+        setSelectedProject(project);
+        setIsBidsModalOpen(true);
+    };
 
     const handleViewDetails = (id: string) => {
         navigate(`/client/profile/projects/${id}`);
     };
 
 
-    // const handleViewProposal = (bid: any) => {
-    //     setSelectedBid(bid);
-    //     setIsProposalModalOpen(true);
-    //     // Note: ViewBidsModal stays open in the background, optional: close it if required
-    // };
+    const handleViewProposal = (bid: IBid) => {
+        setSelectedBid(bid);
+        setIsProposalModalOpen(true);
+        // Note: ViewBidsModal stays open in the background, optional: close it if required
+    };
 
     useEffect(() => {
         const refreshData = async () => {
@@ -97,7 +99,7 @@ const ProjectList = () => {
                                 }}
                                 refresh={() => setRefresh(prev => !prev)}
                                 onEdit={() => handleEdit(project)}
-                            // onBids={() => handleViewBids(project)}
+                            onBids={() => handleViewBids(project)}
                             />
                         ))}
                     </div>
@@ -129,19 +131,21 @@ const ProjectList = () => {
                             : null
                     }
                 />
-                {/* 
-                <ViewBidsModal
-                    isOpen={isBidsModalOpen}
-                    onClose={() => setIsBidsModalOpen(false)}
-                    project={selectedProject}
-                    onViewProposal={handleViewProposal}
-                />
+               
+                {selectedProject && (
+                    <ViewBidsModal
+                        isOpen={isBidsModalOpen}
+                        onClose={() => setIsBidsModalOpen(false)}
+                        project={selectedProject}
+                        onViewProposal={handleViewProposal}
+                    />
+                )}
 
-                <ViewProposalModal
+                 <ViewProposalModal
                     isOpen={isProposalModalOpen}
                     onClose={() => setIsProposalModalOpen(false)}
                     bid={selectedBid}
-                />  */}
+                />   
             </div>
         </div>
     );
