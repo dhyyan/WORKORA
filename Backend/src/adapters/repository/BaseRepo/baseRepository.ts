@@ -18,6 +18,7 @@ export class BaseRepository<T> implements IBaseRepository<T>{
         return this.model.findByIdAndDelete(id)
     }
     findById(id: string): Promise<T | null> {
+        console.log("ideyy",id)
         return this.model.findById(id)
     }
     findByEmail(email: string): Promise<T | null> {

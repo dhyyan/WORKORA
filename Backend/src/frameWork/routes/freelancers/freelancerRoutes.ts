@@ -61,7 +61,7 @@ export class FreelancerRoutes {
             freelancerJobListController.getJobById(req, res);
         });
 
-        this.FreelancerRoutes.post("/createbid",(req:Request,res:Response)=>{
+        this.FreelancerRoutes.post("/createbid", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             bidCreateController.createBid(req,res)
         })
     }

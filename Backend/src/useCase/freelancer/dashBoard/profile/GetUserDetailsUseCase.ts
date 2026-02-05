@@ -30,6 +30,7 @@ export class GetUserUseCase implements IGetUserUseCase {
                 experience: user.experience ?? "",
                 profileImage: user.profileImage,
                 bio: user.bio,
+                rating: user.rating,
                 isSubscribed: user.isSubscribed,
                 isBlocked: user.isBlocked,
 

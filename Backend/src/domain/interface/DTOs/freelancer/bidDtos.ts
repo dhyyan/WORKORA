@@ -5,7 +5,7 @@ export interface BaseBidOutPutDtos {
     coverLetter: string,
     bidAmount?: number,
     status?: "pending" | "accepted" | "rejected",
-    createAt?: Date
+    createdAt?: Date
 }
 
 export interface BidCreateInputDtos {
