@@ -1,3 +1,5 @@
+import { BaseFreelancerOutputDtos } from "../freelancer/authDtos"
+import { BaseContractOutPutDtos } from "./bidDtos"
 
 
 
@@ -74,4 +76,13 @@ export interface JobDeleteInputDtos{
 
 export interface JobDeleteOutputDtos{
     success:boolean
+}
+
+export interface JobContractInputDtos{
+    id:string
+}
+
+export interface JobContractOutPutDtos{
+    contract:BaseContractOutPutDtos,
+    freelancer:BaseFreelancerOutputDtos
 }

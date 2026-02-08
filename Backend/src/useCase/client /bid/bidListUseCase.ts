@@ -3,11 +3,14 @@ import { BidListInputDtos, BidListOutputDtos } from "../../../domain/interface/D
 import { BaseBidOutPutDtos } from "../../../domain/interface/DTOs/freelancer/bidDtos";
 import { IBidRepository } from "../../../domain/interface/repositoryInterface/IBidRepository";
 import { IBidsListsUseCase } from "../../../domain/interface/useCaseInterface/client/bid/iBidsListsUseCase";
+import { IFreelancerRepository } from "../../../domain/interface/repositoryInterface/IFreelancerRepository";
 
 export class BidListUseCase implements IBidsListsUseCase {
     private _bidRepository: IBidRepository
+  
     constructor(bidRepository: IBidRepository) {
         this._bidRepository = bidRepository
+        
     }
 
     async listBids(input: BidListInputDtos): Promise<BidListOutputDtos> {
@@ -17,6 +20,7 @@ export class BidListUseCase implements IBidsListsUseCase {
                 
         const jobId = input.jobId
         const bidsData = await this._bidRepository.findAll({ jobId: jobId })
+       
         console.log("bids find", bidsData)
         if (!bidsData) throw new Error("no bids found for this jobId")
         const bidsArray = Array.isArray(bidsData) ? bidsData : [bidsData];
@@ -27,6 +31,7 @@ export class BidListUseCase implements IBidsListsUseCase {
                 freelancerId: bid.freelancerId,
                 coverLetter: bid.coverLetter,
                 bidAmount: bid.bidAmount,
+                // deadline: bid.deadline,
                 status: bid.status,
                 createAt: bid.createdAt,
             }

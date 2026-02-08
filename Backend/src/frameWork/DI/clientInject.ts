@@ -40,6 +40,14 @@ import { BidListUseCase } from "../../useCase/client /bid/bidListUseCase";
 import { IBidRepository } from "../../domain/interface/repositoryInterface/IBidRepository";
 import { BidRepository } from "../../adapters/repository/freelancer/bidRepository";
 import { BidViewController } from "../../adapters/controllers/client/bid/bidViewController";
+import { HireFreelancerUseCase } from "../../useCase/client /bid/hireFreelancerUseCase";
+import { ContractRepository} from "../../adapters/repository/client/contractRepository";
+import { HireFreelancerController } from "../../adapters/controllers/client/bid/hireFreelancerController";
+import { MilestoneController } from "../../adapters/controllers/client/milestone/milestoneController";
+import { MilestoneUseCase } from "../../useCase/client /milestone/milestoneUseCase";
+import { MileStoneRepository } from "../../adapters/repository/client/milestoneRepository";
+import { JobContractUseCase } from "../../useCase/client /jobs/jobContractUseCase";
+import { JobContractController } from "../../adapters/controllers/client/Job/jobContractController";
 
 
 
@@ -122,3 +130,22 @@ export const jobDeleteController=new JobDeleteController(jobDeleteUseCase)
 const bidRepository:IBidRepository=new BidRepository()
 const bidListUseCase=new BidListUseCase(bidRepository)
 export const bidListController=new BidViewController(bidListUseCase)
+
+
+//hire freelancer
+
+const contractRepository=new ContractRepository()
+const hireFreelancerUseCase=new HireFreelancerUseCase(contractRepository,freelancerRepo,bidRepository,jobRepository)
+export const hireFreelancerController=new HireFreelancerController(hireFreelancerUseCase)
+
+
+//milestone
+
+const milestoneRepository=new MileStoneRepository()
+const milestoneUseCase=new MilestoneUseCase(contractRepository,milestoneRepository)
+export const milestoneController=new MilestoneController(milestoneUseCase)
+
+
+//contract details
+const jobContractUseCase=new JobContractUseCase(contractRepository,freelancerRepo)
+export const jobContractController=new JobContractController(jobContractUseCase)    

@@ -1,5 +1,5 @@
 import { Request, response, Response, Router } from "express";
-import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, jobCreateController, jobDeleteController, jobListController, jobUpdateController, jobViewController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -64,23 +64,40 @@ export class UserRoutes {
             jobListController.listJob(req, res)
         })
 
-        this.UserRoutes.get("/job/:id", (req: Request, res: Response) => {
+        this.UserRoutes.get("/job/:id", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             jobViewController.viewJob(req, res)
         })
 
-        this.UserRoutes.put("/updatejob", (req: Request, res: Response) => {
+        this.UserRoutes.put("/updatejob", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             console.log("hy chellooo")
             jobUpdateController.updateJob(req, res)
         })
 
-        this.UserRoutes.delete("/deletejob/:id", (req: Request, res: Response) => {
+        this.UserRoutes.delete("/deletejob/:id", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             jobDeleteController.delete(req, res)
         })
 
-        this.UserRoutes.get("/bids/:jobId", (req: Request, res: Response) => {
+        this.UserRoutes.get("/bids/:jobId", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             bidListController.listBids(req, res)
         })
- 
+
+        this.UserRoutes.post("/hirefreelancer", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            hireFreelancerController.hire(req, res)
+        })
+
+        this.UserRoutes.post("/milestone", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            milestoneController.createMilestone(req, res)
+        })
+
+        this.UserRoutes.get('/milestone/:jobId', tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            milestoneController.getMilestones(req, res)
+        })
+
+
+        this.UserRoutes.get('/contract', (req: Request, res: Response) => {
+            jobContractController.viewContract(req, res)
+        })
+
     }
 
 

@@ -4,7 +4,7 @@ import { Freelancer } from "../../../domain/entities/freelancerntity";
 export const freelancerSceema = new Schema<Freelancer>({
     //  _id:{ type: String, required: true},
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     phone: { type: String, required: false },
     password: { type: String, required: false },
     gitHubUrl: { type: String },

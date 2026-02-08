@@ -21,6 +21,8 @@ const ApplyBidModal = ({ isOpen, onClose, jobTitle, jobBudget, onSubmit }: Apply
         // Simulate a small delay for better UX (feeling of "processing")
         // await new Promise(resolve => setTimeout(resolve, 800));
         onSubmit({ coverLetter, bidAmount });
+        setCoverLetter("")
+        setBidAmount("")
         setIsSubmitting(false);
         onClose();
     }; 
