@@ -5,7 +5,7 @@ import { Client } from "../../../domain/entities/client.entity"
 export const clientSchem = new Schema<Client>({
     // _id:{ type: String, required: true},
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: false },
     phone: { type: String, required: false },
     profileImage: { type: String, required: false },

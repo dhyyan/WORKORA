@@ -33,26 +33,62 @@ export const jobViewService = async ({ id }: { id: string }) => {
 }
 
 
-export const updateJob=async(job:Partial<IJob>)=>{
-try {
-   console.log("hmmjob",job)
-   const response=await clientAxios.put('/client/updatejob',job)
-   return response.data
-} catch (error) { 
-    console.error("job update error: in service", error);
-      throw error;
-}
-}
-
-
-export const deleteJob=async({_id}:{_id:string})=>{
+export const updateJob = async (job: Partial<IJob>) => {
    try {
-      console.log("delete id in service",_id)
-      const id= _id
-      const response=await clientAxios.delete(`/client/deletejob/${id}`)
+      console.log("hmmjob", job)
+      const response = await clientAxios.put('/client/updatejob', job)
+      return response.data
+   } catch (error) {
+      console.error("job update error: in service", error);
+      throw error;
+   }
+}
+
+
+export const deleteJob = async ({ _id }: { _id: string }) => {
+   try {
+      console.log("delete id in service", _id)
+      const id = _id
+      const response = await clientAxios.delete(`/client/deletejob/${id}`)
       return response.data
    } catch (error) {
       console.error("job delete error: in service", error);
       throw error;
    }
 }
+
+export const contractDetailService = async ({ _id }: { _id: string }) => {
+   try {
+      console.log("service claa fn")
+      const response = await clientAxios.get('/client/contract', {
+         params: { id: _id }
+      })
+      return response.data
+   } catch (error) {
+      console.error("contract get error: in service", error);
+      throw error;
+   }
+}
+
+export const milestoneCreateService = async (milestone: { jobId: string, title: string, amount: number }) => {
+   try {
+      const response = await clientAxios.post("/client/milestone", milestone)
+      return response.data
+   } catch (error) {
+      console.error("milestone create error: in service", error);
+      throw error;
+   }
+}
+
+export const milestoneListService = async ({ jobId }: { jobId: string }) => {
+   try {
+      console.log("Calling milestoneListService with jobId:", jobId);
+      const response = await clientAxios.get(`/client/milestone/${jobId}`)
+      console.log("milestoneListService response:", response.data);
+      return response.data
+   } catch (error) {
+      console.error("milestone list error: in service", error);
+      throw error;
+   }
+}
+

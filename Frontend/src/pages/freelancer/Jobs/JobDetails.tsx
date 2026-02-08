@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { createBidService } from '../../../service/freelancer/bid/bidService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
+import type { AxiosError } from 'axios';
 
 const JobDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ const JobDetails = () => {
     const [error, setError] = useState('');
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-    const userData= useSelector((state:RootState)=>state.freelancerAuth.freelancer);
+    const userData = useSelector((state: RootState) => state.freelancerAuth.freelancer);
 
     useEffect(() => {
         const loadJob = async () => {
@@ -39,10 +40,10 @@ const JobDetails = () => {
         loadJob();
     }, [id]);
 
-    const handleSubmitProposal = async(data: { coverLetter: string; bidAmount: string }) => {
+    const handleSubmitProposal = async (data: { coverLetter: string; bidAmount: string }) => {
         console.log("Proposal Submitted:", data);
         try {
-            if(!userData||!userData._id){
+            if (!userData || !userData._id) {
                 toast.error("Please login to apply for a job.");
                 return;
             }
@@ -52,12 +53,15 @@ const JobDetails = () => {
                 coverLetter: data.coverLetter,
                 bidAmount: parseFloat(data.bidAmount),
             });
-            console.log("response create bid",response)
+            console.log("response create bid", response)
             toast.success("Proposal sent successfully!");
-            
+
         } catch (error) {
-            console.error("Error submitting proposal:", error);
-            toast.error("Failed to send proposal. Please try again.");
+            const axiosError = error as AxiosError<{ message: string }>
+
+            const message = axiosError.response?.data?.message || "Failed to hire freelancer"
+
+            toast.error(message)
         }
         // Here you would typically call an API to submit the proposal
     };

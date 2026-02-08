@@ -4,6 +4,12 @@ import { Clock, CheckCircle, XCircle } from 'lucide-react';
 import type { IBid } from '../../../types/freelancer/bid/IBid';
 import { getUserDetails } from '../../../service/freelancer/Dashboard/profileService';
 import type { IFreelancer } from '../../../types/freelancer/Ifreelancer';
+import { hireFreelancerService } from '../../../service/client/bid/bidService';
+import toast from 'react-hot-toast';
+import { AxiosError } from "axios"
+
+// import { u } from 'framer-motion/client';
+import { useNavigate } from 'react-router-dom';
 
 interface ViewProposalModalProps {
     isOpen: boolean;
@@ -13,13 +19,14 @@ interface ViewProposalModalProps {
 
 const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, bid }) => {
     const [freelancerDetails, setFreelancerDetails] = useState<IFreelancer>({} as IFreelancer)
+    const navigate = useNavigate()
 
     useEffect(() => {
         console.log("bid in proposal modal", bid)
         const fetchFreelancerDetails = async () => {
             try {
                 const response = await getUserDetails({ userId: bid.freelancerId })
-                console.log("freelancer",response.data.userDetails)
+                console.log("freelancer", response.data.userDetails)
                 setFreelancerDetails(response.data.userDetails)
             } catch (error) {
                 console.log("error in fetching freelancer details", error)
@@ -27,6 +34,31 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
         }
         fetchFreelancerDetails();
     }, [bid])
+
+    const handleHireFreelance = async () => {
+        try {
+            if (!bid._id) return toast.error("Invalid bid id")
+
+            const data = {
+                bidId: bid._id,
+                jobId: bid.jobId,
+                freelancerId: bid.freelancerId,
+                totalAmount: bid.bidAmount
+            }
+            console.log("mwoneee", data)
+            const response = await hireFreelancerService(data)
+            navigate("/client/profile/projects")
+            toast.success("Freelancer hired successfully")
+
+            console.log("response of hirefreelancer", response)
+        } catch (error) {
+            const axiosError = error as AxiosError<{ message: string }>
+
+            const message =axiosError.response?.data?.message || "Failed to hire freelancer"
+
+            toast.error(message)
+        }
+    }
     return (
         <ProjectModalWrapper isOpen={isOpen} onClose={onClose} title="Proposal Details">
             <div className="space-y-6">
@@ -76,7 +108,9 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
                         <XCircle size={20} />
                         Decline
                     </button>
-                    <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#10C0A2] hover:bg-[#0EA085] text-white rounded-xl font-semibold shadow-lg shadow-teal-500/20 transition-all active:scale-95">
+                    <button
+                        onClick={() => handleHireFreelance()}
+                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#10C0A2] hover:bg-[#0EA085] text-white rounded-xl font-semibold shadow-lg shadow-teal-500/20 transition-all active:scale-95">
                         <CheckCircle size={20} />
                         Hire Freelancer
                     </button>

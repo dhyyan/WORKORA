@@ -9,7 +9,7 @@ export class BidCreateController {
     }
     async createBid(req: Request, res: Response): Promise<void> {
         try {
-            const { jobId, freelancerId, coverLetter, bidAmount } = req.body;
+            const { jobId, freelancerId, coverLetter, bidAmount,} = req.body;
             console.log("data of bid in controller", req.body)
             const response = await this._createBidUseCase.create({ jobId, freelancerId, coverLetter, bidAmount })
             if (!response) {
@@ -17,8 +17,8 @@ export class BidCreateController {
             } else {
                 res.status(HttpStatus.OK).json({ message: "Bid created successfully", data: response })
             }
-        } catch (error) {
-
+        } catch (error:any) {
+            res.status(HttpStatus.FORBIDDEN).json({message: error.message || "Something went wrong"})
         }
     }
 }

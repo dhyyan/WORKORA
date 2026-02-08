@@ -7,8 +7,9 @@ export class JobRepository extends BaseRepository<Job> implements IJobRepository
     constructor(){
         super (jobModel)
     }
-   async updateProfile(id: string, job: Partial<Job>): Promise<Job | null> {
-       return await jobModel.findByIdAndUpdate(id,job,{new:true})
-    }
+    
+  async findByIdAndUpdate(id: string, job: Partial<Job>): Promise<Job | null> {
+            return await jobModel.findByIdAndUpdate(id, job, { new: true })
+        }
 
 }

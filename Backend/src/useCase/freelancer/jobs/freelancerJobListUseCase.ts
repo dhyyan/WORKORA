@@ -11,7 +11,7 @@ export class FreelancerJobListUseCase implements IFreelancerListJobUseCase {
     async listJobs(): Promise<JobListOutPutDtos> {
         try {
             console.log("f job list useCase called")
-            const response = await this._jobRepository.findAll()
+            const response = await this._jobRepository.findAll({status:"open"});
             console.log('response of job list  :>> ', response);
             if (!response) throw new Error("connot find any jobs")
             const jobs: BaseJobOutPutDtos[] = response.map((job) => ({

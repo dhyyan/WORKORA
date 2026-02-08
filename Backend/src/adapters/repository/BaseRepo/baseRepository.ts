@@ -3,30 +3,35 @@ import { IBaseRepository } from "../../../domain/interface/repositoryInterface/I
 import { Job } from "../../../domain/entities/job.entity";
 import { jobModel } from "../../../frameWork/database/models/job.model";
 
-export class BaseRepository<T> implements IBaseRepository<T>{
-     protected model: Model<T>;
-    constructor(model:Model<T>) {
-        this.model=model
+export class BaseRepository<T> implements IBaseRepository<T> {
+    protected model: Model<T>;
+    constructor(model: Model<T>) {
+        this.model = model
     }
-     async findAll(filter: FilterQuery<T> = {}): Promise<T[]> {
-    return this.model.find(filter);
-  }
-    create(data: T): Promise<T> {
-        return this.model.create(data)
+    async findAll(filter: FilterQuery<T> = {}): Promise<T[]> {
+        console.log("find all data", filter)
+        return this.model.find(filter);
+    }
+    async create(data: T): Promise<T> {
+        console.log("create data in base repo", data)
+        return await this.model.create(data)
     }
     delete(id: string): Promise<T | null> {
         return this.model.findByIdAndDelete(id)
     }
     findById(id: string): Promise<T | null> {
-        console.log("ideyy",id)
+        console.log("ideyy", id)
         return this.model.findById(id)
     }
+
     findByEmail(email: string): Promise<T | null> {
-        return this.model.findOne({email})
+        return this.model.findOne({ email })
     }
 
-    async findByIdAndUpdate(id: string, job: Partial<Job>): Promise<Job | null> {
-            return await jobModel.findByIdAndUpdate(id, job, { new: true })
-        }
-  
+    async update(id: string, data: Partial<T>): Promise<T | null> {
+        return this.model.findByIdAndUpdate(id, data, { new: true });
+    }
+
+
+
 }

@@ -5,7 +5,8 @@ export const jobSchema = new Schema<Job>(
   {
     clientId: {
       type: String,
-      required: true
+      required: true,
+      ref:"client"
     },
 
     title: {
