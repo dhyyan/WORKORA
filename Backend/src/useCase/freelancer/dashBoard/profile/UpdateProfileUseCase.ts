@@ -16,7 +16,7 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
 
             const exist = await this._freelancerRepository.findByEmail(input.email)
             if (!exist) throw new Error("user in this email not existed")
-            const update = await this._freelancerRepository.updateProfile(exist._id?.toString()!, input)
+            const update = await this._freelancerRepository.updateProfile(exist._id!, input)
 
             if (!update) throw new Error("error while updating profile")
             const updatedFreelancer: BaseFreelancerOutputDtos = {

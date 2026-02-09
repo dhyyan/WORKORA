@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IBlockUserUSeCase } from "../../../../domain/interface/useCaseInterface/admin/client/blockUserUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class UserBlockController{
     private _userBlockUseCase:IBlockUserUSeCase
@@ -10,7 +11,7 @@ export class UserBlockController{
 
     async block(req:Request,res:Response):Promise<void>{
         try {
-            const {id}=req.params
+            const id= new Types.ObjectId(req.params.id);
             const {isBlocked}=req.body
             const block=isBlocked
             console.log("id controll",id,block)

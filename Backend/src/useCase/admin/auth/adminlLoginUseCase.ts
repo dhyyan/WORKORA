@@ -43,7 +43,7 @@ export class AmdinLoginUseCase implements IClientLoginUseCase {
 
             // ✅ Create a safe client object (without password)
             const createdUser: BaseClientOutputDtos = {
-                _id: adminExist._id?.toString(),
+                _id: adminExist._id,
                 name: adminExist.name,
                 email: adminExist.email,
                 role: "admin",

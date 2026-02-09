@@ -13,20 +13,15 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
     }
     async block(input: BlockUserInputDtos): Promise<BlockUserOutputDtos> {
         try {
-            console.log("usecase blic",input.isBlocked==false)
             if (input.isBlocked==true) {
                  
-                console.log("hww wer") 
                  const client = await this._clientRepository.findById(input.id);
                 console.log("clienttt",client)
     
                 if (client) {
                     if (!client._id) throw new Error("Client id is missing");
     
-                    const blockedClient =
-                        await this._clientRepository.updateProfile(client._id, {
-                            isBlocked: false,
-                        });
+                    const blockedClient =await this._clientRepository.updateProfile(client._id, {isBlocked: false,});
     
                     return {
                         success: true,

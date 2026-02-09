@@ -16,14 +16,22 @@ export class ChangePassowrdUseCase implements IChangePasswordUseCase{
     async update(input: ChangePasswordIputDtos): Promise<ChangePasswordOutPutDtos> {
         const {email,password}=input
         const user=await this._clientRepository.findByEmail(email)
+
         const fExist=await this._freelancerRepo.findByEmail(email)
+
         if(!user||fExist)throw new Error("email in this user not found")
+
             const hashPassword=await this._hashPassword.hashPassword(password)
+
         if (!hashPassword) throw new Error('Error while hashing password')
-            const updateClient=await this._clientRepository.changePassword(user._id?.toString(),hashPassword)
+
+            const updateClient=await this._clientRepository.changePassword(user._id,hashPassword)
+
          if (!updateClient) throw new Error('error while updating new password in client')
+
+            if(!user._id)throw new Error("user id is missing")
             return{
-            _id: user._id?.toString()||"",
+            _id: user._id,
             name: user.name,
             email: user.email,
             role: "client",

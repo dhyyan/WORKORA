@@ -1,6 +1,8 @@
+import { Types } from "mongoose";
+
 export interface Job {
     _id?: string;
-    clientId: string ;  // from logged-in client
+    clientId: Types.ObjectId ;  // from logged-in client
 
     title: string;
     summary: string;

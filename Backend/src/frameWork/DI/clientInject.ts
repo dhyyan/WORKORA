@@ -51,6 +51,7 @@ import { JobContractController } from "../../adapters/controllers/client/Job/job
 import { EscrowFundController } from "../../adapters/controllers/client/ecrow/escrowController";
 import { EscrowFundUseCase } from "../../useCase/client /escrow/escrowFundUseCase";
 import { EscrowRepository } from "../../adapters/repository/client/escrowRepository";
+import { WalletRepository } from "../../adapters/repository/client/walletRepository";
 
 
 
@@ -61,7 +62,8 @@ const emailService = new EmailService()
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService)
 const hashPasswordService = new HashPasswordService()
 const freelancerRepo = new FreelancerRepository()
-const registerClientUseCase = new RegisterClientUseCase(clientRepository, freelancerRepo, hashPasswordService)
+const walletRepository=new WalletRepository()
+const registerClientUseCase = new RegisterClientUseCase(clientRepository, freelancerRepo, hashPasswordService,walletRepository)
 const sendOtpClientUsecase = new SendOtpClientUseCase(clientRepository, otpService, emailService)
 export const sendOtpController = new SendOtpController(sendOtpClientUsecase)
 export const clientRegisterController = new ClientRegisterController(verifyOtpUseCase, registerClientUseCase)

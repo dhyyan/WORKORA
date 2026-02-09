@@ -31,6 +31,7 @@ import { JobRepository } from "../../adapters/repository/client/jobRepository";
 import { BidCreateController } from "../../adapters/controllers/freelancer/bid/createBidController";
 import { CreateBidUseCase } from "../../useCase/freelancer/bid/createBidUseCase";
 import { BidRepository } from "../../adapters/repository/freelancer/bidRepository";
+import { WalletRepository } from "../../adapters/repository/client/walletRepository";
 
 
 //signup
@@ -41,8 +42,8 @@ const emailService = new EmailService()
 const freelancerVerifyOtpUseCase = new FreelancerVerifyOtpUseCase(freelancerRepository, clientRepository, otpService)
 const freelancerSendOtpUseCase = new FreelancerSentOtpUseCase(freelancerRepository, clientRepository, otpService, emailService)
 const hashPassword = new HashPasswordService()
-
-const freelancerRegisterUseCase = new FreelacerRegisterUseCase(freelancerRepository, clientRepository, hashPassword)
+const walletRepository=new WalletRepository()
+const freelancerRegisterUseCase = new FreelacerRegisterUseCase(freelancerRepository, clientRepository, hashPassword,walletRepository)
 export const freelancerSendOtpController = new FreelancerSentOtpController(freelancerSendOtpUseCase)
 export const freelancerVerifyOtpController = new FreelancerVerifyOtpController(freelancerVerifyOtpUseCase, freelancerRegisterUseCase)
 

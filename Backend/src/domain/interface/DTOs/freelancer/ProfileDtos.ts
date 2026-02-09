@@ -1,3 +1,4 @@
+import { Types } from "mongoose"
 import { BaseFreelancerOutputDtos } from "./authDtos"
 
 export interface UpdateProfileInputDtos{
@@ -21,7 +22,7 @@ export interface UpdateProfileOututDtos{
 //get user details
 
 export interface GetUserDetailsInputDtos{
-    userId:string
+    userId:Types.ObjectId
 }
 
 export interface GetUserDetailOutputDtos{

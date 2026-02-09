@@ -1,7 +1,9 @@
+import { Types } from "mongoose"
+
 export interface BaseBidOutPutDtos {
     _id: string,
     jobId: string,
-    freelancerId: string,
+    freelancerId: Types.ObjectId,
     coverLetter: string,
     bidAmount?: number,
     // deadline: string,
@@ -11,7 +13,7 @@ export interface BaseBidOutPutDtos {
 
 export interface BidCreateInputDtos {
     jobId: string,
-    freelancerId: string,
+    freelancerId: Types.ObjectId,
     coverLetter: string,
     // deadline: string,
     bidAmount: number,

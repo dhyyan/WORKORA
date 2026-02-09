@@ -1,3 +1,4 @@
+import { Types } from "mongoose"
 import { BaseFreelancerOutputDtos } from "../freelancer/authDtos"
 import { BaseContractOutPutDtos } from "./bidDtos"
 
@@ -5,7 +6,7 @@ import { BaseContractOutPutDtos } from "./bidDtos"
 
 export interface BaseJobOutPutDtos{
     _id?:string,
-    clientId?:string,
+    clientId?:Types.ObjectId,
     title:string,
     summary:string,
     features?:string[],
@@ -19,7 +20,7 @@ export interface BaseJobOutPutDtos{
 
 
 export interface JobCreateInputDtos{
-    clientId:string,
+    clientId:Types.ObjectId,
     title:string,
     summary:string,
     features:string[],
@@ -55,7 +56,7 @@ export interface JobViewOutputDtos{
 export interface JobUpdateInputDtos{
   
     _id:string,
-    clientId:string,
+    clientId:Types.ObjectId,
     title:string,
     summary:string,
     features:string[],

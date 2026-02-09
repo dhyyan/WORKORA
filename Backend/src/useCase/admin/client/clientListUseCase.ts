@@ -16,7 +16,7 @@ export class ClientListUseCase implements IClientListUseCase {
             if (!users) throw new Error("users not found")
 
             const clients: BaseClientOutputDtos[] = users.map((user) => ({
-                _id: user._id?.toString(),
+                _id: user._id,
                 name: user.name,
                 email: user.email,
                 phone: user.phone,

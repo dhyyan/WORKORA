@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IClientDataUseCase } from "../../../../../domain/interface/useCaseInterface/client/Dashboard/Profile/iclientDataUseCase";
 import { HttpStatus } from "../../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class ClientDataController{
     private _clientDataUseCase:IClientDataUseCase
@@ -10,7 +11,8 @@ export class ClientDataController{
     async data(req:Request,res:Response):Promise<void>{
         try {
             console.log("loooo")
-            const userId=req.params.userId
+            const userId = new Types.ObjectId(req.params.id);
+
             const {client,success}=await this._clientDataUseCase.fetchData({userId})
             if(!client){
                 res.status(HttpStatus.FORBIDDEN).json({message:"user not fect"})

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { BaseClientOutputDtos } from "../../client/AuthDto";
 
 export interface ClientListInputDtos{
@@ -11,7 +12,7 @@ export interface ClientListOutputDtos {
 
 //block
 export interface BlockUserInputDtos{
-    id:string,
+    id:Types.ObjectId,
     isBlocked:boolean
 }
 
