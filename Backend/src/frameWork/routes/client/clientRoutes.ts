@@ -1,5 +1,5 @@
 import { Request, response, Response, Router } from "express";
-import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
+import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, verifyOtpPassword } from "../../DI/clientInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -93,9 +93,12 @@ export class UserRoutes {
             milestoneController.getMilestones(req, res)
         })
 
-
-        this.UserRoutes.get('/contract', (req: Request, res: Response) => {
+        this.UserRoutes.get('/contract', tokenVerifyMiddleware, authMiddleware,(req: Request, res: Response) => {
             jobContractController.viewContract(req, res)
+        })
+
+        this.UserRoutes.post("/escrow/fund/:milestoneId", (req:Request,res:Response)=>{
+            escrowFundController.fundMilestone(req,res)
         })
 
     }
