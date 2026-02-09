@@ -1,7 +1,9 @@
+import { Types } from "mongoose";
+
 export interface Bid {
     _id?: string,
     jobId: string,
-    freelancerId: string,
+    freelancerId: Types.ObjectId,
     coverLetter: string,
     bidAmount: number,
     // deadline: string,

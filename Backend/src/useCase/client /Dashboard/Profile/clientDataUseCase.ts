@@ -13,7 +13,7 @@ export class ClientDataUseCasse implements IClientDataUseCase {
             const user = await this._clientRepository.findById(input.userId)
             if (!user) throw new Error("user in this id not found")
             const client: BaseClientOutputDtos = {
-                _id: user._id?.toString(),
+                _id: user._id,
                 name: user.name,
                 email: user.email,
                 role: "client",

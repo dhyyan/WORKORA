@@ -19,7 +19,7 @@ export class FreelancerListUseCase implements IFreelancerListUseCase {
                 console.log("fetched freelancer datas in usecase",users)
 
             const freelancers: BaseFreelancerOutputDtos[] = users.map((user) => ({
-                _id: user._id?.toString(),
+                _id: user._id!,
                 name: user.name,
                 email: user.email,
                 phone: user.phone,

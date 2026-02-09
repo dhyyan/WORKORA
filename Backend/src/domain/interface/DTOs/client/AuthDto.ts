@@ -1,5 +1,7 @@
+import { Types } from "mongoose";
+
 export interface BaseClientOutputDtos {
-    _id?: string,
+    _id?: Types.ObjectId,
     name: string,
     email: string,
     phone?: string,
@@ -34,7 +36,7 @@ export interface ClientRegisterInputDto {
 }
 
 export interface ClientRegisteroutputDto extends BaseClientOutputDtos {
-    _id: string
+    _id: Types.ObjectId
 }
 
 
@@ -70,7 +72,7 @@ export interface ChangePasswordIputDtos {
 }
 
 export interface ChangePasswordOutPutDtos extends BaseClientOutputDtos {
-    _id: string
+    _id: Types.ObjectId
 }
 
 //resendOtp

@@ -28,11 +28,11 @@ export class FreelancerChangePassUseCase implements IFreelancerChangePassUseCase
         const hashPassword = await this._hashPassword.hashPassword(password)
         if (!hashPassword) throw new Error('Error while hashing password')
 
-        const updateUser = await this._freelancerRepo.changePassword(fExist._id?.toString(), hashPassword)
+        const updateUser = await this._freelancerRepo.changePassword(fExist._id, hashPassword)
         if (!updateUser) throw new Error('error while updating new password in client')
 
         return {
-            _id: fExist._id||"",
+            _id: fExist._id!,
             name: fExist.name,
             email: fExist.email,
             phone: fExist.phone,

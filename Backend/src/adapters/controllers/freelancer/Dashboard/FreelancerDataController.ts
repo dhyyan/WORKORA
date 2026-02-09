@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IGetUserUseCase } from "../../../../domain/interface/useCaseInterface/freelancer/dashboard/Profile/IGetProfileUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class FreelancerDataController {
     private _getUserUseCase: IGetUserUseCase
@@ -9,7 +10,8 @@ export class FreelancerDataController {
     }
 
     async userData(req: Request, res: Response): Promise<void> {
-        const { userId } = req.params
+        // const { userId } = req.params
+        const userId = new Types.ObjectId(req.params.userId)
         console.log("refresh id form controller",userId)
         try { 
 

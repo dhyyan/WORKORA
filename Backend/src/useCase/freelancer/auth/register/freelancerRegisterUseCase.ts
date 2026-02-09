@@ -4,18 +4,20 @@ import { IClientRepository } from "../../../../domain/interface/repositoryInterf
 import { IFreelancerRepository } from "../../../../domain/interface/repositoryInterface/IFreelancerRepository";
 import { IHashPassword } from "../../../../domain/interface/serviceInterface/IHashPassword";
 import { IFreelancerRegisterUseCase } from "../../../../domain/interface/useCaseInterface/freelancer/auth/register/IFreelancerRegisterUseCase";
+import { IWallet } from "../../../../domain/entities/wallet.entity";
+import { IWalletRepository } from "../../../../domain/interface/repositoryInterface/IWalletRepository";
 
 export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
 
     private _freelancerRepository: IFreelancerRepository
     private _clientRepository: IClientRepository
     private _hashPassword: IHashPassword
-
-    constructor(freelancerRepository: IFreelancerRepository, clientRepository: IClientRepository, hashPassword: IHashPassword) {
+     private _walletRepository: IWalletRepository
+    constructor(freelancerRepository: IFreelancerRepository, clientRepository: IClientRepository, hashPassword: IHashPassword,walletRepository: IWalletRepository) {
         this._freelancerRepository = freelancerRepository
         this._clientRepository = clientRepository
         this._hashPassword = hashPassword
-
+        this._walletRepository = walletRepository
     }
     async create(input: FreelancerRegisterInputDtos): Promise<FreelancerRegisterOutputDtos> {
         const { name, email, phone, password } = input
@@ -47,10 +49,20 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
             googleId:""
         })
 
+        const walletData: IWallet = {
+                    userId:newUser?._id!,
+                    role:"freelancer",
+                    balance:0,
+        
+        
+                }
+                const wallet = await this._walletRepository.create(walletData)
+                console.log("wallet created",wallet)
+        
         if (!newUser) throw new Error("Error while creating new User")
 
         const returnUser: FreelancerRegisterOutputDtos = {
-            _id: newUser._id?.toString()||"",
+            _id: newUser._id!,
             name: newUser.name,
             email: newUser.email,
             phone: newUser.phone,

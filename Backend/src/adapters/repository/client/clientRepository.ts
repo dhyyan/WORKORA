@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Client } from "../../../domain/entities/client.entity";
 import { IClientRepository } from "../../../domain/interface/repositoryInterface/IClientRepository";
 import { clietModel } from "../../../frameWork/database/models/client.model";
@@ -8,7 +9,7 @@ export class ClientRepository implements IClientRepository {
         return await clietModel.create(data)
     }
 
-    async deleteById(id: string): Promise<Client | null> {
+    async deleteById(id: Types.ObjectId): Promise<Client | null> {
         return await clietModel.findByIdAndDelete(id)
     }
 
@@ -16,11 +17,11 @@ export class ClientRepository implements IClientRepository {
         return await clietModel.findOne({ email })
     }
 
-    async findById(_id: string): Promise<Client | null> {
+    async findById(_id: Types.ObjectId): Promise<Client | null> {
         return await clietModel.findById(_id)
     }
 
-    async changePassword(id: string | undefined, hashedPassword: string): Promise<Client | null> {
+    async changePassword(id: Types.ObjectId, hashedPassword: string): Promise<Client | null> {
         if (!id) return null;
 
         return await clietModel.findByIdAndUpdate(
@@ -29,7 +30,7 @@ export class ClientRepository implements IClientRepository {
             { new: true }
         );
     }
-    async updateProfile(id: string, user: Partial<Client>): Promise<Client | null> {
+    async updateProfile(id: Types.ObjectId, user: Partial<Client>): Promise<Client | null> {
         return await clietModel.findByIdAndUpdate(id, user, { new: true })
     }
 

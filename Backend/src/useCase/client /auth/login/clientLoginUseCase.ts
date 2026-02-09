@@ -1,7 +1,9 @@
 import { Client } from "../../../../domain/entities/client.entity";
+import { IWallet } from "../../../../domain/entities/wallet.entity";
 import { BaseClientOutputDtos, ClientLoginInputdDto, ClientLoginOutputdDto } from "../../../../domain/interface/DTOs/client/AuthDto";
 import { IClientRepository } from "../../../../domain/interface/repositoryInterface/IClientRepository";
 import { IFreelancerRepository } from "../../../../domain/interface/repositoryInterface/IFreelancerRepository";
+import { IWalletRepository } from "../../../../domain/interface/repositoryInterface/IWalletRepository";
 import { IHashPassword } from "../../../../domain/interface/serviceInterface/IHashPassword";
 import { IJwtService } from "../../../../domain/interface/serviceInterface/IJwtService";
 import { IClientLoginUseCase } from "../../../../domain/interface/useCaseInterface/client/auth/login/IClientLoginUseCase";
@@ -12,17 +14,20 @@ export class ClientLoginUseCase implements IClientLoginUseCase {
     private _clientRepository: IClientRepository
     private _freelancerRepo: IFreelancerRepository
     private _jwtService: IJwtService
+    // private _walletRepository: IWalletRepository
 
     constructor(
         hashedPassService: IHashPassword,
         clientRepository: IClientRepository,
         freelancerRepo: IFreelancerRepository,
-        jwtService: IJwtService
+        jwtService: IJwtService,
+        // walletRepository: IWalletRepository
     ) {
         this._hashedPassService = hashedPassService
         this._clientRepository = clientRepository
         this._freelancerRepo = freelancerRepo
         this._jwtService = jwtService
+        // this._walletRepository = walletRepository
     }
 
     async logiClient(input: ClientLoginInputdDto): Promise<ClientLoginOutputdDto> {
@@ -57,9 +62,20 @@ export class ClientLoginUseCase implements IClientLoginUseCase {
             user._id?.toString() ?? ""
         );
 
-        // ✅ Create a safe client object (without password)
+        // const walletData
+
+        
+        // const walletData: IWallet = {
+        //             userId:user?._id!,
+        //             role:"client",
+        //             balance:0,
+        
+        
+        //         }
+        // const wallet=await this._walletRepository.create(walletData)
+
         const createdUser: BaseClientOutputDtos = {
-            _id: user._id?.toString(),
+            _id: user._id,
             name: user.name,
             email: user.email,
             role: "client",

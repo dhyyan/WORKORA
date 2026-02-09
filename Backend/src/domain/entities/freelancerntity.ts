@@ -1,5 +1,7 @@
+import { Types } from "mongoose"
+
 export interface Freelancer {
-    _id?: string,
+    _id?: Types.ObjectId,
     name: string,
     email: string,
     phone?: string
