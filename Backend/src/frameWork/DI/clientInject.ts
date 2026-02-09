@@ -48,6 +48,9 @@ import { MilestoneUseCase } from "../../useCase/client /milestone/milestoneUseCa
 import { MileStoneRepository } from "../../adapters/repository/client/milestoneRepository";
 import { JobContractUseCase } from "../../useCase/client /jobs/jobContractUseCase";
 import { JobContractController } from "../../adapters/controllers/client/Job/jobContractController";
+import { EscrowFundController } from "../../adapters/controllers/client/ecrow/escrowController";
+import { EscrowFundUseCase } from "../../useCase/client /escrow/escrowFundUseCase";
+import { EscrowRepository } from "../../adapters/repository/client/escrowRepository";
 
 
 
@@ -149,3 +152,9 @@ export const milestoneController=new MilestoneController(milestoneUseCase)
 //contract details
 const jobContractUseCase=new JobContractUseCase(contractRepository,freelancerRepo)
 export const jobContractController=new JobContractController(jobContractUseCase)    
+
+//escrow
+
+const escrowRepository=new EscrowRepository()
+const escrowFundUseCase=new EscrowFundUseCase(escrowRepository,milestoneRepository)
+export const escrowFundController=new EscrowFundController(escrowFundUseCase)
