@@ -1,5 +1,7 @@
+import { Types } from "mongoose"
+
 export interface BaseMilestoneOutputDtos {
-    _id: string,
+    _id: Types.ObjectId,
     contractId: string,
     title: string,
     amount: number,

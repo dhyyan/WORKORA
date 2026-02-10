@@ -26,7 +26,7 @@ const ProjectList = () => {
 
     // Modal State
     const [selectedProject, setSelectedProject] = useState<IJob | null>(null);
-    const [selectedBid, setSelectedBid] = useState<IBid>("" as unknown as IBid);
+    const [selectedBid, setSelectedBid] = useState<IBid | null>(null);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isBidsModalOpen, setIsBidsModalOpen] = useState(false);
@@ -99,7 +99,7 @@ const ProjectList = () => {
                                 }}
                                 refresh={() => setRefresh(prev => !prev)}
                                 onEdit={() => handleEdit(project)}
-                            onBids={() => handleViewBids(project)}
+                                onBids={() => handleViewBids(project)}
                             />
                         ))}
                     </div>
@@ -131,7 +131,7 @@ const ProjectList = () => {
                             : null
                     }
                 />
-               
+
                 {selectedProject && (
                     <ViewBidsModal
                         isOpen={isBidsModalOpen}
@@ -141,11 +141,13 @@ const ProjectList = () => {
                     />
                 )}
 
-                 <ViewProposalModal
-                    isOpen={isProposalModalOpen}
-                    onClose={() => setIsProposalModalOpen(false)}
-                    bid={selectedBid}
-                />   
+                {selectedBid && (
+                    <ViewProposalModal
+                        isOpen={isProposalModalOpen}
+                        onClose={() => setIsProposalModalOpen(false)}
+                        bid={selectedBid}
+                    />
+                )}
             </div>
         </div>
     );

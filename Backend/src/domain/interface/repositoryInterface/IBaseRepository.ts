@@ -1,4 +1,4 @@
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 import { Job } from "../../entities/job.entity";
 
 export interface IBaseRepository<T> {
@@ -8,7 +8,7 @@ export interface IBaseRepository<T> {
     findById(id: string): Promise<T | null>
     findByEmail(email: string): Promise<T | null>
     findAll(filter?: FilterQuery<T>): Promise<T[]>;
-    update(id: string, data: Partial<T>): Promise<T | null>;
+    update(id: Types.ObjectId, data: Partial<T>): Promise<T | null>;
 }
 
 // export interface IClientRepository {

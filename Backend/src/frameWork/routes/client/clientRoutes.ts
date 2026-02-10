@@ -61,6 +61,7 @@ export class UserRoutes {
         })
 
         this.UserRoutes.get("/jobs/:id", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            console.log("hummbo")
             jobListController.listJob(req, res)
         })
 

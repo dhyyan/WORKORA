@@ -25,7 +25,7 @@ export class EscrowFundUseCase implements IEscrowFundUseCase {
             if (!createEscrow || !createEscrow._id) throw new Error("Failed to create escrow")
 
                 const escrow:BaseEscrowOutputDtos={
-                    _id:createEscrow._id,
+                    _id:createEscrow._id!,
                     milestoneId:createEscrow.milestoneId,
                     amount:createEscrow.amount.toString(),
                     status:"locked",

@@ -22,6 +22,7 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
     const navigate = useNavigate()
 
     useEffect(() => {
+        if (!bid || !bid.freelancerId) return;
         console.log("bid in proposal modal", bid)
         const fetchFreelancerDetails = async () => {
             try {
@@ -54,7 +55,7 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
         } catch (error) {
             const axiosError = error as AxiosError<{ message: string }>
 
-            const message =axiosError.response?.data?.message || "Failed to hire freelancer"
+            const message = axiosError.response?.data?.message || "Failed to hire freelancer"
 
             toast.error(message)
         }
