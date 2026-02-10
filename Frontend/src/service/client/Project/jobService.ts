@@ -14,6 +14,7 @@ export const jobCreateService = async (job: IJob) => {
 
 export const jobListService = async ({ id }: { id: string }) => {
    try {
+      console.log("hambadaa",id)
       const response = await clientAxios.get(`/client/jobs/${id}`)
       return response.data
    } catch (error) {

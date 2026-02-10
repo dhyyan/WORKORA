@@ -11,9 +11,13 @@ export class FreelancerDataController {
 
     async userData(req: Request, res: Response): Promise<void> {
         // const { userId } = req.params
+        if (!Types.ObjectId.isValid(req.params.userId)) {
+            res.status(HttpStatus.BAD_REQUEST).json({ message: "Invalid user ID" });
+            return;
+        }
         const userId = new Types.ObjectId(req.params.userId)
-        console.log("refresh id form controller",userId)
-        try { 
+        console.log("refresh id form controller", userId)
+        try {
 
             const userDetails = await this._getUserUseCase.getUser({ userId })
 

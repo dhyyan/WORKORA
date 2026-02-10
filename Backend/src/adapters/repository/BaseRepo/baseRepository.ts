@@ -1,4 +1,4 @@
-import { FilterQuery, Model } from "mongoose";
+import { FilterQuery, Model, Types } from "mongoose";
 import { IBaseRepository } from "../../../domain/interface/repositoryInterface/IBaseRepository";
 import { Job } from "../../../domain/entities/job.entity";
 import { jobModel } from "../../../frameWork/database/models/job.model";
@@ -28,7 +28,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         return this.model.findOne({ email })
     }
 
-    async update(id: string, data: Partial<T>): Promise<T | null> {
+    async update(id: Types.ObjectId, data: Partial<T>): Promise<T | null> {
         return this.model.findByIdAndUpdate(id, data, { new: true });
     }
 

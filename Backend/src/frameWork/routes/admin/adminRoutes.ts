@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, clientListController, freelancerListController, userBlockController } from "../../DI/adminInject";
+import { adminLoginController, clientListController, freelancerListController, paymentReleseController, userBlockController } from "../../DI/adminInject";
 
 export class AdminRoutes{
     public AdminRoutes:Router
@@ -26,6 +26,10 @@ export class AdminRoutes{
 
          this.AdminRoutes.patch("/block/:id",(req:Request,res:Response)=>{
             userBlockController.block(req,res)
+         })
+
+         this.AdminRoutes.post("/relesepayment",(req:Request,res:Response)=>{
+            paymentReleseController.relesePayment(req,res)
          })
     }
 }
