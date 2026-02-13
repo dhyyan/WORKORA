@@ -5,7 +5,7 @@ import { BaseContractOutPutDtos } from "./bidDtos"
 
 
 export interface BaseJobOutPutDtos{
-    _id?:string,
+    _id?:Types.ObjectId,
     clientId?:Types.ObjectId,
     title:string,
     summary:string,
@@ -38,7 +38,7 @@ export interface JobCreateOutPutDtos{
 }
 
 export interface JobListInputDtos{
-    id:string
+    id:Types.ObjectId
 }
 
 export interface JobListOutPutDtos{
@@ -46,7 +46,7 @@ export interface JobListOutPutDtos{
 }
 
 export interface JobViewInputDtos{
-    id:string
+    id:Types.ObjectId
 }
 
 export interface JobViewOutputDtos{
@@ -55,7 +55,7 @@ export interface JobViewOutputDtos{
 
 export interface JobUpdateInputDtos{
   
-    _id:string,
+    _id:Types.ObjectId,
     clientId:Types.ObjectId,
     title:string,
     summary:string,
@@ -72,7 +72,7 @@ export interface JobUpdateOutputDtos{
 }
 
 export interface JobDeleteInputDtos{
-    id:string
+    id:Types.ObjectId
 }
 
 export interface JobDeleteOutputDtos{
@@ -80,7 +80,7 @@ export interface JobDeleteOutputDtos{
 }
 
 export interface JobContractInputDtos{
-    id:string
+    id:Types.ObjectId
 }
 
 export interface JobContractOutPutDtos{

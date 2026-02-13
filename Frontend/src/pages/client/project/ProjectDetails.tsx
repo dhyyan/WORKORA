@@ -6,6 +6,7 @@ import type { IJob } from '../../../types/client/jobs/IJob';
 import type { IFreelancer } from '../../../types/freelancer/Ifreelancer';
 import type { IMilestone } from '../../../types/client/milestone/IMilestone';
 import type { IContract } from '../../../types/client/jobs/IContract';
+import { paymentMilestone } from '../../../service/client/payment/paymentService';
 
 const ProjectDetails = () => {
     const navigate = useNavigate();
@@ -78,7 +79,18 @@ const ProjectDetails = () => {
         }
     };
 
-    
+
+    const handlefundMilestone=async(milestoneId:string)=>{
+         try {
+            const response=await paymentMilestone(milestoneId)
+            console.log("response of milestone fund",response.url)
+            window.location.href=response.url
+         } catch (error) {
+            console.log(error)
+         }
+    }
+
+
 
     return (
         <div className="w-full max-w-4xl mx-auto py-8 px-4">
@@ -236,7 +248,7 @@ const ProjectDetails = () => {
 
                                     {milestone.status !== 'funded' && (
                                         <button
-                                            
+                                            onClick={()=>handlefundMilestone(milestone._id!)}
                                             className="w-full md:w-auto px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                                         >
                                             <Wallet size={16} /> Fund Milestone

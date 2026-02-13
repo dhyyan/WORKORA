@@ -13,58 +13,58 @@ const ProfileView = () => {
   const userData = useSelector((state: RootState) => state.clientAuth.client)
   const [name, setName] = useState(userData?.name)
   const [phone, setPhone] = useState(userData?.phone)
-  const [imageUrl,setImageUrl]=useState(userData?.profileImage)
- const [data, setData] = useState<IClient | null>(null);
+  const [imageUrl, setImageUrl] = useState(userData?.profileImage)
+  const [data, setData] = useState<IClient | null>(null);
   const dispatch = useDispatch()
 
 
-  console.log("userdfasndaarrtt",userData)
-  
+  console.log("userdfasndaarrtt", userData)
 
-  const handleUpdateProfile = async(event) => {
+
+  const handleUpdateProfile = async (event) => {
     console.log("looooopp", event.target.files[0])
-    
+
     const file = event.target.files?.[0];
     if (!file) {
       return
     }
-    
+
     // setIsUploading(true)
     // setError('')
-    
+
     console.log("not file", file)
     const data = new FormData()
-        data.append("file", file)
-        data.append("upload_preset", "Workora_Profile")
-        data.append("cloud_name", "dzrms0g2j")
+    data.append("file", file)
+    data.append("upload_preset", "Workora_Profile")
+    data.append("cloud_name", "dzrms0g2j")
 
-        const url = "https://api.cloudinary.com/v1_1/dzrms0g2j/image/upload";
-        try {
-            const response = await axios.post(url, data);
-            console.log("Uploaded Image URL:", response.data.secure_url);
-            const imgurl = response.data.secure_url
-            setImageUrl(imgurl)
-            
-            // setSuccess('Profile picture uploaded successfully!')
-        } catch (err) {
-          console.error("Cloudinary upload error:", err);
-          // setError('Failed to upload image. Please try again.')
-        } finally {
-            // setIsUploading(false)
-        }
+    const url = "https://api.cloudinary.com/v1_1/dzrms0g2j/image/upload";
+    try {
+      const response = await axios.post(url, data);
+      console.log("Uploaded Image URL:", response.data.secure_url);
+      const imgurl = response.data.secure_url
+      setImageUrl(imgurl)
+
+      // setSuccess('Profile picture uploaded successfully!')
+    } catch (err) {
+      console.error("Cloudinary upload error:", err);
+      // setError('Failed to upload image. Please try again.')
+    } finally {
+      // setIsUploading(false)
+    }
   }
 
-  console.log("change phote ",imageUrl)
+  console.log("change phote ", imageUrl)
   console.log("loged user profile data", userData?.email)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    console.log("sumbit",imageUrl)
+    console.log("sumbit", imageUrl)
     const data = {
       email: userData?.email ?? "",
       name,
       phone,
-      profileImage:imageUrl
+      profileImage: imageUrl
     }
     const respone = await updateProfile(data)
     console.log("response of update profile", respone.data)
@@ -72,23 +72,23 @@ const ProfileView = () => {
 
   }
   useEffect(() => {
-  const userId = userData?._id;
-  if (!userId) return;
+    const userId = userData?._id;
+    if (!userId) return;
 
-  const fetchUser = async () => {
-    try {
-      const response = await getUserDetails({ userId });
-      console.log("refresh page responsee",response)
-      setData(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const fetchUser = async () => {
+      try {
+        const response = await getUserDetails({ userId });
+        console.log("refresh page responsee", response)
+        setData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  fetchUser();
-}, [userData]);
+    fetchUser();
+  }, [userData]);
 
-  console.log("dataaaaa",data)
+  console.log("dataaaaa", data)
   return (
     <>
       <motion.div
@@ -114,7 +114,7 @@ const ProfileView = () => {
           <div className="md:col-span-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
               <img
-                src={imageUrl?imageUrl:"https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
+                src={imageUrl ? imageUrl : "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover border-4 border-purple-200 shadow-lg"
               />
@@ -153,7 +153,7 @@ const ProfileView = () => {
 
             </div>
           </div>
-  
+
           {/* Edit Form */}
           <div className="md:col-span-2">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">

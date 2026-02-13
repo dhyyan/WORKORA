@@ -15,7 +15,7 @@ export class JobCreateUseCase implements IJobCreateUseCase{
              const job =await this._jobRepository.create({...input, status:"open"})
              console.log("create job in use case",job)
 
-            //  if(!job)throw new Error("Error while creating job in useCase")
+             if(!job)throw new Error("Error while creating job in useCase")
                 console.log('kkkkkkkkk')
 
             return{
@@ -24,6 +24,7 @@ export class JobCreateUseCase implements IJobCreateUseCase{
               }
 
         } catch (error) {
+            
             throw error
         }
     }

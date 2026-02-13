@@ -23,7 +23,13 @@ export class App {
                 credentials: true
             })
         )
-        this._app.use(express.json())
+        this._app.use((req, res, next) => {
+            if (req.originalUrl.startsWith('/client/stripe/webhook')) {
+                next();
+            } else {
+                express.json()(req, res, next);
+            }
+        });
         this._app.use(express.urlencoded({ extended: true }))
         this._setClientRoutes()
         this._setFreelancerRoutes()

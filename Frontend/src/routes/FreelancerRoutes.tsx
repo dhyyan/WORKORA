@@ -21,10 +21,14 @@ const FreelancerRoutes = () => {
         <Route path='/' element={<FreelancerLandingPage />} />
 
         {/* Standalone Job Listing Page */}
+
+
         <Route path='/dashboard' element={<DashBoardLayout />}>
           <Route index element={<Profile />} />
           <Route path='editprofile' element={<EditProfilePage />} />
         </Route>
+
+
         <Route path='/jobs' element={
           <ErrorBoundary>
             <FreelancerJobListing />

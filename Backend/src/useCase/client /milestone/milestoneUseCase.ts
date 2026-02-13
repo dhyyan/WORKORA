@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { BaseMilestoneOutputDtos, CreateMilestoneInputDtos, CreateMilestoneOutputDtos, GetMilestoneOutputDtos } from "../../../domain/interface/DTOs/client/milestoneDtos";
 import { IContractRepository } from "../../../domain/interface/repositoryInterface/IContractRepository";
 import { IMilestoneRepository } from "../../../domain/interface/repositoryInterface/IMilestoneRepository";
@@ -34,7 +35,7 @@ export class MilestoneUseCase implements IMilestoneUseCase {
         }
     }
 
-    async getMilestones(jobId: string): Promise<GetMilestoneOutputDtos> {
+    async getMilestones(jobId: Types.ObjectId): Promise<GetMilestoneOutputDtos> {
         try {
             console.log("Getting milestones for jobId:", jobId);
             const contract = await this._contractRepository.findContractByJobId(jobId)

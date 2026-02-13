@@ -9,6 +9,12 @@ export const jobSchema = new Schema<Job>(
       ref:"client"
     },
 
+    freelancerId:{
+      type:Schema.Types.ObjectId,
+      require:false,
+      ref:"freelancer"
+    },
+
     title: {
       type: String,
       required: true

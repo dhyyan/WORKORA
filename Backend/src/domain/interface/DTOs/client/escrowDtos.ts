@@ -9,9 +9,21 @@ export interface BaseEscrowOutputDtos {
 }
 
 export interface MilestoneFundInputDtos{
-    id:string
+    id:Types.ObjectId
 }
 
 export interface MilestoneFundOutputDtos{
     escrow:BaseEscrowOutputDtos
 }
+
+
+//stripe
+export interface createCheckoutInputDtos{
+    milestoneId:Types.ObjectId
+}
+
+// export interface createCheckoutOutputDtos{
+//     // milestoneId:Types.ObjectId,
+//     req.session.url=string
+    
+// }

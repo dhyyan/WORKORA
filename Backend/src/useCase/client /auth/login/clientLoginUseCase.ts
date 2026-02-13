@@ -86,6 +86,7 @@ export class ClientLoginUseCase implements IClientLoginUseCase {
             googleId: user.googleId,
             createdAt: user.createdAt
         };
+        console.log("login user data in usecase",createdUser)
 
         return { createdUser, accessToken, refreshToken };
 

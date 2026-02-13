@@ -1,5 +1,7 @@
+import { Types } from "mongoose";
+
 export interface DecodeTockenEntity{
-    userId:string,
+    userId:Types.ObjectId,
     role:string,
     iat:number,
     exp:number

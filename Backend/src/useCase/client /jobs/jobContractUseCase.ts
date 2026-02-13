@@ -28,7 +28,7 @@ export class JobContractUseCase implements IJobContractUseCase {
             console.log("if contracteeey", ifContract)
 
             const contract: BaseContractOutPutDtos = {
-                _id: ifContract._id.toString(),
+                _id: ifContract._id,
                 jobId: ifContract.jobId,
                 freelancerId: ifContract.freelancerId,
                 totalAmount: ifContract.totalAmount,

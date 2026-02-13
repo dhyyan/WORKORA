@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IJobListUseCase } from "../../../../domain/interface/useCaseInterface/client/jobs/jobListUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class JobListController{
     private _jobListUseCase:IJobListUseCase
@@ -9,7 +10,7 @@ export class JobListController{
     }
     async listJob(req:Request,res:Response):Promise<void>{
         try {
-            const id=req.params.id
+            const id=new Types.ObjectId(req.params.id)
             console.log("ideyykuta",id)
             const listJobs=await this._jobListUseCase.listJobs({id})
             if(!listJobs){

@@ -52,6 +52,11 @@ import { EscrowFundController } from "../../adapters/controllers/client/ecrow/es
 import { EscrowFundUseCase } from "../../useCase/client /escrow/escrowFundUseCase";
 import { EscrowRepository } from "../../adapters/repository/client/escrowRepository";
 import { WalletRepository } from "../../adapters/repository/client/walletRepository";
+import { PaymentCheckoutController } from "../../adapters/controllers/client/payment/paymentCheckoutController";
+import { CreateCheckoutSessionUseCase } from "../../useCase/client /payment/createCheckoutSessionUseCase";
+import { StripeService } from "../service/stripe/stripeService";
+import { StripeWebhookController } from "../../adapters/controllers/client/payment/stripeWebHookController";
+import { StripeWebhookUseCase } from "../../useCase/client /payment/stripeWebHookUseCase";
 
 
 
@@ -160,3 +165,12 @@ export const jobContractController=new JobContractController(jobContractUseCase)
 const escrowRepository=new EscrowRepository()
 const escrowFundUseCase=new EscrowFundUseCase(escrowRepository,milestoneRepository)
 export const escrowFundController=new EscrowFundController(escrowFundUseCase)
+
+
+const stripeService=new StripeService()
+const createCheckoutUseCase=new CreateCheckoutSessionUseCase(milestoneRepository,stripeService)
+export const paymentCheckoutController=new PaymentCheckoutController(createCheckoutUseCase)
+
+
+const stripeWeebhookUseCase=new StripeWebhookUseCase(stripeService,escrowFundUseCase)
+export const stripeWebhookController=new StripeWebhookController(stripeWeebhookUseCase)

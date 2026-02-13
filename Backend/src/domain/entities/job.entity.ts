@@ -1,9 +1,9 @@
 import { Types } from "mongoose";
 
 export interface Job {
-    _id?: string;
+    _id?: Types.ObjectId;
     clientId: Types.ObjectId ;  // from logged-in client
-
+    freelancerId?:Types.ObjectId,
     title: string;
     summary: string;
     features?: string[];

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import ProjectListHeader from '../../../components/client/project/ProjectListHeader';
 import ProjectCard from '../../../components/client/project/ProjectCard';
 import ProjectListEmptyState from '../../../components/client/project/ProjectListEmptyState';
@@ -13,16 +15,17 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import type { IBid } from '../../../types/freelancer/bid/IBid';
 
-
-
-
-
 const ProjectList = () => {
     const navigate = useNavigate();
     // Toggle this to see empty state during development
     const [projects, setProjects] = useState<IJob[]>([])
     const user = useSelector((state: RootState) => state.clientAuth.client)
     const [refresh, setRefresh] = useState(false)
+
+    // Tab State
+    const tabs = ['All Jobs', 'Assigned Jobs'];
+    const [activeTab, setActiveTab] = useState('All Jobs');
+    const [isTabLoading, setIsTabLoading] = useState(false);
 
     // Modal State
     const [selectedProject, setSelectedProject] = useState<IJob | null>(null);
@@ -73,39 +76,127 @@ const ProjectList = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh]);
 
+    const handleTabChange = (tab: string) => {
+        if (tab === activeTab) return;
+        setIsTabLoading(true);
+        setActiveTab(tab);
+
+        // Simulate loading effect
+        setTimeout(() => {
+            setIsTabLoading(false);
+        }, 500);
+    };
+
     console.log("dataaa", projects)
     return (
         <div className="w-full">
             <div className="max-w-5xl mx-auto">
                 <ProjectListHeader onCreate={() => setIsCreateModalOpen(true)} />
 
-                {projects.length > 0 ? (
-                    <div className="space-y-4">
-                        {projects.map((project) => (
-                            <ProjectCard
+                {/* Tab Switcher */}
+                <div className="mb-6 flex space-x-8 border-b border-gray-200">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => handleTabChange(tab)}
+                            className={`
+                                relative pb-3 text-base font-medium transition-colors whitespace-nowrap
+                                ${activeTab === tab
+                                    ? 'text-emerald-600'
+                                    : 'text-gray-500 hover:text-gray-700'
+                                }
+                            `}
+                        >
+                            {tab}
+                            {activeTab === tab && (
+                                <motion.div
+                                    layoutId="activeTabClient"
+                                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                                    initial={false}
+                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                />
+                            )}
+                        </button>
+                    ))}
+                </div>
 
-                                key={project._id}
-                                _id={project._id!}
-                                title={project.title}
-                                description={project.summary}
-                                category={project.category}
-                                budget={project.price}
-                                status={project.status ?? "open"}
-                                postedDate={project.createdAt ? new Date(project.createdAt).toLocaleDateString() : ""}
-                                onViewDetails={() => {
-                                    if (project._id) {
-                                        handleViewDetails(project._id);
-                                    }
-                                }}
-                                refresh={() => setRefresh(prev => !prev)}
-                                onEdit={() => handleEdit(project)}
-                                onBids={() => handleViewBids(project)}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <ProjectListEmptyState />
-                )}
+                {/* Content Area */}
+                <div className="min-h-[400px] relative">
+                    <AnimatePresence mode="wait">
+                        {isTabLoading ? (
+                            <motion.div
+                                key="loader"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute inset-0 flex items-center justify-center bg-white/50 z-10 pt-20"
+                            >
+                                <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key={activeTab}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {activeTab === 'All Jobs' ? (
+                                    projects.length > 0 ? (
+                                        <div className="space-y-4">
+                                            {projects.map((project) => (
+                                                <ProjectCard
+                                                    key={project._id}
+                                                    _id={project._id!}
+                                                    title={project.title}
+                                                    description={project.summary}
+                                                    category={project.category}
+                                                    budget={project.price}
+                                                    status={project.status ?? "open"}
+                                                    postedDate={project.createdAt ? new Date(project.createdAt).toLocaleDateString() : ""}
+                                                    onViewDetails={() => {
+                                                        if (project._id) {
+                                                            handleViewDetails(project._id);
+                                                        }
+                                                    }}
+                                                    refresh={() => setRefresh(prev => !prev)}
+                                                    onEdit={() => handleEdit(project)}
+                                                    onBids={() => handleViewBids(project)}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <ProjectListEmptyState />
+                                    )
+                                ) : (
+                                    /* Assigned Jobs Tab - Mock Data */
+                                    <div className="space-y-4">
+                                        {mockAssignedJobs.map((project) => (
+                                            <ProjectCard
+                                                key={project._id}
+                                                _id={project._id!}
+                                                title={project.title}
+                                                description={project.summary}
+                                                category={project.category}
+                                                // @ts-ignore
+                                                budget={project.price}
+                                                status={project.status as any}
+                                                postedDate={project.createdAt ? project.createdAt.toLocaleDateString() : ""}
+                                                onViewDetails={() => {
+                                                    // For mock data, we might not want to navigate or just log
+                                                    console.log("View details for mock assigned job", project._id);
+                                                }}
+                                                refresh={() => { }}
+                                                onEdit={() => { }}
+                                                onBids={() => { }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
 
                 {/* Modals */}
                 <CreateProjectModal
@@ -152,5 +243,40 @@ const ProjectList = () => {
         </div>
     );
 };
+
+// Define mock data outside or inside
+const mockAssignedJobs = [
+    {
+        _id: 'mock-assigned-1',
+        title: 'E-commerce Platform Redesign',
+        category: 'Web Development',
+        price: "5000",
+        summary: 'Complete redesign of the main product pages and checkout flow for better conversion.',
+        status: 'assigned',
+        createdAt: new Date(),
+        features: []
+    },
+    {
+        _id: 'mock-assigned-2',
+        title: 'Mobile App API Integration',
+        category: 'Backend Development',
+        price: "3200",
+        summary: 'Developing and integrating RESTful APIs for the new mobile application.',
+        status: 'assigned',
+        createdAt: new Date(Date.now() - 86400000 * 2), // 2 days ago
+        features: []
+    },
+    {
+        _id: 'mock-assigned-3',
+        title: 'SEO Optimization for Blog',
+        category: 'Digital Marketing',
+        price: '1200',
+        summary: 'Optimizing existing blog content and improving site speed for better search rankings.',
+        status: 'assigned',
+        createdAt: new Date(Date.now() - 86400000 * 5), // 5 days ago
+        features: []
+    }
+];
+
 
 export default ProjectList;

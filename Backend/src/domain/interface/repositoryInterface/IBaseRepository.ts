@@ -3,9 +3,9 @@ import { Job } from "../../entities/job.entity";
 
 export interface IBaseRepository<T> {
     create(data: T): Promise<T>
-    delete(id: string): Promise<T | null>
+    delete(id: Types.ObjectId): Promise<T | null>
 
-    findById(id: string): Promise<T | null>
+    findById(id: Types.ObjectId): Promise<T | null>
     findByEmail(email: string): Promise<T | null>
     findAll(filter?: FilterQuery<T>): Promise<T[]>;
     update(id: Types.ObjectId, data: Partial<T>): Promise<T | null>;

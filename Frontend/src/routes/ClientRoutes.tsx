@@ -9,6 +9,7 @@ import Wallet from "../components/client/dashboard/Wallet";
 import ChangePassword from "../components/client/dashboard/ChangePassword";
 import ProjectList from "../pages/client/project/ProjectList";
 import ProjectDetails from "../pages/client/project/ProjectDetails";
+import PaymentSuccess from "../pages/client/PaymentSuccess";
 import ClientProtectRoute from "./ProtectRoute/ClientProtectRoute";
 
 
@@ -29,6 +30,7 @@ export function ClientRoutes() {
           <Route path="password" element={<ChangePassword />} />
 
         </Route>
+        <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
     </>
   );
