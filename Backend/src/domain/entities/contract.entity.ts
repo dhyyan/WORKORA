@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 
 export interface IContract {
-    _id?: string,
-    jobId: string,
+    _id?: Types.ObjectId,
+    jobId: Types.ObjectId,
     freelancerId: Types.ObjectId,
     totalAmount: number,
     status?: "active" | "completed" | "cancelled",

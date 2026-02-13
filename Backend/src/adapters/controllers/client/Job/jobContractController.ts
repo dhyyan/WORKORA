@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IJobContractUseCase } from "../../../../domain/interface/useCaseInterface/client/jobs/iJobContractUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class JobContractController{
     private _jobContractUseCase:IJobContractUseCase
@@ -9,7 +10,7 @@ export class JobContractController{
     }
     async viewContract(req:Request,res:Response):Promise<void>{
         try {
-            const id=req.query.id as string
+            const id=new Types.ObjectId(req.query.id as string)
             console.log("id contract",id)
          
             const {contract,freelancer}=await this._jobContractUseCase.contractDetails({id})

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IContract } from "../../../domain/entities/contract.entity";
 import { IContractRepository } from "../../../domain/interface/repositoryInterface/IContractRepository";
 import { contractModel } from "../../../frameWork/database/models/contract.model";
@@ -7,7 +8,7 @@ export class ContractRepository extends BaseRepository<IContract> implements ICo
     constructor(){
             super (contractModel)
         }  
-    findContractByJobId(jobId: string): Promise<IContract | null> {
+    findContractByJobId(jobId: Types.ObjectId): Promise<IContract | null> {
         return contractModel.findOne({jobId})
     }
 }

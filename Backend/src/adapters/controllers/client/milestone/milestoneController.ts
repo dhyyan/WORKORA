@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IMilestoneUseCase } from "../../../../domain/interface/useCaseInterface/client/milestone/iMilestoneUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class MilestoneController {
     private _milestoneUseCase: IMilestoneUseCase;
@@ -23,7 +24,7 @@ export class MilestoneController {
 
     async getMilestones(req: Request, res: Response): Promise<void> {
         try {
-            const { jobId } = req.params;
+            const  jobId  = new Types.ObjectId(req.params.jobId)
             const result = await this._milestoneUseCase.getMilestones(jobId);
             if (!result.success) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: "Failed to fetch milestones" });

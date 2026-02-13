@@ -22,10 +22,13 @@ export class HireFreelancerUseCase implements IHireFreelancerUseCase {
         try {
             const { bidId,jobId, freelancerId, totalAmount } = input
             console.log("data in hired freeelancere", input)
+
             const freelancer = await this._freelancerRepository.findById(freelancerId)
             if (!freelancer) throw new Error("freelancer not found")
+
                 const existingContract = await this._contractRepository.findContractByJobId(jobId)
                 if(existingContract) throw new Error("contract already assign this job")
+
             const createContract = await this._contractRepository.create({ ...input, status: "active" })
             if (!createContract || !createContract._id) throw new Error("error while creating new contract")
 
@@ -36,12 +39,13 @@ export class HireFreelancerUseCase implements IHireFreelancerUseCase {
             const updateBid = await this._bidRepository.updateBid(id, bid)
             console.log("Update BId", updateBid)
             if (!updateBid) throw new Error("error while updating bid status")
-            const jobUpdate = await this._jobRepository.findByIdAndUpdate(jobId, { status: "assigned" })
+
+            const jobUpdate = await this._jobRepository.findByIdAndUpdate(jobId, { status: "assigned",freelancerId:freelancer._id })
             console.log("update Job", jobUpdate)
             if (!jobUpdate) throw new Error("error while updating job status")
 
             const contract: BaseContractOutPutDtos = {
-                _id: createContract._id.toString(),
+                _id: createContract._id,
                 jobId: createContract.jobId,
                 freelancerId: createContract.freelancerId,
                 totalAmount: createContract.totalAmount,

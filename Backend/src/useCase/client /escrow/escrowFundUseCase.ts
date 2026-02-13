@@ -24,14 +24,18 @@ export class EscrowFundUseCase implements IEscrowFundUseCase {
             const createEscrow = await this._escrowRepository.create({ ...data })
             if (!createEscrow || !createEscrow._id) throw new Error("Failed to create escrow")
 
-                const escrow:BaseEscrowOutputDtos={
-                    _id:createEscrow._id!,
-                    milestoneId:createEscrow.milestoneId,
-                    amount:createEscrow.amount.toString(),
-                    status:"locked",
-                    createdAt:createEscrow.createdAt
-                }
-                return {escrow}
+            const escrow: BaseEscrowOutputDtos = {
+                _id: createEscrow._id!,
+                milestoneId: createEscrow.milestoneId,
+                amount: createEscrow.amount.toString(),
+                status: "locked",
+                createdAt: createEscrow.createdAt
+            }
+
+            // Update milestone status to funded
+            await this._milestoneRepository.update(ifMilestoneExist._id, { status: "funded" });
+
+            return { escrow }
 
         } catch (error) {
             throw new Error((error as Error).message)

@@ -14,12 +14,14 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     }
     async create(data: T): Promise<T> {
         console.log("create data in base repo", data)
-        return await this.model.create(data)
+        const created= await this.model.create(data)
+        console.log("created",created)
+        return created
     }
-    delete(id: string): Promise<T | null> {
+    delete(id: Types.ObjectId): Promise<T | null> {
         return this.model.findByIdAndDelete(id)
     }
-    findById(id: string): Promise<T | null> {
+    findById(id: Types.ObjectId): Promise<T | null> {
         console.log("ideyy", id)
         return this.model.findById(id)
     }

@@ -2,14 +2,14 @@ import { Types } from "mongoose"
 
 export interface BaseMilestoneOutputDtos {
     _id: Types.ObjectId,
-    contractId: string,
+    contractId: Types.ObjectId,
     title: string,
     amount: number,
     status: "pending" | "funded" | "submited" | "released" | "approved",
 }
 
 export interface CreateMilestoneInputDtos {
-    jobId: string,
+    jobId: Types.ObjectId,
     title: string,
     amount: number
 }

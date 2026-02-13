@@ -1,4 +1,4 @@
-import { BarChart3Icon, LogOutIcon, MenuIcon, UsersIcon } from 'lucide-react'
+import { BarChart3Icon, LogOutIcon, MenuIcon, UsersIcon, DollarSign } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 const SideBar = () => {
@@ -7,6 +7,7 @@ const SideBar = () => {
         { id: "dashboard", icon: BarChart3Icon, label: "Dashboard" },
         { id: "clients", icon: UsersIcon, label: "Clients" },
         { id: "freelancers", icon: UsersIcon, label: "Freelancers" },
+        { id: "escrow", icon: DollarSign, label: "Escrow" },
 
     ]
     return (

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { BaseJobOutPutDtos } from "../../../domain/interface/DTOs/client/JobDto";
 import { JobListOutPutDtos } from "../../../domain/interface/DTOs/freelancer/JobDtos";
 import { IJobRepository } from "../../../domain/interface/repositoryInterface/IJobRepository";
@@ -34,7 +35,7 @@ export class FreelancerJobListUseCase implements IFreelancerListJobUseCase {
         }
     }
 
-    async findJobById(id: string): Promise<BaseJobOutPutDtos | null> {
+    async findJobById(id: Types.ObjectId): Promise<BaseJobOutPutDtos | null> {
         try {
             const job = await this._jobRepository.findById(id);
             if (!job) return null;

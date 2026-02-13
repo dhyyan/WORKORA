@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IJobViewUseCase } from "../../../../domain/interface/useCaseInterface/client/jobs/jobViewUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class JobViewController{
     private _jobViewUseCase:IJobViewUseCase
@@ -9,7 +10,7 @@ export class JobViewController{
     }
    async viewJob(req:Request,res:Response):Promise<void>{
         try {
-            const id=req.params.id
+            const id=new Types.ObjectId(req.params.id)
             const response =await this._jobViewUseCase.viewJob({id})
             if(response){
                 res.status(HttpStatus.OK).json({message:"job view success",job:response,success:true})

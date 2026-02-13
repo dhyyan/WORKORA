@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IFreelancerListJobUseCase } from "../../../../domain/interface/useCaseInterface/freelancer/jobs/iFreelancerJobListUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class FreelancerJobListController {
     private _freelancerJobListUseCase: IFreelancerListJobUseCase
@@ -23,7 +24,7 @@ export class FreelancerJobListController {
 
     async getJobById(req: Request, res: Response) {
         try {
-            const { id } = req.params;
+            const  id  = new Types.ObjectId(req.params.id)
             const response = await this._freelancerJobListUseCase.findJobById(id);
             if (!response) {
                 res.status(HttpStatus.NOT_FOUND).json({ message: "Job not found", success: false });

@@ -18,7 +18,7 @@ export class JobController{
             }
             res.status(HttpStatus.CREATED).json({message:"job created successfully",jobData:createJob,success:true})
         } catch (error) {
-            
+            console.log("error in job controller",error)
         }
     }
 }
