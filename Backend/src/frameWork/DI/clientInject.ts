@@ -57,6 +57,8 @@ import { CreateCheckoutSessionUseCase } from "../../useCase/client /payment/crea
 import { StripeService } from "../service/stripe/stripeService";
 import { StripeWebhookController } from "../../adapters/controllers/client/payment/stripeWebHookController";
 import { StripeWebhookUseCase } from "../../useCase/client /payment/stripeWebHookUseCase";
+import { JobListAssignedController } from "../../adapters/controllers/client/Job/jobListAssignedJobController";
+import { JobListAssignedUsecase } from "../../useCase/client /jobs/jobListAssignedUsecase";
 
 
 
@@ -174,3 +176,8 @@ export const paymentCheckoutController=new PaymentCheckoutController(createCheck
 
 const stripeWeebhookUseCase=new StripeWebhookUseCase(stripeService,escrowFundUseCase)
 export const stripeWebhookController=new StripeWebhookController(stripeWeebhookUseCase)
+
+//job assigned list
+
+const jobListAssignUsecase=new JobListAssignedUsecase(jobRepository)
+export const jobListAssigneJobController=new JobListAssignedController(jobListAssignUsecase)

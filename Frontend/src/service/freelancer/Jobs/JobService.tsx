@@ -19,3 +19,32 @@ export const fetchJobById = async (id: string) => {
         throw error
     }
 }
+
+export const fetchBids=async(freelanceId:string)=>{
+    try {
+        const response=await freelancerAxios.get(`/freelancer/list/bids/${freelanceId}`)
+        console.log("response in service",response)
+        return response.data
+    } catch (error) {
+        console.log("error in bid list service", error)
+    }
+}
+
+
+export const fetchAcceptedJobs=async(freelanceId:string)=>{
+    try {
+        const response=await freelancerAxios.get(`/freelancer/list/accept/jobs/${freelanceId}`)
+        return response.data
+    } catch (error) {
+        console.log("error in job accepted list service", error)
+    }
+}
+
+export const fetchCompletedJobs=async(freelanceId:string)=>{
+    try {
+        const response=await freelancerAxios.get(`/freelancer/list/completed/jobs/${freelanceId}`)
+        return response.data
+    } catch (error) {
+        console.log("error in job completed list service", error)
+    }
+}

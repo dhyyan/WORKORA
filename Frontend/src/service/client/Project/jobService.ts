@@ -93,3 +93,13 @@ export const milestoneListService = async ({ jobId }: { jobId: string }) => {
    }
 }
 
+export const assignedJobService=async(clientId:string)=>{
+   try {
+      const response=await clientAxios.get(`/client/list/jobs/assigned/${clientId}`)
+      return response.data
+   } catch (error) {
+       console.error("assigned jobs list error: in service", error);
+      throw error;
+   }
+}
+

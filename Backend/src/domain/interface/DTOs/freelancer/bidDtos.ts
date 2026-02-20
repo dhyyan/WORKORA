@@ -22,3 +22,11 @@ export interface BidCreateInputDtos {
 export interface BidCreateOutPutDtos{
     bid:BaseBidOutPutDtos
 }
+
+export interface ListBidInputDtos{
+    freelancerId:Types.ObjectId
+}
+
+export interface ListBidOutputDtos{
+    bids:BaseBidOutPutDtos[]
+}

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController } from "../../DI/freelancerInject";
+import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController, listAcceptJobsController, listBidController, listCompletedJobsController } from "../../DI/freelancerInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -63,6 +63,18 @@ export class FreelancerRoutes {
 
         this.FreelancerRoutes.post("/createbid", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             bidCreateController.createBid(req,res)
+        })
+
+        this.FreelancerRoutes.get("/list/accept/jobs/:freelancerId",(req:Request,res:Response)=>{
+            listAcceptJobsController.list(req,res)
+        })
+
+        this.FreelancerRoutes.get("/list/bids/:freelancerId",(req:Request,res:Response)=>{
+            listBidController.list(req,res)
+        })
+
+        this.FreelancerRoutes.get("/list/completed/jobs/:freelancerId",(req:Request,res:Response)=>{
+            listCompletedJobsController.list(req,res)
         })
     }
 }

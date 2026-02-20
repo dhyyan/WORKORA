@@ -32,6 +32,12 @@ import { BidCreateController } from "../../adapters/controllers/freelancer/bid/c
 import { CreateBidUseCase } from "../../useCase/freelancer/bid/createBidUseCase";
 import { BidRepository } from "../../adapters/repository/freelancer/bidRepository";
 import { WalletRepository } from "../../adapters/repository/client/walletRepository";
+import { ListAcceptJobsController } from "../../adapters/controllers/freelancer/jobs/listAcceptJobController";
+import { ListAcceptJobsUsecse } from "../../useCase/freelancer/jobs/listAcceptJobsUsecase";
+import { ListBidController } from "../../adapters/controllers/freelancer/bid/listBidController";
+import { ListBidUsecase } from "../../useCase/freelancer/bid/listBidUsecase";
+import {  ListCompletedJobsController } from "../../adapters/controllers/freelancer/jobs/listCompletedJobsController";
+import { ListCopletedJobsUsecase } from "../../useCase/freelancer/jobs/listCopletedJobsUsecase";
 
 
 //signup
@@ -99,3 +105,17 @@ export const freelancerJobListController=new FreelancerJobListController(freelan
 const bidRepository=new BidRepository()
 const createBidUseCase=new CreateBidUseCase(bidRepository)
 export const bidCreateController=new BidCreateController(createBidUseCase)
+
+//list accept jobs
+const listAccetpJobsUsecase=new ListAcceptJobsUsecse(jobRepository)
+export const listAcceptJobsController=new ListAcceptJobsController(listAccetpJobsUsecase)
+
+//list bids
+const listBidUsecase=new ListBidUsecase(bidRepository)
+export const listBidController=new ListBidController(listBidUsecase)
+
+//list completed jobs
+
+
+const listcomletedJobs=new ListCopletedJobsUsecase(jobRepository)
+export const listCompletedJobsController=new ListCompletedJobsController(listcomletedJobs)
