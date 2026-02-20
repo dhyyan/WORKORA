@@ -1,5 +1,5 @@
 import { Request, response, Response, Router } from "express";
-import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, paymentCheckoutController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, stripeWebhookController, verifyOtpPassword } from "../../DI/clientInject";
+import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListAssigneJobController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, paymentCheckoutController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, stripeWebhookController, verifyOtpPassword } from "../../DI/clientInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 import express from "express";
@@ -112,6 +112,10 @@ export class UserRoutes {
             express.raw({ type: "application/json" }), // IMPORTANT
             stripeWebhookController.handleWebhook.bind(stripeWebhookController)
         );
+
+        this.UserRoutes.get("/list/jobs/assigned/:clientId",(req:Request,res:Response)=>{
+            jobListAssigneJobController.list(req,res)
+        })
 
     }
 

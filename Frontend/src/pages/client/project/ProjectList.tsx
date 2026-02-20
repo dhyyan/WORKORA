@@ -10,7 +10,7 @@ import ViewBidsModal from '../../../components/client/project/ViewBidsModal';
 import CreateProjectModal from '../../../components/client/project/CreateProjectModal';
 import ViewProposalModal from '../../../components/client/project/ViewProposalModal';
 import type { IJob } from '../../../types/client/jobs/IJob';
-import { jobListService } from '../../../service/client/Project/jobService';
+import { jobListService, assignedJobService } from '../../../service/client/Project/jobService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import type { IBid } from '../../../types/freelancer/bid/IBid';
@@ -19,6 +19,7 @@ const ProjectList = () => {
     const navigate = useNavigate();
     // Toggle this to see empty state during development
     const [projects, setProjects] = useState<IJob[]>([])
+    const [assignedProjects, setAssignedProjects] = useState<IJob[]>([])
     const user = useSelector((state: RootState) => state.clientAuth.client)
     const [refresh, setRefresh] = useState(false)
 
@@ -67,6 +68,12 @@ const ProjectList = () => {
                 const response = await jobListService({ id });
                 console.log("ress", response)
                 setProjects(response.jobs.jobs);
+
+                const assignedRess = await assignedJobService(id);
+                console.log("assignedRess", assignedRess);
+                if (assignedRess?.jobs) {
+                    setAssignedProjects(assignedRess.jobs);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -169,29 +176,33 @@ const ProjectList = () => {
                                         <ProjectListEmptyState />
                                     )
                                 ) : (
-                                    /* Assigned Jobs Tab - Mock Data */
-                                    <div className="space-y-4">
-                                        {mockAssignedJobs.map((project) => (
-                                            <ProjectCard
-                                                key={project._id}
-                                                _id={project._id!}
-                                                title={project.title}
-                                                description={project.summary}
-                                                category={project.category}
-                                                // @ts-ignore
-                                                budget={project.price}
-                                                status={project.status as any}
-                                                postedDate={project.createdAt ? project.createdAt.toLocaleDateString() : ""}
-                                                onViewDetails={() => {
-                                                    // For mock data, we might not want to navigate or just log
-                                                    console.log("View details for mock assigned job", project._id);
-                                                }}
-                                                refresh={() => { }}
-                                                onEdit={() => { }}
-                                                onBids={() => { }}
-                                            />
-                                        ))}
-                                    </div>
+                                    /* Assigned Jobs Tab */
+                                    assignedProjects.length > 0 ? (
+                                        <div className="space-y-4">
+                                            {assignedProjects.map((project) => (
+                                                <ProjectCard
+                                                    key={project._id}
+                                                    _id={project._id!}
+                                                    title={project.title}
+                                                    description={project.summary}
+                                                    category={project.category}
+                                                    budget={project.price}
+                                                    status={project.status!}
+                                                    postedDate={project.createdAt ? new Date(project.createdAt).toLocaleDateString() : ""}
+                                                    onViewDetails={() => {
+                                                        if (project._id) {
+                                                            handleViewDetails(project._id);
+                                                        }
+                                                    }}
+                                                    refresh={() => setRefresh(prev => !prev)}
+                                                    onEdit={() => { }}
+                                                    onBids={() => { }}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <ProjectListEmptyState />
+                                    )
                                 )}
                             </motion.div>
                         )}
@@ -243,40 +254,5 @@ const ProjectList = () => {
         </div>
     );
 };
-
-// Define mock data outside or inside
-const mockAssignedJobs = [
-    {
-        _id: 'mock-assigned-1',
-        title: 'E-commerce Platform Redesign',
-        category: 'Web Development',
-        price: "5000",
-        summary: 'Complete redesign of the main product pages and checkout flow for better conversion.',
-        status: 'assigned',
-        createdAt: new Date(),
-        features: []
-    },
-    {
-        _id: 'mock-assigned-2',
-        title: 'Mobile App API Integration',
-        category: 'Backend Development',
-        price: "3200",
-        summary: 'Developing and integrating RESTful APIs for the new mobile application.',
-        status: 'assigned',
-        createdAt: new Date(Date.now() - 86400000 * 2), // 2 days ago
-        features: []
-    },
-    {
-        _id: 'mock-assigned-3',
-        title: 'SEO Optimization for Blog',
-        category: 'Digital Marketing',
-        price: '1200',
-        summary: 'Optimizing existing blog content and improving site speed for better search rankings.',
-        status: 'assigned',
-        createdAt: new Date(Date.now() - 86400000 * 5), // 5 days ago
-        features: []
-    }
-];
-
 
 export default ProjectList;

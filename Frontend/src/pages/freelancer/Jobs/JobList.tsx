@@ -2,25 +2,29 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, DollarSign, Clock, Filter, Check, Loader2, Briefcase, FileText, CheckCircle } from 'lucide-react';
-import { fetchJobs } from '../../../service/freelancer/Jobs/JobService';
+import { fetchJobs, fetchBids, fetchAcceptedJobs, fetchCompletedJobs } from '../../../service/freelancer/Jobs/JobService';
 import Navbar from '../../../components/freelancer/DashBoard/Navbar';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../../store/store';
 
 // Mock Data Types
 interface IMockProject {
-    id: string;
+    id: string; // Keep string for consistent ID handling
     title: string;
     client: string;
     status: 'Ongoing' | 'Completed' | 'Bids';
     price: string;
-    date: string;
+    cretedAt: string;
 }
 
 const FreelancerJobListing = () => {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState<IJob[]>([]);
     const [loading, setLoading] = useState(true);
+    const { freelancer } = useSelector((state: RootState) => state.freelancerAuth);
+    const freelancerId = freelancer?._id;
 
     // Tab State
     const tabs = ['All', 'Ongoing', 'Bids', 'Completed'];
@@ -37,15 +41,6 @@ const FreelancerJobListing = () => {
     const categories = ['Development', 'Design', 'Marketing', 'Writing', 'Admin'];
     const skills = ['React', 'Node.js', 'UI/UX', 'SEO', 'Python', 'Figma', 'TypeScript'];
 
-    // Mock Projects Data
-    const allMockProjects: IMockProject[] = [
-        { id: '1', title: 'E-commerce Website Redesign', client: 'TechSolutions Inc.', status: 'Ongoing', price: '$1200', date: '2023-10-15' },
-        { id: '2', title: 'Mobile App Logo Design', client: 'Creative Minds', status: 'Bids', price: '$300', date: '2023-10-20' },
-        { id: '3', title: 'React Native Bug Fixes', client: 'StartUp Hub', status: 'Completed', price: '$500', date: '2023-09-10' },
-        { id: '4', title: 'SEO Optimization for Blog', client: 'Content King', status: 'Ongoing', price: '$800', date: '2023-10-05' },
-        { id: '5', title: 'Corporate Branding Package', client: 'Enterprise Corp', status: 'Bids', price: '$1500', date: '2023-10-22' },
-        { id: '6', title: 'Wordpress Plugin Customization', client: 'WP Gurus', status: 'Completed', price: '$450', date: '2023-09-01' },
-    ];
 
     useEffect(() => {
         const loadJobs = async () => {
@@ -69,21 +64,79 @@ const FreelancerJobListing = () => {
     }, []);
 
     // Tab Switcher Logic
-    const handleTabChange = (tab: string) => {
+    const handleTabChange = async (tab: string) => {
         if (tab === activeTab) return;
         setIsTabLoading(true);
         setActiveTab(tab);
 
-        // Simulate network delay
-        setTimeout(() => {
+        try {
             if (tab === 'All') {
-                setMockData([]);
-            } else {
-                setMockData(allMockProjects.filter(p => p.status === tab));
+                setMockData([]); // Clear other tab data
+            } else if (tab === 'Bids') {
+                if (freelancerId) {
+                    const response = await fetchBids(freelancerId);
+                    console.log("respose of bid",response)
+                    if (response && response.bids) {
+                        // const mappedBids = response.bids.map((bid: any) => ({
+                        //     id: bid._id,
+                        //     title: bid.jobId.title,
+                        //     client: bid.jobId.clientId.name || 'Client', // client name might be inside clientId object
+                        //     status: 'Bids',
+                        //     price: `$${bid.bidAmount}`,
+                        //     date: new Date(bid.createdAt).toLocaleDateString()
+                        // }));
+                        setMockData(response.bids.bids);
+                    } else {
+                        setMockData([]);
+                    }
+                }
+            } else if (tab === 'Ongoing') {
+                if (freelancerId) {
+                    // Assuming 'Ongoing' refers to accepted jobs
+                    const response = await fetchAcceptedJobs(freelancerId);
+                    console.log("accepted jobs",response)
+                    if (response && response.jobs) {
+                        // const mappedJobs = response.jobs.map((job: any) => ({
+                        //     id: job._id,
+                        //     title: job.jobId.title,
+                        //     client: job.clientId.name || 'Client',
+                        //     status: 'Ongoing',
+                        //     price: `$${job.totalAmount || job.jobId.price}`, // Adjust based on actual response structure
+                        //     date: new Date(job.createdAt).toLocaleDateString()
+                        // }));
+                        setMockData(response.jobs);
+                    } else {
+                        setMockData([]);
+                    }
+                }
+            } else if (tab === 'Completed') {
+                if (freelancerId) {
+                    const response = await fetchCompletedJobs(freelancerId);
+                    console.log("response of completed jobs",response)
+                    if (response && response.jobs) {
+                        // const mappedJobs = response.jobs.map((job: any) => ({
+                        //     id: job._id,
+                        //     title: job.jobId.title,
+                        //     client: job.clientId.name || 'Client',
+                        //     status: 'Completed',
+                        //     price: `$${job.totalAmount}`,
+                        //     date: new Date(job.updatedAt).toLocaleDateString()
+                        // }));
+                        setMockData(response.jobs);
+                    } else {
+                        setMockData([]);
+                    }
+                }
             }
+        } catch (error) {
+            console.error(`Error fetching data for tab ${tab}:`, error);
+            setMockData([]);
+        } finally {
             setIsTabLoading(false);
-        }, 500);
+        }
     };
+
+    console.log("bids data",mockData)
 
     // Filter Logic (For 'All' tab)
     const getPriceValue = (priceStr?: string) => {
@@ -422,7 +475,7 @@ const FreelancerJobListing = () => {
                                                         </div>
                                                     </div>
                                                     <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center text-xs text-gray-500">
-                                                        <span>Posted {project.date}</span>
+                                                        <span>Posted {project.cretedAt}</span>
                                                         <button className="text-emerald-600 font-medium hover:underline">View Details</button>
                                                     </div>
                                                 </div>
