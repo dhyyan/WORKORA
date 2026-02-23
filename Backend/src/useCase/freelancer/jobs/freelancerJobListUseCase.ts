@@ -37,6 +37,7 @@ export class FreelancerJobListUseCase implements IFreelancerListJobUseCase {
 
     async findJobById(id: Types.ObjectId): Promise<BaseJobOutPutDtos | null> {
         try {
+            console.log("job id",id)
             const job = await this._jobRepository.findById(id);
             if (!job) return null;
             return {

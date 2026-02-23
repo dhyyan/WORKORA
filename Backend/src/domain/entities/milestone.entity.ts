@@ -5,6 +5,9 @@ export interface IMilestone {
     contractId: Types.ObjectId,
     title: string,
     amount: number,
-    status?: "pending" | "funded" | "submited" |"released" | "approved",
+    description:string,
+    taskUrl:string,
+    reason:string
+    status?: "pending" | "funded" | "submited" |"released" | "rejected" | "approved" | "locked" | "refunded",
     createdAt?: Date,
 }   

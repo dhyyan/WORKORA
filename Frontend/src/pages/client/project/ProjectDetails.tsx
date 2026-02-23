@@ -1,12 +1,13 @@
-import { ArrowLeft, Clock, DollarSign, Tag, CheckCircle, Plus, Wallet, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Clock, DollarSign, Tag, CheckCircle, Plus, Wallet, AlertCircle, Eye, ExternalLink } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { contractDetailService, jobViewService, milestoneCreateService, milestoneListService } from '../../../service/client/Project/jobService';
+import { contractDetailService, jobViewService } from '../../../service/client/Project/jobService';
 import { useEffect, useState } from 'react';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import type { IFreelancer } from '../../../types/freelancer/Ifreelancer';
 import type { IMilestone } from '../../../types/client/milestone/IMilestone';
 import type { IContract } from '../../../types/client/jobs/IContract';
 import { paymentMilestone } from '../../../service/client/payment/paymentService';
+import { approveMilestonPaymentService, milestoneCreateService, milestoneListService, requestMilestonChangeService } from '../../../service/client/milestone/milestonService';
 
 const ProjectDetails = () => {
     const navigate = useNavigate();
@@ -17,6 +18,10 @@ const ProjectDetails = () => {
     const [milestoneForm, setMilestoneForm] = useState({ title: '', amount: '' })
     const [loading, setLoading] = useState(false)
     const { id } = useParams()
+    const [refreshPage, setRefreshPage] = useState(false)
+    const [selectedMilestone, setSelectedMilestone] = useState<IMilestone | null>(null);
+    const [isRequestChangeModalOpen, setIsRequestChangeModalOpen] = useState(false);
+    const [changeReason, setChangeReason] = useState("");
 
     useEffect(() => {
         const viewJobDetails = async () => {
@@ -53,7 +58,7 @@ const ProjectDetails = () => {
         viewJobDetails();
         viewContractDetails();
         fetchMilestones();
-    }, [id]);
+    }, [id, refreshPage]);
 
     const handleCreateMilestone = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -72,6 +77,8 @@ const ProjectDetails = () => {
                 const listResponse = await milestoneListService({ jobId: id });
                 if (listResponse.milestones) setMilestones(listResponse.milestones);
             }
+            setMilestoneForm({ title: "", amount: "" })
+            setRefreshPage(true)
         } catch (error) {
             console.error(error);
         } finally {
@@ -80,14 +87,42 @@ const ProjectDetails = () => {
     };
 
 
-    const handlefundMilestone=async(milestoneId:string)=>{
-         try {
-            const response=await paymentMilestone(milestoneId)
-            console.log("response of milestone fund",response.url)
-            window.location.href=response.url
-         } catch (error) {
+    const handlefundMilestone = async (milestoneId: string) => {
+        try {
+            const response = await paymentMilestone(milestoneId)
+            console.log("response of milestone fund", response.url)
+            window.location.href = response.url
+        } catch (error) {
             console.log(error)
-         }
+        }
+    }
+
+    //handle approve milestone fund
+    const handleApproveFund = async (milestoneId: string) => {
+        try {
+            const response = await approveMilestonPaymentService(milestoneId)
+            console.log("response of approve milestone", response)
+            setSelectedMilestone(null);
+            setRefreshPage(prev => !prev);
+        } catch (error) {
+            console.log("error while approve milestone fund", error)
+        }
+    }
+
+    //handle request milestone change
+    const handleRequestChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedMilestone?._id || !changeReason.trim()) return;
+        try {
+            const response = await requestMilestonChangeService({ milestoneId: selectedMilestone._id, reason: changeReason })
+            console.log("response of request change milestone", response)
+            setIsRequestChangeModalOpen(false);
+            setSelectedMilestone(null);
+            setChangeReason("");
+            setRefreshPage(prev => !prev);
+        } catch (error) {
+            console.log("error while request change milestone ", error)
+        }
     }
 
 
@@ -246,17 +281,29 @@ const ProjectDetails = () => {
                                         </div>
                                     </div>
 
-                                    {milestone.status !== 'funded' && (
+                                    {milestone.status === 'pending' && (
                                         <button
-                                            onClick={()=>handlefundMilestone(milestone._id!)}
+                                            onClick={() => handlefundMilestone(milestone._id!)}
                                             className="w-full md:w-auto px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                                         >
                                             <Wallet size={16} /> Fund Milestone
                                         </button>
                                     )}
-                                    {milestone.status === 'funded' && (
+                                    {(milestone.status === 'funded' || milestone.status === 'submited') && (
+                                        <button
+                                            disabled={milestone.status === 'funded'}
+                                            onClick={() => milestone.status === 'submited' && setSelectedMilestone(milestone)}
+                                            className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${milestone.status === 'submited'
+                                                ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm'
+                                                : 'bg-blue-300 text-white cursor-not-allowed opacity-70'
+                                                }`}
+                                        >
+                                            <Eye size={16} /> View
+                                        </button>
+                                    )}
+                                    {milestone.status === 'approved' && (
                                         <div className="text-green-600 text-sm font-medium flex items-center gap-1">
-                                            <CheckCircle size={16} /> Funded
+                                            <CheckCircle size={16} /> Approved
                                         </div>
                                     )}
                                 </div>
@@ -266,6 +313,125 @@ const ProjectDetails = () => {
                                 <p>No milestones created yet.</p>
                             </div>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {/* View Milestone Modal */}
+            {selectedMilestone && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-xl border border-gray-100 flex flex-col gap-6 transform transition-all">
+                        <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900">Milestone Submission</h3>
+                                <p className="text-sm text-gray-500 mt-1">{selectedMilestone.title}</p>
+                            </div>
+                            <button
+                                onClick={() => setSelectedMilestone(null)}
+                                className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
+                            >
+                                <AlertCircle className="w-5 h-5 opacity-0" />
+                                <span className="absolute top-10 right-10 text-xl font-bold">&times;</span>
+                            </button>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                <ExternalLink size={16} className="text-blue-500" />
+                                Task URL
+                            </label>
+                            <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                                {selectedMilestone.taskUrl ? (
+                                    <a
+                                        href={selectedMilestone.taskUrl.startsWith('http') ? selectedMilestone.taskUrl : `https://${selectedMilestone.taskUrl}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-700 hover:underline break-all font-medium transition-colors"
+                                    >
+                                        {selectedMilestone.taskUrl}
+                                    </a>
+                                ) : (
+                                    <span className="text-gray-500 italic">No URL provided</span>
+                                )}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 text-gray-700 whitespace-pre-wrap min-h-[100px] leading-relaxed">
+                                {selectedMilestone.description || 'No description provided'}
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 mt-2">
+                            <button
+                                onClick={() => setIsRequestChangeModalOpen(true)}
+                                className="px-6 py-2.5 border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-50 rounded-xl transition-all font-semibold flex items-center justify-center"
+                            >
+                                Request Change
+                            </button>
+                            <button
+                                onClick={() => handleApproveFund(selectedMilestone._id!)}
+                                className="px-6 py-2.5 bg-green-600 text-white hover:bg-green-700 rounded-xl transition-all font-semibold shadow-sm hover:shadow-md flex items-center justify-center"
+                            >
+                                Approve
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Request Change Modal */}
+            {isRequestChangeModalOpen && selectedMilestone && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-xl border border-gray-100 flex flex-col gap-6 transform transition-all">
+                        <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900">Request Change</h3>
+                                <p className="text-sm text-gray-500 mt-1">Specify changes for the submitted milestone.</p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setIsRequestChangeModalOpen(false);
+                                    setChangeReason("");
+                                }}
+                                className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
+                            >
+                                <span className="text-xl font-bold">&times;</span>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleRequestChange} className="flex flex-col gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">Reason</label>
+                                <textarea
+                                    value={changeReason}
+                                    onChange={(e) => setChangeReason(e.target.value)}
+                                    placeholder="Enter the requested changes..."
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none min-h-[120px]"
+                                    required
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-end gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setIsRequestChangeModalOpen(false);
+                                        setChangeReason("");
+                                    }}
+                                    className="px-6 py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl transition-all font-semibold"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-6 py-2.5 bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition-all font-semibold shadow-sm"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

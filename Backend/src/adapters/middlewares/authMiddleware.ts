@@ -39,7 +39,7 @@ console.log("2n midlldde",userId)
           .status(HttpStatus.UNAUTHORIZED)
           .json({ message: "user is blocked by admin" });
       }
-      console.log("dfgdfg success")
+      console.log("success")
       return next();
     }
 

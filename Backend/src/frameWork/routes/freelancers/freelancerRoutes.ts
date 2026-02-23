@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController, listAcceptJobsController, listBidController, listCompletedJobsController } from "../../DI/freelancerInject";
+import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController, listAcceptJobsController, listBidController, listCompletedJobsController, milestoneSubmitController } from "../../DI/freelancerInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -75,6 +75,10 @@ export class FreelancerRoutes {
 
         this.FreelancerRoutes.get("/list/completed/jobs/:freelancerId",(req:Request,res:Response)=>{
             listCompletedJobsController.list(req,res)
+        })
+
+        this.FreelancerRoutes.post("/milestone/sumbmit/:milestoneId",(req:Request,res:Response)=>{
+            milestoneSubmitController.submit(req,res)
         })
     }
 }

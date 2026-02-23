@@ -3,5 +3,15 @@ export interface IMilestone {
     contractId: string;
     title: string;
     amount: number;
-    status: "pending" | "funded" | "submited" | "released" | "approved";
+    description?: string,
+    taskUrl?: string,
+    reason?: string,
+    status: "pending" | "funded" | "submited" | "released" | "approved" | "rejected";
+}
+
+
+export interface SubmitMiestone {
+    milestoneId: string,
+    taskUrl: string,
+    description: string,
 }

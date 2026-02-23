@@ -9,35 +9,35 @@ import { removeFreelancer } from "../store/slice/freelancer/FreelanceSlice"
 console.log("evvvvvv", import.meta.env.VITE_API_BASEURL)
 // import {clientAddToken} from "../store/slice/client/clientTokenSlice"
 
-const createAxiosInstance=(type:"client"|"freelancer"|"admin")=>{
-    const axiosInstance=axios.create({
-        baseURL:import.meta.env.VITE_API_BASEURL,
-        withCredentials:true
-    })
+const createAxiosInstance = (type: "client" | "freelancer" | "admin") => {
+  const axiosInstance = axios.create({
+    baseURL: import.meta.env.VITE_API_BASEURL,
+    withCredentials: true
+  })
 
-    axiosInstance.interceptors.request.use(
+  axiosInstance.interceptors.request.use(
 
-        (config)=>{
+    (config) => {
 
-            let token=null
-            if(type=="client"){
-                token=store.getState().clientToken.token
-            }else if(type=="freelancer"){
-                token=store.getState().freelancerToken.token
-            }
+      let token = null
+      if (type == "client") {
+        token = store.getState().clientToken.token
+      } else if (type == "freelancer") {
+        token = store.getState().freelancerToken.token
+      }
 
-            if(token){
-                config.headers.Authorization=`Bearer ${token}`
-            }
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
 
-            return config
-        },
+      return config
+    },
 
-        (error)=>Promise.reject(error)
+    (error) => Promise.reject(error)
 
-    )
+  )
 
-     // RESPONSE INTERCEPTOR
+  // RESPONSE INTERCEPTOR
   axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -66,11 +66,11 @@ const createAxiosInstance=(type:"client"|"freelancer"|"admin")=>{
       return Promise.reject(error);
     }
   );
-    
-    return axiosInstance;
+
+  return axiosInstance;
 }
 
 
-export const clientAxios= createAxiosInstance("client")
-export const freelancerAxios= createAxiosInstance("freelancer")
-export const admintAxios= createAxiosInstance("admin")
+export const clientAxios = createAxiosInstance("client")
+export const freelancerAxios = createAxiosInstance("freelancer")
+export const admintAxios = createAxiosInstance("admin")

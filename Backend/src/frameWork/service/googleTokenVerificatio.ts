@@ -13,7 +13,7 @@ interface GoogleUserInfo {
 
 export const verifyGoogleToken = async (token: string) => {
     try {
-       
+
         const ticket = await googleClient.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_CLIENT_ID,
@@ -30,7 +30,7 @@ export const verifyGoogleToken = async (token: string) => {
             });
 
             const userData = response.data;
-            
+
             return {
                 email: userData.email,
                 name: userData.name,

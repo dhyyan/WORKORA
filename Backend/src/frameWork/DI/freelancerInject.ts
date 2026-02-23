@@ -38,6 +38,9 @@ import { ListBidController } from "../../adapters/controllers/freelancer/bid/lis
 import { ListBidUsecase } from "../../useCase/freelancer/bid/listBidUsecase";
 import {  ListCompletedJobsController } from "../../adapters/controllers/freelancer/jobs/listCompletedJobsController";
 import { ListCopletedJobsUsecase } from "../../useCase/freelancer/jobs/listCopletedJobsUsecase";
+import { MilestoneSubmitController } from "../../adapters/controllers/freelancer/milestone/milestoneSubmitController";
+import { SubmitMilestoneUsecase } from "../../useCase/freelancer/milestone/submitMilestoneUsecase";
+import { MileStoneRepository } from "../../adapters/repository/client/milestoneRepository";
 
 
 //signup
@@ -119,3 +122,9 @@ export const listBidController=new ListBidController(listBidUsecase)
 
 const listcomletedJobs=new ListCopletedJobsUsecase(jobRepository)
 export const listCompletedJobsController=new ListCompletedJobsController(listcomletedJobs)
+
+//milestone Update
+
+const milestoneRepository=new MileStoneRepository()
+const submitMilestoneUsecase=new SubmitMilestoneUsecase(milestoneRepository)
+export const milestoneSubmitController=new MilestoneSubmitController(submitMilestoneUsecase)
