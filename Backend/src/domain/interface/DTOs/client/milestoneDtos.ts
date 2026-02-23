@@ -5,6 +5,9 @@ export interface BaseMilestoneOutputDtos {
     contractId: Types.ObjectId,
     title: string,
     amount: number,
+    description?:string,
+    taskUrl?:string,
+    reason?:string,
     status: "pending" | "funded" | "submited" | "released" | "approved",
 }
 
@@ -25,3 +28,19 @@ export interface GetMilestoneOutputDtos {
     success: boolean
 }
 
+export interface IApproveMilestonePaymentInputDtos{
+    milestoneId:Types.ObjectId
+}
+
+export interface IApproveMilestonePaymentOutputDtos{
+    success:boolean
+}
+
+export interface IRequestMilestoneChangeInputDtos{
+    milestoneId:Types.ObjectId,
+    reason:string
+}
+
+export interface IRequestMilestoneChangeOutputDtos{
+    success:boolean
+}

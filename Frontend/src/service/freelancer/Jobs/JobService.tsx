@@ -48,3 +48,17 @@ export const fetchCompletedJobs=async(freelanceId:string)=>{
         console.log("error in job completed list service", error)
     }
 }
+
+//milestone service
+
+export const milestoneListService = async ({ jobId }: { jobId: string }) => {
+   try {
+      console.log("Calling milestoneListService with jobId:", jobId);
+      const response = await freelancerAxios.get(`/client/milestone/${jobId}`)
+      console.log("milestoneListService response:", response.data);
+      return response.data
+   } catch (error) {
+      console.error("milestone list error: in service", error);
+      throw error;
+   }
+}

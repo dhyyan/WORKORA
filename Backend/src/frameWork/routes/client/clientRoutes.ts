@@ -1,5 +1,5 @@
 import { Request, response, Response, Router } from "express";
-import { bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListAssigneJobController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, paymentCheckoutController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, stripeWebhookController, verifyOtpPassword } from "../../DI/clientInject";
+import { approveMilestonePaymentController, bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListAssigneJobController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, paymentCheckoutController, requestMilestoneChangeController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, stripeWebhookController, verifyOtpPassword } from "../../DI/clientInject";
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 import express from "express";
@@ -99,11 +99,7 @@ export class UserRoutes {
             jobContractController.viewContract(req, res)
         })
 
-        // this.UserRoutes.post("/escrow/fund/:milestoneId", (req:Request,res:Response)=>{
-        //     escrowFundController.fundMilestone(req,res)
-        // })
-
-        this.UserRoutes.post("/payment/checkout", (req: Request, res: Response) => {
+        this.UserRoutes.post("/payment/checkout",tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             paymentCheckoutController.checkout(req, res)
         })
 
@@ -113,8 +109,16 @@ export class UserRoutes {
             stripeWebhookController.handleWebhook.bind(stripeWebhookController)
         );
 
-        this.UserRoutes.get("/list/jobs/assigned/:clientId",(req:Request,res:Response)=>{
+        this.UserRoutes.get("/list/jobs/assigned/:clientId",tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             jobListAssigneJobController.list(req,res)
+        })
+
+        this.UserRoutes.post("/milestone/approve/payment/:milestoneId",(req:Request,res:Response)=>{
+            approveMilestonePaymentController.approve(req,res)
+        })
+
+        this.UserRoutes.post("/milestone/requstchange/:milestoneId",(req:Request,res:Response)=>{
+            requestMilestoneChangeController.requestchange(req,res)
         })
 
     }

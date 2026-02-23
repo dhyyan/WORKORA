@@ -44,6 +44,8 @@ export class HireFreelancerUseCase implements IHireFreelancerUseCase {
             console.log("update Job", jobUpdate)
             if (!jobUpdate) throw new Error("error while updating job status")
 
+                // const rejectExistBid=await this._bidRepository.updateBid(!id,{status:"rejec"})
+
             const contract: BaseContractOutPutDtos = {
                 _id: createContract._id,
                 jobId: createContract.jobId,

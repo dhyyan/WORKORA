@@ -11,7 +11,7 @@ import type { RootState } from '../../../store/store';
 
 // Mock Data Types
 interface IMockProject {
-    id: string; // Keep string for consistent ID handling
+    _id: string; // Keep string for consistent ID handling
     title: string;
     client: string;
     status: 'Ongoing' | 'Completed' | 'Bids';
@@ -77,14 +77,7 @@ const FreelancerJobListing = () => {
                     const response = await fetchBids(freelancerId);
                     console.log("respose of bid",response)
                     if (response && response.bids) {
-                        // const mappedBids = response.bids.map((bid: any) => ({
-                        //     id: bid._id,
-                        //     title: bid.jobId.title,
-                        //     client: bid.jobId.clientId.name || 'Client', // client name might be inside clientId object
-                        //     status: 'Bids',
-                        //     price: `$${bid.bidAmount}`,
-                        //     date: new Date(bid.createdAt).toLocaleDateString()
-                        // }));
+                
                         setMockData(response.bids.bids);
                     } else {
                         setMockData([]);
@@ -96,14 +89,7 @@ const FreelancerJobListing = () => {
                     const response = await fetchAcceptedJobs(freelancerId);
                     console.log("accepted jobs",response)
                     if (response && response.jobs) {
-                        // const mappedJobs = response.jobs.map((job: any) => ({
-                        //     id: job._id,
-                        //     title: job.jobId.title,
-                        //     client: job.clientId.name || 'Client',
-                        //     status: 'Ongoing',
-                        //     price: `$${job.totalAmount || job.jobId.price}`, // Adjust based on actual response structure
-                        //     date: new Date(job.createdAt).toLocaleDateString()
-                        // }));
+                        
                         setMockData(response.jobs);
                     } else {
                         setMockData([]);
@@ -114,14 +100,7 @@ const FreelancerJobListing = () => {
                     const response = await fetchCompletedJobs(freelancerId);
                     console.log("response of completed jobs",response)
                     if (response && response.jobs) {
-                        // const mappedJobs = response.jobs.map((job: any) => ({
-                        //     id: job._id,
-                        //     title: job.jobId.title,
-                        //     client: job.clientId.name || 'Client',
-                        //     status: 'Completed',
-                        //     price: `$${job.totalAmount}`,
-                        //     date: new Date(job.updatedAt).toLocaleDateString()
-                        // }));
+                        
                         setMockData(response.jobs);
                     } else {
                         setMockData([]);
@@ -190,6 +169,7 @@ const FreelancerJobListing = () => {
         }
     };
 
+    console.log("|list ongoing ",mockData)
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
             <Navbar />
@@ -453,7 +433,7 @@ const FreelancerJobListing = () => {
                                         {mockData.length > 0 ? (
                                             mockData.map((project) => (
                                                 <div
-                                                    key={project.id}
+                                                    key={project._id}
                                                     className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow cursor-pointer group"
                                                 >
                                                     <div className="flex justify-between items-start">
@@ -476,7 +456,7 @@ const FreelancerJobListing = () => {
                                                     </div>
                                                     <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center text-xs text-gray-500">
                                                         <span>Posted {project.cretedAt}</span>
-                                                        <button className="text-emerald-600 font-medium hover:underline">View Details</button>
+                                                        <button onClick={() => navigate(`/freelancer/jobs/${project._id}`)} className="text-emerald-600 font-medium hover:underline">View Details</button>
                                                     </div>
                                                 </div>
                                             ))

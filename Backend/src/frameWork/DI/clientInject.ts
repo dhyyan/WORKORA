@@ -59,6 +59,10 @@ import { StripeWebhookController } from "../../adapters/controllers/client/payme
 import { StripeWebhookUseCase } from "../../useCase/client /payment/stripeWebHookUseCase";
 import { JobListAssignedController } from "../../adapters/controllers/client/Job/jobListAssignedJobController";
 import { JobListAssignedUsecase } from "../../useCase/client /jobs/jobListAssignedUsecase";
+import { ApproveMilestonePaymentController } from "../../adapters/controllers/client/milestone/approveMilestonePaymentController";
+import { ApproveMilestonePaymentUsecase } from "../../useCase/client /milestone/approveMilestonePaymentUsecase";
+import { RequestMilestoneChangeController } from "../../adapters/controllers/client/milestone/requestMilestoneChangeController";
+import { RequestMilestoneChangeUsecase } from "../../useCase/client /milestone/requestMilestoneChangeUsecase";
 
 
 
@@ -181,3 +185,13 @@ export const stripeWebhookController=new StripeWebhookController(stripeWeebhookU
 
 const jobListAssignUsecase=new JobListAssignedUsecase(jobRepository)
 export const jobListAssigneJobController=new JobListAssignedController(jobListAssignUsecase)
+
+//approve milestone fund
+
+const approveMilestonePaymentUsecase=new ApproveMilestonePaymentUsecase(milestoneRepository)
+export const approveMilestonePaymentController=new ApproveMilestonePaymentController(approveMilestonePaymentUsecase)
+
+//request change milestone
+
+const requestMilestoneChangeUsecase=new RequestMilestoneChangeUsecase(milestoneRepository)
+export const requestMilestoneChangeController=new RequestMilestoneChangeController(requestMilestoneChangeUsecase)

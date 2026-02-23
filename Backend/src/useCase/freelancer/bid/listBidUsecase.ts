@@ -10,7 +10,7 @@ export class ListBidUsecase implements IListBidUsecase {
     }
     async listBids(input: ListBidInputDtos): Promise<ListBidOutputDtos> {
         try {
-            const bidList = await this._bidRepository.findAll({ freelancerId: input.freelancerId, status: "pending" })
+            const bidList = await this._bidRepository.findAll({ freelancerId: input.freelancerId})
             if (!bidList) throw new Error("bids in this freelancer id not found")
                 console.log("bids in usecase",bidList)
 
