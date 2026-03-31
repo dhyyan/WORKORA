@@ -4,7 +4,7 @@ import { Clock, CheckCircle, XCircle } from 'lucide-react';
 import type { IBid } from '../../../types/freelancer/bid/IBid';
 import { getUserDetails } from '../../../service/freelancer/Dashboard/profileService';
 import type { IFreelancer } from '../../../types/freelancer/Ifreelancer';
-import { hireFreelancerService } from '../../../service/client/bid/bidService';
+import { hireFreelancerService, rejectFreelancerService } from '../../../service/client/bid/bidService';
 import toast from 'react-hot-toast';
 import { AxiosError } from "axios"
 
@@ -36,13 +36,14 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
         fetchFreelancerDetails();
     }, [bid])
 
+    //hire freelancer
     const handleHireFreelance = async () => {
         try {
             if (!bid._id) return toast.error("Invalid bid id")
 
             const data = {
-                bidId: bid._id,
                 jobId: bid.jobId,
+                bidId: bid._id,
                 freelancerId: bid.freelancerId,
                 totalAmount: bid.bidAmount
             }
@@ -56,6 +57,26 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
             const axiosError = error as AxiosError<{ message: string }>
 
             const message = axiosError.response?.data?.message || "Failed to hire freelancer"
+
+            toast.error(message)
+        }
+    }
+
+    //reject freelancer
+
+    const handleRejectFreelancer = async () => {
+        try {
+            if (!bid._id) return toast.error("Invalid bid id")
+
+            const response = await rejectFreelancerService(bid._id)
+            navigate("/client/profile/projects")
+            toast.success("Freelancer Rejected successfully")
+            console.log("response of hirefreelancer", response)
+
+        } catch (error) {
+            const axiosError = error as AxiosError<{ message: string }>
+
+            const message = axiosError.response?.data?.message || "Failed to reject freelancer"
 
             toast.error(message)
         }
@@ -105,7 +126,9 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
 
                 {/* Actions */}
                 <div className="flex gap-4 pt-4">
-                    <button className="flex-1 flex items-center justify-center gap-2 py-3 border border-red-100 text-red-600 hover:bg-red-50 rounded-xl font-semibold transition-colors">
+                    <button
+                        onClick={() => handleRejectFreelancer()}
+                        className="flex-1 flex items-center justify-center gap-2 py-3 border border-red-100 text-red-600 hover:bg-red-50 rounded-xl font-semibold transition-colors">
                         <XCircle size={20} />
                         Decline
                     </button>

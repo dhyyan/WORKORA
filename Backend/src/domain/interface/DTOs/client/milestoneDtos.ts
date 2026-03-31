@@ -1,14 +1,14 @@
 import { Types } from "mongoose"
 
 export interface BaseMilestoneOutputDtos {
-    _id: Types.ObjectId,
+    _id?: Types.ObjectId,
     contractId: Types.ObjectId,
     title: string,
     amount: number,
-    description?:string,
-    taskUrl?:string,
-    reason?:string,
-    status: "pending" | "funded" | "submited" | "released" | "approved",
+    description?: string,
+    taskUrl?: string,
+    reason?: string,
+    status?: "pending" | "funded" | "submited" | "released" | "rejected" | "approved" | "locked" | "refunded",
 }
 
 export interface CreateMilestoneInputDtos {
@@ -28,19 +28,19 @@ export interface GetMilestoneOutputDtos {
     success: boolean
 }
 
-export interface IApproveMilestonePaymentInputDtos{
-    milestoneId:Types.ObjectId
+export interface IApproveMilestonePaymentInputDtos {
+    milestoneId: Types.ObjectId
 }
 
-export interface IApproveMilestonePaymentOutputDtos{
-    success:boolean
+export interface IApproveMilestonePaymentOutputDtos {
+    success: boolean
 }
 
-export interface IRequestMilestoneChangeInputDtos{
-    milestoneId:Types.ObjectId,
-    reason:string
+export interface IRequestMilestoneChangeInputDtos {
+    milestoneId: Types.ObjectId,
+    reason: string
 }
 
-export interface IRequestMilestoneChangeOutputDtos{
-    success:boolean
+export interface IRequestMilestoneChangeOutputDtos {
+    success: boolean
 }

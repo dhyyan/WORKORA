@@ -10,6 +10,9 @@ import FreelancerProtectRoute from './ProtectRoute/FreelancerProtectRoute'
 import FreelancerJobListing from '../pages/freelancer/Jobs/JobList'
 import ErrorBoundary from '../components/common/ErrorBoundary';
 import JobDetails from '../pages/freelancer/Jobs/JobDetails';
+import ChatPage from '../pages/common/ChatPage'
+import MessageTemplate from '../components/common/chat/MessageTemplate'
+import MessageContainer from '../components/common/chat/MessageContainer'
 
 const FreelancerRoutes = () => {
   return (
@@ -39,6 +42,11 @@ const FreelancerRoutes = () => {
             <JobDetails />
           </ErrorBoundary>
         } />
+
+        <Route path='/chat' element={<ChatPage />} >
+          <Route index element={<MessageTemplate />} />
+          <Route path=":freelancerId/:clientId" element={<MessageContainer />} />
+        </Route>
       </Routes>
     </>
   )

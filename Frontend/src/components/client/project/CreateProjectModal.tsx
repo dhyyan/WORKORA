@@ -34,13 +34,13 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
     };
     console.log("job data", features)
     const user = useSelector((state: RootState) => state.clientAuth.client)
-    console.log("job creating user details",user)
+    console.log("job creating user details", user)
 
     const handleSubmitJov = async () => {
         try {
             console.log('dfgd')
             const data: IJob = {
-                clientId: user?._id ,
+                clientId: user?._id,
                 title,
                 category,
                 price: budget,

@@ -1,4 +1,4 @@
-import { BarChart3Icon, LogOutIcon, MenuIcon, UsersIcon, DollarSign } from 'lucide-react'
+import { BarChart3Icon, LogOutIcon, MenuIcon, UsersIcon, BadgeIndianRupee, LayoutGrid } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 const SideBar = () => {
@@ -7,8 +7,8 @@ const SideBar = () => {
         { id: "dashboard", icon: BarChart3Icon, label: "Dashboard" },
         { id: "clients", icon: UsersIcon, label: "Clients" },
         { id: "freelancers", icon: UsersIcon, label: "Freelancers" },
-        { id: "escrow", icon: DollarSign, label: "Escrow" },
-
+        { id: "escrow", icon: BadgeIndianRupee, label: "Escrow" },
+        { id: "categories", icon: LayoutGrid, label: "Category" }
     ]
     return (
         <>
@@ -20,7 +20,7 @@ const SideBar = () => {
                 >
                     <div className="flex flex-col h-full">
                         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                            <h1 className="text-2xl font-bold text-gray-900">FreelanceHub</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">Workora</h1>
                             <button className="md:hidden">
                                 <MenuIcon className="w-6 h-6" />
                             </button>

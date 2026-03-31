@@ -12,13 +12,14 @@ export class JobListUseCase implements IJobListUseCase {
             if (!input.id) {
                 throw new Error("user id is missing");
             }
-            console.log("id in use case",input.id)
+            console.log("id in use case", input.id);
+            const { page = 1, limit = 5 } = input;
 
-            const listJobs = await this._jobRepository.findAll({ clientId: input.id});
-            console.log("lilst jobs",listJobs)
+            const response = await this._jobRepository.findClientJobsPaginated(input.id, page, limit);
+            console.log("list jobs paginated", response.jobs);
 
-            const jobs: BaseJobOutPutDtos[] = listJobs.map((job) => ({
-                _id:job._id!,
+            const jobs: BaseJobOutPutDtos[] = response.jobs.map((job) => ({
+                _id: job._id!,
                 clientId: job.clientId,
                 title: job.title,
                 summary: job.summary,
@@ -31,7 +32,7 @@ export class JobListUseCase implements IJobListUseCase {
                 createdAt: job.createdAt
             }));
 
-            return { jobs };
+            return { jobs, totalJobs: response.totalJobs };
         } catch (error) {
             throw error;
         }

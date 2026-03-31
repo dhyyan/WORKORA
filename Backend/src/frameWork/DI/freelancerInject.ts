@@ -100,7 +100,7 @@ export const freelancerDataController = new FreelancerDataController(getUserUseC
 //freelancer list jobs
 
 const jobRepository=new JobRepository()
-const freelancerJobListUseCase=new FreelancerJobListUseCase(jobRepository)
+const freelancerJobListUseCase=new FreelancerJobListUseCase(jobRepository,clientRepository)
 export const freelancerJobListController=new FreelancerJobListController(freelancerJobListUseCase)
 
 

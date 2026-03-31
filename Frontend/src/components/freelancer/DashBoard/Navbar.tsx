@@ -1,12 +1,45 @@
 import { Bell, Menu, MessageSquare } from 'lucide-react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { removeFreelancer } from '../../../store/slice/freelancer/FreelanceSlice'
 import { freelancerRemoveToken } from '../../../store/slice/freelancer/FreelancerToken'
+import { getUserDetails } from '../../../service/freelancer/Dashboard/profileService'
+import { useEffect, useState } from 'react'
+import type { IProfile } from '../../../types/freelancer/Dashboard/IProfile'
+import type { RootState } from "../../../store/store";
 
 const Navbar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+   const userdata = useSelector(
+    (state: RootState) => state.freelancerAuth.freelancer
+  );
+ 
+
+  // ✅ Correct initial state
+  const [data, setData] = useState<IProfile | null>(null);
+  
+  useEffect(() => {
+    console.log("refreshed page")
+    const userId = userdata?._id;
+    console.log("user id",userId)
+    if (!userId) return;
+    
+    const fetchUser = async () => {
+      try {
+        const response = await getUserDetails({ userId });
+        console.log("refresh data from profil",response.data.userDetails)
+        setData(response.data.userDetails);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    fetchUser();
+    console.log("calleddddd")
+  },[userdata?._id]);
+
   const handleLogout = () => {
     navigate('/freelancer/login', { replace: true })
     dispatch(removeFreelancer())
@@ -30,27 +63,11 @@ const Navbar = () => {
                 Workora
               </NavLink>
             </span>
-            {/* <div className="hidden md:flex items-center space-x-6 ml-8">
-              <NavLink to="/freelancer/dashboard" className={({ isActive }) => isActive ? "text-emerald-500 font-medium" : "text-gray-600 hover:text-emerald-500"}>Home</NavLink>
-              <NavLink to="/freelancer/jobs" className={({ isActive }) => isActive ? "text-emerald-500 font-medium" : "text-gray-600 hover:text-emerald-500"}>Find Work</NavLink>
-            </div> */}
+           
           </div>
         </div>
 
-        {/* Center: Search (Optional visual filler) */}
-        {/* <div className="hidden md:flex max-w-md w-full mx-8">
-          <div className="relative w-full">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors"
-              placeholder="Search projects..."
-            />
-          </div>
-        </div> */}
-
+       
         {/* Right: Actions & Profile */}
         <div className="flex items-center space-x-2 md:space-x-4">
           <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors relative">
@@ -64,22 +81,15 @@ const Navbar = () => {
 
           <div className="h-8 w-px bg-gray-200 mx-2 hidden md:block"></div>
 
-          {/* <button className="flex items-center space-x-3 p-1 hover:bg-gray-50 rounded-full transition-colors border border-transparent hover:border-gray-200">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium text-sm border-2 border-white shadow-sm">
-            SJ
-          </div>
-          <span className="hidden md:block text-sm font-medium text-gray-700 pr-2">
-            Sarah J.
-          </span>
-        </button> */}
+         
 
           <div className="relative group">
             <div className="flex items-center space-x-3 p-1 cursor-pointer hover:bg-gray-50 rounded-full transition-colors border border-transparent hover:border-gray-200">
               <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium text-sm border-2 border-white shadow-sm">
-                SJ
+                <img src={data?.profileImage} alt="" />
               </div>
               <span className="hidden md:block text-sm font-medium text-gray-700 pr-2">
-                Sarah J.
+               {data?.name}
               </span>
             </div>
 

@@ -63,6 +63,10 @@ import { ApproveMilestonePaymentController } from "../../adapters/controllers/cl
 import { ApproveMilestonePaymentUsecase } from "../../useCase/client /milestone/approveMilestonePaymentUsecase";
 import { RequestMilestoneChangeController } from "../../adapters/controllers/client/milestone/requestMilestoneChangeController";
 import { RequestMilestoneChangeUsecase } from "../../useCase/client /milestone/requestMilestoneChangeUsecase";
+import { RejectFreelancerController } from "../../adapters/controllers/client/bid/rejectFreelancerController";
+import { RejectFreelancerUsecase } from "../../useCase/client /bid/rejectFreelancerUsecase";
+import { clietModel } from "../database/models/client.model";
+import { ChatRepository } from "../../adapters/repository/chat/chatRepository";
 
 
 
@@ -151,8 +155,14 @@ export const bidListController=new BidViewController(bidListUseCase)
 //hire freelancer
 
 const contractRepository=new ContractRepository()
-const hireFreelancerUseCase=new HireFreelancerUseCase(contractRepository,freelancerRepo,bidRepository,jobRepository)
+const chatRepository=new ChatRepository()
+const hireFreelancerUseCase=new HireFreelancerUseCase(contractRepository,freelancerRepo,bidRepository,jobRepository,chatRepository)
 export const hireFreelancerController=new HireFreelancerController(hireFreelancerUseCase)
+
+//reject Freelancer
+
+const rejectFreelancerUsecase=new RejectFreelancerUsecase(bidRepository)
+export const rejectFreelancerController=new RejectFreelancerController(rejectFreelancerUsecase)
 
 
 //milestone
@@ -195,3 +205,4 @@ export const approveMilestonePaymentController=new ApproveMilestonePaymentContro
 
 const requestMilestoneChangeUsecase=new RequestMilestoneChangeUsecase(milestoneRepository)
 export const requestMilestoneChangeController=new RequestMilestoneChangeController(requestMilestoneChangeUsecase)
+

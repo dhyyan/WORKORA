@@ -12,10 +12,10 @@ export const jobCreateService = async (job: IJob) => {
    }
 }
 
-export const jobListService = async ({ id }: { id: string }) => {
+export const jobListService = async ({ id, page = 1, limit = 5 }: { id: string, page?: number, limit?: number }) => {
    try {
       console.log("hambadaa", id)
-      const response = await clientAxios.get(`/client/jobs/${id}`)
+      const response = await clientAxios.get(`/client/jobs/${id}`, { params: { page, limit } })
       return response.data
    } catch (error) {
       console.error("job list error: in service", error);
@@ -72,12 +72,12 @@ export const contractDetailService = async ({ _id }: { _id: string }) => {
 }
 
 
-export const assignedJobService=async(clientId:string)=>{
+export const assignedJobService = async (clientId: string) => {
    try {
-      const response=await clientAxios.get(`/client/list/jobs/assigned/${clientId}`)
+      const response = await clientAxios.get(`/client/list/jobs/assigned/${clientId}`)
       return response.data
    } catch (error) {
-       console.error("assigned jobs list error: in service", error);
+      console.error("assigned jobs list error: in service", error);
       throw error;
    }
 }

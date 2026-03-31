@@ -18,7 +18,7 @@ export class UpateProfileUseCase implements IUpateProfileUseCase {
             console.log("looooogoogo")
             const exist = await this._clientRepository.findByEmail(email)
             if (!exist||!exist._id) throw new Error("user in this email and id not founded ")
-            const updateProfile = await this._clientRepository.updateProfile(
+            const updateProfile = await this._clientRepository.update(
                 exist._id,
                 input,
 

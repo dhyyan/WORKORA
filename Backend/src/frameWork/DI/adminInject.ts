@@ -1,8 +1,12 @@
 import { AdminLoginController } from "../../adapters/controllers/admin/auth/admilControllerLogin";
 import { ClientListController } from "../../adapters/controllers/admin/client/ clientListController";
+import { CategoryController } from "../../adapters/controllers/admin/client/categoryController";
+// import { CategoryListController } from "../../adapters/controllers/admin/client/categoryUpdateController";
+import { MilestoneListController } from "../../adapters/controllers/admin/client/milestoneListController";
 import { UserBlockController } from "../../adapters/controllers/admin/client/userBlockController";
 import { PaymentReleseController } from "../../adapters/controllers/admin/freelancer/escrow/paymentReleseController";
 import { FreelancerListController } from "../../adapters/controllers/admin/freelancer/freelancerListConroller";
+import { CategoryRepository } from "../../adapters/repository/client/categoryRepository";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
 import { ContractRepository } from "../../adapters/repository/client/contractRepository";
 import { EscrowRepository } from "../../adapters/repository/client/escrowRepository";
@@ -10,7 +14,9 @@ import { MileStoneRepository } from "../../adapters/repository/client/milestoneR
 import { WalletRepository } from "../../adapters/repository/client/walletRepository";
 import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
 import { AmdinLoginUseCase } from "../../useCase/admin/auth/adminlLoginUseCase";
+import { CategoryUsecase } from "../../useCase/admin/client/categoryUsecase";
 import { ClientListUseCase } from "../../useCase/admin/client/clientListUseCase";
+import { MilestoneListUsecase } from "../../useCase/admin/client/milestoneListUsecase";
 import { UserBlockUseCase } from "../../useCase/admin/client/userBlockUseCase";
 import { PaymentReleseUseCase } from "../../useCase/admin/freelancer/escrow/paymentReleseUseCase";
 import { FreelancerListUseCase } from "../../useCase/admin/freelancer/freelancerListUseCase";
@@ -51,3 +57,18 @@ const escrowRepository=new EscrowRepository()
 const paymentReleseUseCase=new PaymentReleseUseCase(milestoneRepository,contractRepository,walletRepository,escrowRepository)
 export const paymentReleseController=new PaymentReleseController(paymentReleseUseCase)
 
+
+
+//milestone list
+const milestoneRepositroy=new MileStoneRepository()
+const milestoneListUsecase=new MilestoneListUsecase(milestoneRepository)
+ export const milestoneListController=new MilestoneListController(milestoneListUsecase)
+
+ //catetory
+ const categoryRepository=new CategoryRepository
+ const categoryUsecase=new CategoryUsecase(categoryRepository)
+ export const categoryController=new CategoryController(categoryUsecase)
+
+ //category list
+//  const categoryListUsecase=new CategoryListUsecase(categoryRepository)
+//  export const categoryListController=new CategoryListController()

@@ -11,6 +11,7 @@ import CreateProjectModal from '../../../components/client/project/CreateProject
 import ViewProposalModal from '../../../components/client/project/ViewProposalModal';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import { jobListService, assignedJobService } from '../../../service/client/Project/jobService';
+import Pagination from '../../../components/common/Pagination';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import type { IBid } from '../../../types/freelancer/bid/IBid';
@@ -27,6 +28,11 @@ const ProjectList = () => {
     const tabs = ['All Jobs', 'Assigned Jobs'];
     const [activeTab, setActiveTab] = useState('All Jobs');
     const [isTabLoading, setIsTabLoading] = useState(false);
+
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 5;
 
     // Modal State
     const [selectedProject, setSelectedProject] = useState<IJob | null>(null);
@@ -65,10 +71,14 @@ const ProjectList = () => {
             if (!user?._id) return;
             const id = user._id
             try {
-                const response = await jobListService({ id });
+                const response = await jobListService({ id, page: currentPage, limit });
                 console.log("ress", response)
-                setProjects(response.jobs.jobs);
+                setProjects(response.jobs);
+                if (response.totalJobs) {
+                    setTotalPages(Math.ceil(response.totalJobs / limit));
+                }
 
+                // Since assigned jobs are on a different tab and service, we shouldn't necessarily re-fetch them on every page change, but for simplicity it stays here for now.
                 const assignedRess = await assignedJobService(id);
                 console.log("assignedRess", assignedRess);
                 if (assignedRess?.jobs) {
@@ -81,7 +91,7 @@ const ProjectList = () => {
         setRefresh(false);
         refreshData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [refresh]);
+    }, [refresh, currentPage]);
 
     const handleTabChange = (tab: string) => {
         if (tab === activeTab) return;
@@ -171,6 +181,15 @@ const ProjectList = () => {
                                                     onBids={() => handleViewBids(project)}
                                                 />
                                             ))}
+
+                                            {/* Pagination Navigation */}
+                                            {totalPages > 1 && (
+                                                <Pagination
+                                                    currentPage={currentPage}
+                                                    totalPages={totalPages}
+                                                    onPageChange={setCurrentPage}
+                                                />
+                                            )}
                                         </div>
                                     ) : (
                                         <ProjectListEmptyState />

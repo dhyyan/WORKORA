@@ -6,4 +6,4 @@ export interface IEscrowModel extends Omit<Escrow,"_id">, Document{
      _id: ObjectId
 }
 
-export const escrowModel=model<Escrow>("esrow",escrowScheema)
+export const escrowModel=model<Escrow>("Esrow",escrowScheema)

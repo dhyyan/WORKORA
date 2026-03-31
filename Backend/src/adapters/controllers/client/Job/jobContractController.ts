@@ -11,13 +11,15 @@ export class JobContractController{
     async viewContract(req:Request,res:Response):Promise<void>{
         try {
             const id=new Types.ObjectId(req.query.id as string)
-            console.log("id contract",id)
-         
             const {contract,freelancer}=await this._jobContractUseCase.contractDetails({id})
             if(!contract)res.status(HttpStatus.FORBIDDEN).json({message:"Contract not found"})
             res.status(HttpStatus.OK).json({contract,freelancer})
         } catch (error) {
-            
+            res.status(HttpStatus.BAD_REQUEST).json({
+                message: "Error while fetching contract",
+                error: error instanceof Error ? error.message : "Unknown error",
+                stack: error instanceof Error ? error.stack : undefined
+            });
         }
     }
 }

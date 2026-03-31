@@ -7,4 +7,4 @@ export interface IContractModel extends Omit<IContract,'_id'>, Document{
 }
 
 
-export const contractModel = model<IContract>('contract', contractSchema)   
+export const contractModel = model<IContract>('Contract', contractSchema)   

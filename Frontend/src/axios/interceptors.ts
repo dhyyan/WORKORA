@@ -73,4 +73,4 @@ const createAxiosInstance = (type: "client" | "freelancer" | "admin") => {
 
 export const clientAxios = createAxiosInstance("client")
 export const freelancerAxios = createAxiosInstance("freelancer")
-export const admintAxios = createAxiosInstance("admin")
+export const adminAxios = createAxiosInstance("admin")

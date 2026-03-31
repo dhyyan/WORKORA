@@ -12,6 +12,9 @@ export class BidRepository extends BaseRepository<Bid> implements IBidRepository
         return this.model.findOne({ jobId })
     }
 
+    findAllBids(freelancerId: Types.ObjectId): Promise<Bid[] | null> {
+        return this.model.find({ freelancerId }).populate({ path: "jobId",select:"title price"}).lean()}
+
     updateBid(id: Types.ObjectId, bid: Partial<Bid>): Promise<Bid | null> {
         return this.model.findByIdAndUpdate(id, bid, { new: true })
     }

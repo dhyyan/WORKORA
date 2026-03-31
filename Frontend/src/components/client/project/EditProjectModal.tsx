@@ -38,8 +38,8 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, pr
         if (!jobUpdate.features || !feature.trim()) return;
         setJobUpdate({ ...jobUpdate, features: [...jobUpdate.features, feature.trim()] });
     }
-    
-    
+
+
 
     // ✅ remove feature
     const removeFeature = (index: number) => {
@@ -165,7 +165,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, pr
 
                         className="flex items-center gap-2 px-6 py-2.5 bg-[#10C0A2] hover:bg-[#0EA085] text-white text-sm font-semibold rounded-xl shadow-lg shadow-teal-500/20 transition-all active:scale-95 cursor-pointer"
                     >
-                    
+
                         <Save size={18} />
                         Save Changes
                     </button>

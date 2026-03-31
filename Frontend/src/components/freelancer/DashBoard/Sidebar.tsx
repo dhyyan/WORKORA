@@ -1,10 +1,10 @@
-import { Briefcase, User, Wallet, Lock, LogOut } from "lucide-react"
+import { User, Wallet, Lock, LogOut } from "lucide-react"
 import { NavLink } from "react-router-dom"
 
 const Sidebar = () => {
   const menuItems = [
     { id: "", label: "Profile", icon: User },
-    { id: "projects", label: "My Projects", icon: Briefcase },
+    
     { id: "wallet", label: "Wallet", icon: Wallet },
     { id: "password", label: "Change Password", icon: Lock },
   ]

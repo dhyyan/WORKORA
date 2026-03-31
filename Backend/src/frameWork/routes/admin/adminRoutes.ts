@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, clientListController, freelancerListController, paymentReleseController, userBlockController } from "../../DI/adminInject";
+import { adminLoginController, categoryController, clientListController, freelancerListController, milestoneListController, paymentReleseController, userBlockController } from "../../DI/adminInject";
 
 export class AdminRoutes{
     public AdminRoutes:Router
@@ -28,8 +28,23 @@ export class AdminRoutes{
             userBlockController.block(req,res)
          })
 
-         this.AdminRoutes.post("/relesepayment",(req:Request,res:Response)=>{
+         this.AdminRoutes.post("/relesepayment/:id",(req:Request,res:Response)=>{
             paymentReleseController.relesePayment(req,res)
          })
+
+         this.AdminRoutes.get("/list/milestone",(req:Request,res:Response)=>{
+            milestoneListController.list(req,res)
+         })
+
+        this.AdminRoutes.post("/categories",(req:Request,res:Response)=>{
+            categoryController.create(req,res)
+        })
+        // this.AdminRoutes.patch("/categories/:id",(req:Request,res:Response)=>{
+        //     categoryUpdateController.updateList(req,res)
+        // })
+
+        // this.AdminRoutes.get("/categories",(req:Request,res:Response)=>{
+        //     categoryListController.list(req,res)
+        // })
     }
 }

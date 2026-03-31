@@ -6,4 +6,4 @@ export interface IClientModel extends Omit<Client, '_id'>, Document {
     _id: ObjectId
 }
 
-export const clietModel = model<Client>('client', clientSchem)
+export const clietModel = model<Client>('Client', clientSchem)

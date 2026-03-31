@@ -12,6 +12,7 @@ export class VerifyOtpPassword {
     async verifyOtp(req: Request, res: Response): Promise<void> {
         const { email, otp } = req.body
         try {
+            console.log("email and otp",email,otp)
             const verify = await this._forgotOtpUseCase.valid({ email, otp });
             if (verify) {
                 res.status(HttpStatus.OK).json({ message: 'OTP verified successfully', data: verify });
@@ -20,7 +21,7 @@ export class VerifyOtpPassword {
             }
         } catch (error) {
             res.status(HttpStatus.BAD_REQUEST).json({
-                message: "Error while creating client",
+                message: "Error while verifying otp",
                 error: error instanceof Error ? error.message : "Unknown error",
                 stack: error instanceof Error ? error.stack : undefined
             });
