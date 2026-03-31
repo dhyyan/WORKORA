@@ -65,19 +65,19 @@ export class FreelancerRoutes {
             bidCreateController.createBid(req,res)
         })
 
-        this.FreelancerRoutes.get("/list/accept/jobs/:freelancerId",(req:Request,res:Response)=>{
+        this.FreelancerRoutes.get("/list/accept/jobs/:freelancerId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             listAcceptJobsController.list(req,res)
         })
 
-        this.FreelancerRoutes.get("/list/bids/:freelancerId",(req:Request,res:Response)=>{
+        this.FreelancerRoutes.get("/list/bids/:freelancerId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             listBidController.list(req,res)
         })
 
-        this.FreelancerRoutes.get("/list/completed/jobs/:freelancerId",(req:Request,res:Response)=>{
+        this.FreelancerRoutes.get("/list/completed/jobs/:freelancerId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             listCompletedJobsController.list(req,res)
         })
 
-        this.FreelancerRoutes.post("/milestone/sumbmit/:milestoneId",(req:Request,res:Response)=>{
+        this.FreelancerRoutes.post("/milestone/sumbmit/:milestoneId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             milestoneSubmitController.submit(req,res)
         })
     }

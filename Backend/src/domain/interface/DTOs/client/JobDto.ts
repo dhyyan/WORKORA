@@ -39,11 +39,14 @@ export interface JobCreateOutPutDtos {
 }
 
 export interface JobListInputDtos {
-    id: Types.ObjectId
+    id: Types.ObjectId;
+    page: number;
+    limit: number;
 }
 
 export interface JobListOutPutDtos {
-    jobs: BaseJobOutPutDtos[]
+    jobs: BaseJobOutPutDtos[];
+    totalJobs: number;
 }
 
 export interface JobViewInputDtos {
@@ -94,7 +97,7 @@ export interface JobListAssignInputDtos {
 }
 
 export interface JobListAssignOutputDtos {
-    _id:Types.ObjectId
+    _id: Types.ObjectId
     title: string,
     summary: string,
     features: string[],

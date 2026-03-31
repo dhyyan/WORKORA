@@ -1,6 +1,5 @@
 import { BaseBidOutPutDtos, ListBidInputDtos, ListBidOutputDtos } from "../../../domain/interface/DTOs/freelancer/bidDtos";
 import { IBidRepository } from "../../../domain/interface/repositoryInterface/IBidRepository";
-import { IJobRepository } from "../../../domain/interface/repositoryInterface/IJobRepository";
 import { IListBidUsecase } from "../../../domain/interface/useCaseInterface/freelancer/jobs/bid/IListBidUseCase";
 
 export class ListBidUsecase implements IListBidUsecase {
@@ -10,21 +9,21 @@ export class ListBidUsecase implements IListBidUsecase {
     }
     async listBids(input: ListBidInputDtos): Promise<ListBidOutputDtos> {
         try {
-            const bidList = await this._bidRepository.findAll({ freelancerId: input.freelancerId})
+            const bidList = await this._bidRepository.findAllBids(input.freelancerId)
             if (!bidList) throw new Error("bids in this freelancer id not found")
-                console.log("bids in usecase",bidList)
+                console.log("bidsse ",bidList)
+            
 
-            const bids: BaseBidOutPutDtos[] = bidList.map((bid) => ({
+            const bids: BaseBidOutPutDtos[] = bidList.map((bid: any) => ({
                 _id: bid._id!,
-                jobId: bid.jobId,
-                freelancerId: bid.freelancerId,
+                title: bid.jobId?.title || bid.coverLetter,
                 coverLetter: bid.coverLetter,
-                bidAmount: bid.bidAmount,
-                status: "pending",
+                bidAmount: bid.jobId?.price || bid.bidAmount,
+                status: bid.status || "pending",
                 createdAt: bid.createdAt
             }))
 
-            return {bids}
+            return { bids }
         } catch (error) {
             throw error
         }

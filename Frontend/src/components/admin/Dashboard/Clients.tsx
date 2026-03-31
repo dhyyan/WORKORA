@@ -1,28 +1,39 @@
 import { useEffect, useState } from "react";
 import { blockUser, listClients } from "../../../service/admin/Dashboard/client/clientService";
 import type { IClient } from "../../../types/client/IClient";
+import { Search } from "lucide-react";
+import Pagination from "../../common/Pagination";
 
 const Clients = () => {
     const [users, setUsers] = useState<IClient[]>([]);
-    const [block,setBlock]=useState("")
+    const [block, setBlock] = useState("")
     const [loadingId] = useState<string | null>(null);
+    const [search, setSearch] = useState("")
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 5;
 
     const refreshClients = async () => {
-        const response = await listClients();
-        setUsers(response.data.clients);
+
+        const response = await listClients(currentPage, limit, search);
+        console.log("response", response)
+        if (response?.response) {
+            setUsers(response.response.clients || []);
+            setTotalPages(Math.ceil((response.response.totalClients || 0) / limit));
+        }
     };
 
-    
+
     const handleToggleStatus = async (id: string, isBlocked: boolean) => {
         // console.log("claeedddd", id)
         try {
             if (isBlocked) {
-                const respone = await blockUser({ id ,isBlocked})
+                const respone = await blockUser({ id, isBlocked })
                 console.log(respone.data)
                 setBlock("BLOCKED")
-                
+
             } else {
-                const respone = await blockUser({ id,isBlocked })
+                const respone = await blockUser({ id, isBlocked })
                 console.log(respone.data)
                 setBlock("UNBLOCKED")
             }
@@ -30,16 +41,29 @@ const Clients = () => {
             console.log(error)
         }
     }
-    
+
+    //list clients
     useEffect(() => {
         const loadClients = async () => {
             await refreshClients()
         }
         loadClients()
-    },[block])
+    },[block, currentPage, search])
+
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm">
             <h2 className="text-xl font-semibold mb-6">Clients</h2>
+
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                    type="text"
+                    placeholder="Search client..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent w-full md:w-64 text-sm"
+                />
+            </div>
 
             <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -105,8 +129,8 @@ const Clients = () => {
                                     <button
                                         disabled={loadingId === user._id}
                                         onClick={() =>
-                                            
-                                            user._id&&user.isBlocked !== undefined && handleToggleStatus(user._id, user.isBlocked)
+
+                                            user._id && user.isBlocked !== undefined && handleToggleStatus(user._id, user.isBlocked)
                                         }
                                         className={`px-4 py-1.5 rounded-md text-xs font-medium transition
                       ${user.isBlocked
@@ -128,8 +152,15 @@ const Clients = () => {
                                 </td>
                             </tr>
                         ))}
+
+
                     </tbody>
                 </table>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
 
                 {users.length === 0 && (
                     <p className="text-center text-gray-500 mt-6">

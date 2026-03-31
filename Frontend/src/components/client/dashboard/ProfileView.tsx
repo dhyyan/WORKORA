@@ -1,7 +1,7 @@
 import type { RootState } from '../../../store/store'
 import { motion } from 'framer-motion'
 import { Mail, Save } from 'lucide-react'
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent, type ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProfile } from '../../../service/client/authService'
 import { addClient } from '../../../store/slice/client/clientSlice'
@@ -21,8 +21,8 @@ const ProfileView = () => {
   console.log("userdfasndaarrtt", userData)
 
 
-  const handleUpdateProfile = async (event) => {
-    console.log("looooopp", event.target.files[0])
+  const handleUpdateProfile = async (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("looooopp", event.target.files?.[0])
 
     const file = event.target.files?.[0];
     if (!file) {

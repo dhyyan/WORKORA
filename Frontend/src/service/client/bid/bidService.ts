@@ -24,3 +24,14 @@ export const hireFreelancerService=async({jobId,bidId,freelancerId,totalAmount}:
         throw error;
     }
 }
+
+export const rejectFreelancerService=async(bidId:string)=>{
+    try {
+        console.log("mwoleeeeeeeeyeee")
+        const response=await clientAxios.post("/client/rejectfreelancer",{bidId})
+        return response.data
+    } catch (error) {
+        console.error('Error while hiring freelancer:', error);
+        throw error;
+    }
+}

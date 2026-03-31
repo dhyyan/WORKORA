@@ -78,7 +78,7 @@ const Profile = () => {
             <div className="mt-6 space-y-3 text-sm text-gray-600 text-left">
               <p>📧 {data?.email || "—"}</p>
               <p>📞 {data?.phone || "—"}</p>
-              <p>📍 San Francisco, CA</p>
+             
             </div>
 
             <NavLink to="/freelancer/dashboard/editprofile">

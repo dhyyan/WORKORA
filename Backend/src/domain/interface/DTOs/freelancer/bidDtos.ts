@@ -2,8 +2,8 @@ import { Types } from "mongoose"
 
 export interface BaseBidOutPutDtos {
     _id: Types.ObjectId,
-    jobId: Types.ObjectId,
-    freelancerId: Types.ObjectId,
+    jobId?: Types.ObjectId,
+    freelancerId?: Types.ObjectId,
     coverLetter: string,
     bidAmount?: number,
     // deadline: string,
@@ -19,14 +19,14 @@ export interface BidCreateInputDtos {
     bidAmount: number,
 }
 
-export interface BidCreateOutPutDtos{
-    bid:BaseBidOutPutDtos
+export interface BidCreateOutPutDtos {
+    bid: BaseBidOutPutDtos
 }
 
-export interface ListBidInputDtos{
-    freelancerId:Types.ObjectId
+export interface ListBidInputDtos {
+    freelancerId: Types.ObjectId
 }
 
-export interface ListBidOutputDtos{
-    bids:BaseBidOutPutDtos[]
+export interface ListBidOutputDtos {
+    bids: BaseBidOutPutDtos[]
 }

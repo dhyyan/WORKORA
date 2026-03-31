@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, DollarSign, Calendar, Star, Shield, Globe } from 'lucide-react';
+import { ArrowLeft, Clock, DollarSign, Calendar } from 'lucide-react';
 import { fetchJobById, milestoneListService } from '../../../service/freelancer/Jobs/JobService';
 import Navbar from '../../../components/freelancer/DashBoard/Navbar';
 import type { IJob } from '../../../types/client/jobs/IJob';
@@ -14,11 +14,13 @@ import type { AxiosError } from 'axios';
 import type { IMilestone, SubmitMiestone } from '../../../types/client/milestone/IMilestone';
 import SubmitWorkModal from './SubmitWorkModal';
 import { submitMilestoneService } from '../../../service/freelancer/milestone/milestoneService';
+import type { IUser } from '../../../types/auth/IUser';
 
 const JobDetails = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [job, setJob] = useState<IJob | null>(null);
+    const [user, setUser] = useState<IUser | null>(null)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -38,7 +40,8 @@ const JobDetails = () => {
                 const data = await fetchJobById(id);
                 // Handle different response structures gracefully
                 const jobData = data?.response || data?.job || data;
-                setJob(jobData);
+                setJob(jobData.jobDetail);
+                setUser(jobData.user)
             } catch (err) {
                 console.error(err);
                 setError('Failed to load job details');
@@ -48,6 +51,7 @@ const JobDetails = () => {
         };
         loadJob();
     }, [id]);
+    console.log("jobbbe", job)
 
 
     //list milestone 
@@ -297,31 +301,27 @@ const JobDetails = () => {
 
                             <div className="space-y-5">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                                        C
+                                    <div className="w-11 h-12 bg-gradient-to-br  to-gray-900 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                                        <img src={user?.profileImage} alt="" />
                                     </div>
                                     <div>
                                         <p className="font-bold text-gray-900">Client Info</p>
-                                        <p className="text-xs text-gray-500">Member since 2024</p>
+                                        {/* <p className="text-xs text-gray-500">Member since 2024</p> */}
                                     </div>
                                 </div>
 
                                 <div className="space-y-3 pt-2">
                                     <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                        <span className="font-medium">4.9/5 Rating</span>
+                                        {/* <Star className="w-4 h-4 text-amber-400 fill-amber-400" /> */}
+                                        <span className="font-medium">{user?.name}</span>
                                     </div>
                                     <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <MapPin className="w-4 h-4 text-gray-400" />
-                                        <span>New York, USA</span>
+                                        {/* <MapPin className="w-4 h-4 text-gray-400" /> */}
+                                        <span>{user?.email} </span>
                                     </div>
                                     <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <Shield className="w-4 h-4 text-emerald-500" />
-                                        <span className="text-emerald-700 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">Payment Verified</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <Globe className="w-4 h-4 text-gray-400" />
-                                        <span>30+ Jobs Posted</span>
+                                        {/* <Shield className="w-4 h-4 text-emerald-500" /> */}
+                                        <span className="text-emerald-700 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">{user?.phone}</span>
                                     </div>
                                 </div>
                             </div>

@@ -11,7 +11,7 @@ export const walletSchema = new Schema<IWallet>(
 
     role: {
       type: String,
-      enum: ["client", "freelancer"],
+      enum: ["Client", "Freelancer"],
       required: true
     },
 

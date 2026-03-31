@@ -6,13 +6,13 @@ export const jobSchema = new Schema<Job>(
     clientId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref:"client"
+      ref: "Client"
     },
 
-    freelancerId:{
-      type:Schema.Types.ObjectId,
-      require:false,
-      ref:"freelancer"
+    freelancerId: {
+      type: Schema.Types.ObjectId,
+      require: false,
+      ref: "Freelancer"
     },
 
     title: {

@@ -5,6 +5,7 @@ import AdminDashBoardLayout from '../pages/admin/DashBoard/AdminDashBoardLayout'
 import Clients from '../components/admin/Dashboard/Clients'
 import Freelancers from '../components/admin/Dashboard/Freelancers'
 import EscrowList from '../components/admin/Dashboard/EscrowList'
+import CategoryList from '../components/admin/Dashboard/CategoryList'
 
 const AdminRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AdminRoutes = () => {
           <Route path='clients' element={<Clients />} />
           <Route path='freelancers' element={<Freelancers />} />
           <Route path='escrow' element={<EscrowList />} />
+          <Route path='categories' element={<CategoryList />} />
         </Route>
       </Routes>
 

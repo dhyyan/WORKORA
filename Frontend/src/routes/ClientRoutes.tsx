@@ -11,7 +11,9 @@ import ProjectList from "../pages/client/project/ProjectList";
 import ProjectDetails from "../pages/client/project/ProjectDetails";
 import PaymentSuccess from "../pages/client/PaymentSuccess";
 import ClientProtectRoute from "./ProtectRoute/ClientProtectRoute";
-
+import ChatPage from "../pages/common/ChatPage";
+import MessageTemplate from "../components/common/chat/MessageTemplate";
+import MessageContainer from "../components/common/chat/MessageContainer";
 
 
 export function ClientRoutes() {
@@ -31,6 +33,11 @@ export function ClientRoutes() {
 
         </Route>
         <Route path="/payment-success" element={<PaymentSuccess />} />
+
+        <Route path="/chat" element={<ChatPage />} > 
+          <Route index element={<MessageTemplate />} />
+          <Route path=":freelancerId/:clientId" element={<MessageContainer />} />
+        </Route>
       </Routes>
     </>
   );

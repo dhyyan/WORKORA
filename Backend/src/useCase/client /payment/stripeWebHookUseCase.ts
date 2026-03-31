@@ -26,7 +26,7 @@ export class StripeWebhookUseCase {
         throw new Error("Milestone ID missing in metadata");
       }
 
-      // 🔥 reuse your existing escrow logic
+      // reuse your existing escrow logic
       await this._escrowFundUseCase.createEscrow({
         id: new Types.ObjectId(milestoneId)
       });

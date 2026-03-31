@@ -37,9 +37,7 @@ export class PaymentReleseUseCase implements IPaymentRelesePaymentUseCase {
             console.log("waltee",wallet)
             if (!wallet || !wallet._id) throw new Error("wallet in this id not found")
 
-            // const update={
-            //     balance:wallet.balance+=milestone.amount
-            // }
+         
             const newBalance = wallet.balance + milestone.amount;
 
             const newTransaction:IWalletTransaction = {
@@ -62,8 +60,9 @@ export class PaymentReleseUseCase implements IPaymentRelesePaymentUseCase {
             console.log("Updated milestone", updateMilestone)
 
             const escrow=await this._escrowRepository.findByMilestoneId(milestone._id)
-
+            console.log("deyyydaak",escrow)
             if(!escrow||!escrow._id)throw new Error("escrow in this milestone id is missing")
+
             const updateEscrow = await this._escrowRepository.update(escrow._id!, { status: "released" })
             console.log("updateEscrow",updateEscrow)
             return { success: true }

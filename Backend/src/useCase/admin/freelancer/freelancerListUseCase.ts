@@ -14,11 +14,14 @@ export class FreelancerListUseCase implements IFreelancerListUseCase {
     async listFreelancer(input: FreelancerListInputDtos): Promise<FreelancerListOutputDtos> {
 
         try {
-            const users = await this._freelancerRepository.findAll()
+            const {page,limit,search}=input
+            console.log("page,limt, search",page,limit,search)
+
+            const users = await this._freelancerRepository.findAllFreelancer(page,limit,search)
             if (!users) throw new Error("fetch users error in useCase")
                 console.log("fetched freelancer datas in usecase",users)
 
-            const freelancers: BaseFreelancerOutputDtos[] = users.map((user) => ({
+            const freelancers: BaseFreelancerOutputDtos[] = users.freelancer.map((user) => ({
                 _id: user._id!,
                 name: user.name,
                 email: user.email,
@@ -37,7 +40,7 @@ export class FreelancerListUseCase implements IFreelancerListUseCase {
                 createdAt: user.createdAt,
             }));
 
-            return { freelancers };
+            return { freelancers,totalFreelancer:users.totalFreelancer };
         } catch (error) {
             console.error("error in freelancer list useCase", error);
             throw error;

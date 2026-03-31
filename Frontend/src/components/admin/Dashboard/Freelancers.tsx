@@ -3,16 +3,26 @@ import { useEffect, useState } from "react";
 import type { IProfile } from "../../../types/freelancer/Dashboard/IProfile";
 import { listFreelancers } from "../../../service/admin/Dashboard/freelancer/freelancerService";
 import { blockUser } from "../../../service/admin/Dashboard/client/clientService";
+import { Search } from "lucide-react";
+import Pagination from "../../common/Pagination";
 
 
 const Freelancers = () => {
   const [freelancers, setFreelancers] = useState<IProfile[]>([]);
   const [loadingId] = useState<string | null>(null);
   const [block, setBlock] = useState("")
+  const [search, setSearch] = useState("")
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(4);
+  const limit = 5;
 
   const refreshFreelancers = async () => {
-    const res = await listFreelancers();
-    setFreelancers(res.data.freelancers);
+    const response = await listFreelancers(currentPage, limit, search);
+    console.log("resssss", response)
+    if (response?.response) {
+      setFreelancers(response.response.freelancers || []);
+      setTotalPages(Math.ceil((response.response.totalFreelancer || 0) / limit));
+    }
   };
 
   const handleToggleStatus = async (id: string, isBlocked: boolean) => {
@@ -38,11 +48,25 @@ const Freelancers = () => {
       await refreshFreelancers()
     }
     loadFreelancers()
-  }, [block]);
+  }, [block, currentPage, search]);
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">
       <h2 className="text-xl font-semibold mb-6">Freelancers</h2>
+
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <input
+          type="text"
+          placeholder="Search client..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            setCurrentPage(1)
+          }}
+          className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent w-full md:w-64 text-sm"
+        />
+      </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
@@ -94,8 +118,8 @@ const Freelancers = () => {
                 <td className="px-4 py-3">
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium ${user.isBlocked
-                        ? "bg-red-100 text-red-600"
-                        : "bg-green-100 text-green-600"
+                      ? "bg-red-100 text-red-600"
+                      : "bg-green-100 text-green-600"
                       }`}
                   >
                     {user.isBlocked ? "Unlisted" : "Listed"}
@@ -138,6 +162,16 @@ const Freelancers = () => {
             ))}
           </tbody>
         </table>
+
+        {totalPages > 1 && (
+          <div className="mt-4 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
 
         {freelancers.length === 0 && (
           <p className="text-center text-gray-500 mt-6">

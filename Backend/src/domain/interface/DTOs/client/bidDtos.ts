@@ -27,3 +27,10 @@ export interface HireFreelancerInputDtos{
 export interface HireFreelancerOutputDtos{
     contract:BaseContractOutPutDtos
 }
+
+export interface IRejectFreelancerInputDtos{
+    bidId:Types.ObjectId
+}
+export interface IRejectFreelancerOutputDtos{
+    success:Boolean
+}
