@@ -5,4 +5,5 @@ export interface IChatUseCase{
     saveMessage(input:ISaveMessageInput):Promise<ISaveMessageOutput>
     getChatUsers(input:IGetChatUsersInput):Promise<IGetChatUsersOutput>
     getChatUsersClient(input:IGetChatUsersInput):Promise<IGetChatUsersOutput>
+    markMessagesAsRead(roomId: string, userId: string): Promise<void>
 }

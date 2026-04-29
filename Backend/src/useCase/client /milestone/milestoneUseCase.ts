@@ -9,7 +9,7 @@ export class MilestoneUseCase implements IMilestoneUseCase {
     private _milestoneRepository: IMilestoneRepository;
     constructor(contractRepository: IContractRepository, milestoneRepository: IMilestoneRepository) {
         this._contractRepository = contractRepository
-        this._milestoneRepository = milestoneRepository 
+        this._milestoneRepository = milestoneRepository
     }
     async createMilestone(input: CreateMilestoneInputDtos): Promise<CreateMilestoneOutputDtos> {
         try {
@@ -17,16 +17,17 @@ export class MilestoneUseCase implements IMilestoneUseCase {
             if (!contract) throw new Error("Contract not found")
             if (!contract._id) throw new Error("Contract id not found")
 
-            const milestoneCreated = await this._milestoneRepository.create({ ...input, description:"",taskUrl:"", status: "pending", contractId: contract._id,reason:"" })
+            const milestoneCreated = await this._milestoneRepository.create({ ...input, description: "", taskUrl: "", status: "pending", contractId: contract._id, reason: "" })
             console.log("milestone created", milestoneCreated)
+
             const milestone: BaseMilestoneOutputDtos = {
                 _id: milestoneCreated._id!,
                 contractId: milestoneCreated.contractId,
                 title: milestoneCreated.title,
                 amount: milestoneCreated.amount,
-                description:milestoneCreated.description,
-                taskUrl:milestoneCreated.taskUrl,
-                reason:milestoneCreated.reason,
+                description: milestoneCreated.description,
+                taskUrl: milestoneCreated.taskUrl,
+                reason: milestoneCreated.reason,
                 status: "pending"
             }
             return {
@@ -64,9 +65,9 @@ export class MilestoneUseCase implements IMilestoneUseCase {
                     title: m.title,
                     amount: m.amount,
                     status: m.status as any,
-                    description:m.description,
-                    taskUrl:m.taskUrl,
-                    reason:m.reason
+                    description: m.description,
+                    taskUrl: m.taskUrl,
+                    reason: m.reason
 
                 })),
                 success: true

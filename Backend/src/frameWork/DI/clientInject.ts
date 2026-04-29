@@ -1,4 +1,6 @@
 import { NewPasswordController } from "../../adapters/controllers/client/changePasswordController";
+import { AuthChangePasswordController } from "../../adapters/controllers/client/AuthChangePasswordController";
+
 import { ClientGoogleController } from "../../adapters/controllers/client/clientGoogleAuthController";
 import { ClientLogin } from "../../adapters/controllers/client/clientLoginController";
 import { ClientDataController } from "../../adapters/controllers/client/Dashboard/Profile/clientData";
@@ -19,6 +21,8 @@ import { FreelancerRepository } from "../../adapters/repository/freelancer/freel
 import { ClientLoginUseCase } from "../../useCase/client /auth/login/clientLoginUseCase";
 import { GoogleAuthUseCase } from "../../useCase/client /auth/login/googleAuthUseCase";
 import { ChangePassowrdUseCase } from "../../useCase/client /auth/password/changePasswordUseCase";
+import { AuthChangePasswordUseCase } from "../../useCase/client /auth/password/AuthChangePasswordUseCase";
+
 import { ForgotOtpPasswordUseCase } from "../../useCase/client /auth/password/forgotOtpPasswordUseCase";
 import { ForgotPasswordUseCase } from "../../useCase/client /auth/password/ForgotPasswordUseCase";
 import { RegisterClientUseCase } from "../../useCase/client /auth/register/clientRegisterUseCase";
@@ -41,7 +45,7 @@ import { IBidRepository } from "../../domain/interface/repositoryInterface/IBidR
 import { BidRepository } from "../../adapters/repository/freelancer/bidRepository";
 import { BidViewController } from "../../adapters/controllers/client/bid/bidViewController";
 import { HireFreelancerUseCase } from "../../useCase/client /bid/hireFreelancerUseCase";
-import { ContractRepository} from "../../adapters/repository/client/contractRepository";
+import { ContractRepository } from "../../adapters/repository/client/contractRepository";
 import { HireFreelancerController } from "../../adapters/controllers/client/bid/hireFreelancerController";
 import { MilestoneController } from "../../adapters/controllers/client/milestone/milestoneController";
 import { MilestoneUseCase } from "../../useCase/client /milestone/milestoneUseCase";
@@ -57,6 +61,8 @@ import { CreateCheckoutSessionUseCase } from "../../useCase/client /payment/crea
 import { StripeService } from "../service/stripe/stripeService";
 import { StripeWebhookController } from "../../adapters/controllers/client/payment/stripeWebHookController";
 import { StripeWebhookUseCase } from "../../useCase/client /payment/stripeWebHookUseCase";
+import { CreateSubscriptionSessionUseCase } from "../../useCase/client /payment/createSubscriptionSessionUseCase";
+import { SubscriptionController } from "../../adapters/controllers/client/payment/subscriptionController";
 import { JobListAssignedController } from "../../adapters/controllers/client/Job/jobListAssignedJobController";
 import { JobListAssignedUsecase } from "../../useCase/client /jobs/jobListAssignedUsecase";
 import { ApproveMilestonePaymentController } from "../../adapters/controllers/client/milestone/approveMilestonePaymentController";
@@ -65,8 +71,9 @@ import { RequestMilestoneChangeController } from "../../adapters/controllers/cli
 import { RequestMilestoneChangeUsecase } from "../../useCase/client /milestone/requestMilestoneChangeUsecase";
 import { RejectFreelancerController } from "../../adapters/controllers/client/bid/rejectFreelancerController";
 import { RejectFreelancerUsecase } from "../../useCase/client /bid/rejectFreelancerUsecase";
-import { clietModel } from "../database/models/client.model";
 import { ChatRepository } from "../../adapters/repository/chat/chatRepository";
+import { GetWalletUseCase } from "../../useCase/client /Dashboard/Wallet/GetWalletUseCase";
+import { GetWalletController } from "../../adapters/controllers/client/Dashboard/Wallet/getWalletController";
 
 
 
@@ -77,8 +84,8 @@ const emailService = new EmailService()
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService)
 const hashPasswordService = new HashPasswordService()
 const freelancerRepo = new FreelancerRepository()
-const walletRepository=new WalletRepository()
-const registerClientUseCase = new RegisterClientUseCase(clientRepository, freelancerRepo, hashPasswordService,walletRepository)
+const walletRepository = new WalletRepository()
+const registerClientUseCase = new RegisterClientUseCase(clientRepository, freelancerRepo, hashPasswordService, walletRepository)
 const sendOtpClientUsecase = new SendOtpClientUseCase(clientRepository, otpService, emailService)
 export const sendOtpController = new SendOtpController(sendOtpClientUsecase)
 export const clientRegisterController = new ClientRegisterController(verifyOtpUseCase, registerClientUseCase)
@@ -103,6 +110,10 @@ export const verifyOtpPassword = new VerifyOtpPassword(forgotOtpPasswordUseCase)
 const changePassowrdUseCase = new ChangePassowrdUseCase(freelancerRepo, clientRepository, hashPasswordService)
 export const newPasswordController = new NewPasswordController(changePassowrdUseCase)
 
+const authChangePasswordUseCase = new AuthChangePasswordUseCase(clientRepository, hashPasswordService);
+export const authChangePasswordController = new AuthChangePasswordController(authChangePasswordUseCase);
+
+
 //resendOtp
 
 const resendOptUseCase = new ResendOtpUseCase(clientRepository, otpService, emailService)
@@ -118,91 +129,97 @@ const googleAuthUseCase = new GoogleAuthUseCase(freelancerRepo, clientRepository
 export const clientGoogleController = new ClientGoogleController(googleAuthUseCase)
 
 
-const clientDataUseCase=new ClientDataUseCasse(clientRepository)
-export const clientDataController=new ClientDataController(clientDataUseCase)
+const clientDataUseCase = new ClientDataUseCasse(clientRepository)
+export const clientDataController = new ClientDataController(clientDataUseCase)
 
 
 
 //jobs 
-const jobRepository=new JobRepository()
-const jobCreateUseCase=new JobCreateUseCase(jobRepository)
-export const jobCreateController=new JobController(jobCreateUseCase)
+const jobRepository = new JobRepository()
+const jobCreateUseCase = new JobCreateUseCase(jobRepository, clientRepository)
+export const jobCreateController = new JobController(jobCreateUseCase)
 
 //jobs list
-const jobListUseCase=new JobListUseCase(jobRepository)
-export const jobListController=new JobListController(jobListUseCase)
+const jobListUseCase = new JobListUseCase(jobRepository)
+export const jobListController = new JobListController(jobListUseCase)
 
 //job view
-const jobViewUseCase=new JobViewUseCase(jobRepository)
-export const jobViewController=new JobViewController(jobViewUseCase)
+const jobViewUseCase = new JobViewUseCase(jobRepository)
+export const jobViewController = new JobViewController(jobViewUseCase)
 
 //update Job
-const jobUpdateUseCase=new JobUpdateUseCase(jobRepository)
-export const jobUpdateController=new JobUpdateController(jobUpdateUseCase)
+const jobUpdateUseCase = new JobUpdateUseCase(jobRepository)
+export const jobUpdateController = new JobUpdateController(jobUpdateUseCase)
 
 //delete job
 
-const jobDeleteUseCase=new JobDeleteUseCase(jobRepository)
-export const jobDeleteController=new JobDeleteController(jobDeleteUseCase)
+const jobDeleteUseCase = new JobDeleteUseCase(jobRepository)
+export const jobDeleteController = new JobDeleteController(jobDeleteUseCase)
 
 //bid list for client
 
-const bidRepository:IBidRepository=new BidRepository()
-const bidListUseCase=new BidListUseCase(bidRepository)
-export const bidListController=new BidViewController(bidListUseCase)
+const bidRepository: IBidRepository = new BidRepository()
+const bidListUseCase = new BidListUseCase(bidRepository)
+export const bidListController = new BidViewController(bidListUseCase)
 
 
 //hire freelancer
 
-const contractRepository=new ContractRepository()
-const chatRepository=new ChatRepository()
-const hireFreelancerUseCase=new HireFreelancerUseCase(contractRepository,freelancerRepo,bidRepository,jobRepository,chatRepository)
-export const hireFreelancerController=new HireFreelancerController(hireFreelancerUseCase)
+const contractRepository = new ContractRepository()
+const chatRepository = new ChatRepository()
+const hireFreelancerUseCase = new HireFreelancerUseCase(contractRepository, freelancerRepo, bidRepository, jobRepository, chatRepository)
+export const hireFreelancerController = new HireFreelancerController(hireFreelancerUseCase)
 
 //reject Freelancer
 
-const rejectFreelancerUsecase=new RejectFreelancerUsecase(bidRepository)
-export const rejectFreelancerController=new RejectFreelancerController(rejectFreelancerUsecase)
+const rejectFreelancerUsecase = new RejectFreelancerUsecase(bidRepository)
+export const rejectFreelancerController = new RejectFreelancerController(rejectFreelancerUsecase)
 
 
 //milestone
 
-const milestoneRepository=new MileStoneRepository()
-const milestoneUseCase=new MilestoneUseCase(contractRepository,milestoneRepository)
-export const milestoneController=new MilestoneController(milestoneUseCase)
+const milestoneRepository = new MileStoneRepository()
+const milestoneUseCase = new MilestoneUseCase(contractRepository, milestoneRepository)
+export const milestoneController = new MilestoneController(milestoneUseCase)
 
 
 //contract details
-const jobContractUseCase=new JobContractUseCase(contractRepository,freelancerRepo)
-export const jobContractController=new JobContractController(jobContractUseCase)    
+const jobContractUseCase = new JobContractUseCase(contractRepository, freelancerRepo)
+export const jobContractController = new JobContractController(jobContractUseCase)
 
 //escrow
 
-const escrowRepository=new EscrowRepository()
-const escrowFundUseCase=new EscrowFundUseCase(escrowRepository,milestoneRepository)
-export const escrowFundController=new EscrowFundController(escrowFundUseCase)
+const escrowRepository = new EscrowRepository()
+const escrowFundUseCase = new EscrowFundUseCase(escrowRepository, milestoneRepository)
+export const escrowFundController = new EscrowFundController(escrowFundUseCase)
 
 
-const stripeService=new StripeService()
-const createCheckoutUseCase=new CreateCheckoutSessionUseCase(milestoneRepository,stripeService)
-export const paymentCheckoutController=new PaymentCheckoutController(createCheckoutUseCase)
+const stripeService = new StripeService()
+const createCheckoutUseCase = new CreateCheckoutSessionUseCase(milestoneRepository, stripeService)
+export const paymentCheckoutController = new PaymentCheckoutController(createCheckoutUseCase)
 
 
-const stripeWeebhookUseCase=new StripeWebhookUseCase(stripeService,escrowFundUseCase)
-export const stripeWebhookController=new StripeWebhookController(stripeWeebhookUseCase)
+const stripeWeebhookUseCase = new StripeWebhookUseCase(stripeService, escrowFundUseCase, walletRepository)
+export const stripeWebhookController = new StripeWebhookController(stripeWeebhookUseCase)
+
+const createSubscriptionSessionUseCase = new CreateSubscriptionSessionUseCase(stripeService)
+export const subscriptionController = new SubscriptionController(createSubscriptionSessionUseCase)
 
 //job assigned list
 
-const jobListAssignUsecase=new JobListAssignedUsecase(jobRepository)
-export const jobListAssigneJobController=new JobListAssignedController(jobListAssignUsecase)
+const jobListAssignUsecase = new JobListAssignedUsecase(jobRepository)
+export const jobListAssigneJobController = new JobListAssignedController(jobListAssignUsecase)
 
 //approve milestone fund
 
-const approveMilestonePaymentUsecase=new ApproveMilestonePaymentUsecase(milestoneRepository)
-export const approveMilestonePaymentController=new ApproveMilestonePaymentController(approveMilestonePaymentUsecase)
+const approveMilestonePaymentUsecase = new ApproveMilestonePaymentUsecase(milestoneRepository, contractRepository, jobRepository)
+export const approveMilestonePaymentController = new ApproveMilestonePaymentController(approveMilestonePaymentUsecase)
 
 //request change milestone
 
-const requestMilestoneChangeUsecase=new RequestMilestoneChangeUsecase(milestoneRepository)
-export const requestMilestoneChangeController=new RequestMilestoneChangeController(requestMilestoneChangeUsecase)
+const requestMilestoneChangeUsecase = new RequestMilestoneChangeUsecase(milestoneRepository)
+export const requestMilestoneChangeController = new RequestMilestoneChangeController(requestMilestoneChangeUsecase)
+
+const getWalletUseCase = new GetWalletUseCase(walletRepository)
+export const getWalletController = new GetWalletController(getWalletUseCase)
 

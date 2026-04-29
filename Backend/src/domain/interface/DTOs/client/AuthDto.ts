@@ -75,6 +75,13 @@ export interface ChangePasswordOutPutDtos extends BaseClientOutputDtos {
     _id: Types.ObjectId
 }
 
+export interface AuthChangePasswordInputDto {
+    userId: string | Types.ObjectId,
+    oldPassword?: string,
+    newPassword?: string
+}
+
+
 //resendOtp
 export interface ResendOtpInputDto {
     email: string

@@ -10,5 +10,6 @@ export const paymentMilestone=async(milestoneId:string)=>{
         return response.data
     } catch (error) {
         console.log("error in paymentmilestone service",error)
+        throw error;
     }
 }

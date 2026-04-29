@@ -29,7 +29,10 @@ export class ClientProfileUpdateController{
                     email:updatedUser?.email,
                     name:updatedUser?.name,
                     phone:updatedUser?.phone,
-                    profileImage:updatedUser?.profileImage
+                    profileImage:updatedUser?.profileImage,
+                    isSubscribed: updatedUser?.isSubscribed,
+                    isBlocked: updatedUser?.isBlocked,
+                    googleId: updatedUser?.googleId,
                 }
                 res.status(HttpStatus.OK).json({message:"profile updated success",data})
             

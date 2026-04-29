@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { adminLoginController, categoryController, clientListController, freelancerListController, milestoneListController, paymentReleseController, userBlockController } from "../../DI/adminInject";
+import { adminLoginController, categoryController, clientListController, concernListController, freelancerListController, getSubscriptionRevenueController, milestoneListController, paymentReleseController, userBlockController } from "../../DI/adminInject";
 
 export class AdminRoutes{
     public AdminRoutes:Router
@@ -39,12 +39,24 @@ export class AdminRoutes{
         this.AdminRoutes.post("/categories",(req:Request,res:Response)=>{
             categoryController.create(req,res)
         })
-        // this.AdminRoutes.patch("/categories/:id",(req:Request,res:Response)=>{
-        //     categoryUpdateController.updateList(req,res)
-        // })
+        this.AdminRoutes.patch("/categories/status/:id",(req:Request,res:Response)=>{
+            categoryController.toggleStatus(req,res)
+        })
 
-        // this.AdminRoutes.get("/categories",(req:Request,res:Response)=>{
-        //     categoryListController.list(req,res)
-        // })
+        this.AdminRoutes.get("/categories",(req:Request,res:Response)=>{
+            categoryController.list(req,res)
+        })
+
+        this.AdminRoutes.get("/concern",(req:Request,res:Response)=>{
+            concernListController.list(req,res)
+        })
+
+        this.AdminRoutes.post("/concern/release/:id",(req:Request,res:Response)=>{
+            concernListController.releasePayment(req,res)
+        })
+
+        this.AdminRoutes.get("/subscriptions",(req:Request,res:Response)=>{
+            getSubscriptionRevenueController.getSubscriptions(req,res)
+        })
     }
 }

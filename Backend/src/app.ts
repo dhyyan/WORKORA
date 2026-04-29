@@ -67,63 +67,65 @@ export class App {
         this.io.on("connection", (socket) => {
             console.log("user connected", socket.id)
 
-            //room created
+            //room joined
             socket.on("join_chat", (roomId: string) => {
                 socket.join(roomId)
                 console.log(`Socket ${socket.id} joined room: ${roomId}`);
             })
 
-            //message recived form frontend and saved in db
+            //message received from frontend and saved in db
             socket.on("send_message", async (messageData) => {
                 try {
                     console.log("messageData from socket received", messageData)
                     const savedMessage = await chatUsecase.saveMessage({ input: messageData })
 
-                    socket.to(messageData.roomId).emit("receive_message", savedMessage.message)
+                    // Broadcast to everyone in the room (including sender to get the DB ID and timestamp)
+                    this.io.to(messageData.roomId).emit("receive_message", savedMessage.message)
 
                 } catch (error) {
                     console.log("error in send_message", error)
                 }
             })
 
+            // Mark messages as read
+            socket.on("mark_as_read", async ({ roomId, userId }) => {
+                try {
+                    console.log(`Marking messages as read in room ${roomId} for user ${userId}`);
+                    await chatUsecase.markMessagesAsRead(roomId, userId);
+                    // Notify everyone else in the room that messages were read
+                    socket.to(roomId).emit("messages_read", { roomId, userId });
+                } catch (error) {
+                    console.log("error in mark_as_read", error);
+                }
+            })
+
             socket.on("disconnect", () => {
                 console.log("user disconnected", socket.id)
             })
-
-
         })
     }
 
     listen() {
         this.httpServer.listen(this._port, () => {
-            console.log(`server reunned ${this._port}`)
+            console.log(`server runned ${this._port}`)
         })
     }
 
     private _setClientRoutes() {
-        console.log("Route called")
         this._app.use('/client/', new UserRoutes().UserRoutes)
     }
 
     private _setFreelancerRoutes() {
-        console.log("freelancer Route called")
         this._app.use("/freelancer", new FreelancerRoutes().FreelancerRoutes)
     }
 
 
     private _setChatRoutes() {
-        console.log("Chat Route called")
         this._app.use('/chat', new ChatRoute().chatRoutes)
     }
     private _setAdminRoutes() {
-        console.log("Admin Route called")
         this._app.use("/admin", new AdminRoutes().AdminRoutes)
     }
-
-
 }
 
 const app = new App()
-
-
-

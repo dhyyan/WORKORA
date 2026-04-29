@@ -1,5 +1,6 @@
 import { Request, response, Response, Router } from "express";
-import { approveMilestonePaymentController, bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListAssigneJobController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, paymentCheckoutController, rejectFreelancerController, requestMilestoneChangeController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, stripeWebhookController, verifyOtpPassword } from "../../DI/clientInject";
+import { approveMilestonePaymentController, bidListController, clientDataController, clientGoogleController, clientLogin, clientProfileUpdateController, clientRegisterController, escrowFundController, getWalletController, hireFreelancerController, jobContractController, jobCreateController, jobDeleteController, jobListAssigneJobController, jobListController, jobUpdateController, jobViewController, milestoneController, newPasswordController, paymentCheckoutController, rejectFreelancerController, requestMilestoneChangeController, resendOtpController, sendOtpController, sendOtpForgotPasswordController, stripeWebhookController, verifyOtpPassword, authChangePasswordController, subscriptionController } from "../../DI/clientInject";
+
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 import express from "express";
@@ -46,6 +47,11 @@ export class UserRoutes {
         this.UserRoutes.post('/updateprofile', tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             clientProfileUpdateController.updateProfile(req, res)
         })
+
+        this.UserRoutes.post("/change-password", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            authChangePasswordController.changePassword(req, res)
+        })
+
 
         this.UserRoutes.post("/google", (req: Request, res: Response) => {
             clientGoogleController.googleAuth(req, res)
@@ -122,6 +128,14 @@ export class UserRoutes {
 
         this.UserRoutes.post("/milestone/requstchange/:milestoneId",(req:Request,res:Response)=>{
             requestMilestoneChangeController.requestchange(req,res)
+        })
+
+        this.UserRoutes.post("/subscription", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            subscriptionController.createSubscription(req, res)
+        })
+
+        this.UserRoutes.get("/wallet/:userId", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            getWalletController.getWallet(req, res)
         })
 
         

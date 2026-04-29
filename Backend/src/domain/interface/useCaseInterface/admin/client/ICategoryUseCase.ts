@@ -1,5 +1,7 @@
-import { ICategoryInputDtos, ICategoryOutputDtos } from "../../../DTOs/admin/client/clientDtos";
+import { ICategoryInputDtos, ICategoryListOutputDtos, ICategoryOutputDtos } from "../../../DTOs/admin/client/clientDtos";
 
 export interface ICategoryUsecase {
     createCategory(input:ICategoryInputDtos):Promise<ICategoryOutputDtos>
+    listCategory():Promise<ICategoryListOutputDtos>
+    toggleCategoryStatus(id:string):Promise<boolean>
 }

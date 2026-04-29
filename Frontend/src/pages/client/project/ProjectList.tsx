@@ -25,7 +25,7 @@ const ProjectList = () => {
     const [refresh, setRefresh] = useState(false)
 
     // Tab State
-    const tabs = ['All Jobs', 'Assigned Jobs'];
+    const tabs = ['All Jobs', 'Assigned Jobs', 'Completed Jobs'];
     const [activeTab, setActiveTab] = useState('All Jobs');
     const [isTabLoading, setIsTabLoading] = useState(false);
 
@@ -88,7 +88,6 @@ const ProjectList = () => {
                 console.log(error);
             }
         };
-        setRefresh(false);
         refreshData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh, currentPage]);
@@ -192,13 +191,15 @@ const ProjectList = () => {
                                             )}
                                         </div>
                                     ) : (
-                                        <ProjectListEmptyState />
+                                        <ProjectListEmptyState 
+                                            onButtonClick={() => setIsCreateModalOpen(true)}
+                                        />
                                     )
-                                ) : (
+                                ) : activeTab === 'Assigned Jobs' ? (
                                     /* Assigned Jobs Tab */
-                                    assignedProjects.length > 0 ? (
+                                    assignedProjects.filter(p => p.status === 'assigned').length > 0 ? (
                                         <div className="space-y-4">
-                                            {assignedProjects.map((project) => (
+                                            {assignedProjects.filter(p => p.status === 'assigned').map((project) => (
                                                 <ProjectCard
                                                     key={project._id}
                                                     _id={project._id!}
@@ -220,7 +221,43 @@ const ProjectList = () => {
                                             ))}
                                         </div>
                                     ) : (
-                                        <ProjectListEmptyState />
+                                        <ProjectListEmptyState 
+                                            title="No active projects"
+                                            description="You don't have any projects currently assigned to freelancers."
+                                            showButton={false}
+                                        />
+                                    )
+                                ) : (
+                                    /* Completed Jobs Tab */
+                                    assignedProjects.filter(p => p.status === 'closed').length > 0 ? (
+                                        <div className="space-y-4">
+                                            {assignedProjects.filter(p => p.status === 'closed').map((project) => (
+                                                <ProjectCard
+                                                    key={project._id}
+                                                    _id={project._id!}
+                                                    title={project.title}
+                                                    description={project.summary}
+                                                    category={project.category}
+                                                    budget={project.price}
+                                                    status={project.status!}
+                                                    postedDate={project.createdAt ? new Date(project.createdAt).toLocaleDateString() : ""}
+                                                    onViewDetails={() => {
+                                                        if (project._id) {
+                                                            handleViewDetails(project._id);
+                                                        }
+                                                    }}
+                                                    refresh={() => setRefresh(prev => !prev)}
+                                                    onEdit={() => { }}
+                                                    onBids={() => { }}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <ProjectListEmptyState 
+                                            title="No completed projects"
+                                            description="You haven't completed any projects yet. Once a project is finished and closed, it will appear here."
+                                            showButton={false}
+                                        />
                                     )
                                 )}
                             </motion.div>
@@ -231,14 +268,14 @@ const ProjectList = () => {
                 {/* Modals */}
                 <CreateProjectModal
                     isOpen={isCreateModalOpen}
-                    refresh={() => setRefresh(true)}
+                    refresh={() => setRefresh(prev => !prev)}
                     onClose={() => setIsCreateModalOpen(false)}
                 />
 
                 <EditProjectModal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
-                    refresh={() => setRefresh(true)}
+                    refresh={() => setRefresh(prev => !prev)}
                     project={
                         selectedProject
                             ? {

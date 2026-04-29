@@ -105,5 +105,21 @@ export interface JobListAssignOutputDtos {
     duration: string,
     deadline: string,
     price: number,
-    status: "assigned"
+    status: "assigned" | "closed"
+}
+
+export interface IConcerInputDtos {
+    contractId: Types.ObjectId,
+    milestoneId: Types.ObjectId,
+    description: string,
+    amount: number
+}
+
+export interface IConcerOutputDtos {
+    _id: Types.ObjectId,
+    contractId: Types.ObjectId,
+    milestoneId: Types.ObjectId,
+    description: string,
+    amount: number,
+    status: string
 }

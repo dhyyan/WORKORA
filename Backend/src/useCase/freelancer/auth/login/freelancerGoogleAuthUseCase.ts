@@ -37,6 +37,7 @@ export class FreelancerGoogleAuthUseCase implements IGoogleAuthUseCase {
 
             let freelancer = await this._freelancerRepository.findByEmail(email);
             if(freelancer?.isBlocked)throw new Error("user in this email is blocked by admin")
+            
             if (!freelancer) {
                 freelancer = await this._freelancerRepository.create({
                     email,
@@ -51,10 +52,13 @@ export class FreelancerGoogleAuthUseCase implements IGoogleAuthUseCase {
                     bio:"",
                     isBlocked:false,
                     isSubscribed:false,
-
-
-                
+                    freeApplicationsCount: 0,
+                    googleId: payload.sub
                 });
+            } else if (!freelancer.googleId) {
+                // Update existing freelancer if they login with Google for the first time
+                await this._freelancerRepository.update(freelancer._id!, { googleId: payload.sub });
+                freelancer.googleId = payload.sub;
             }
 
             if (!freelancer || !freelancer._id) {

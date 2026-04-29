@@ -14,10 +14,6 @@ export class ChatUsecase implements IChatUseCase {
     async saveMessage(input: ISaveMessageInput): Promise<ISaveMessageOutput> {
         try {
             console.log("Saving message with input:", input)
-            // const chatRoom=await this._messageRepository.findById(input.input.roomId)
-            // if(!chatRoom){
-            //     throw new Error("Chat room not found")
-            // }
             const message = await this._messageRepository.create({ ...input.input })
             return { message }
         } catch (error) {
@@ -27,7 +23,6 @@ export class ChatUsecase implements IChatUseCase {
 
     
     async getMessage(input: IGetMessageInput): Promise<IGetMessageOutput> {
-
         try {
             const messages = await this._messageRepository.findAll({
                 roomId: input.roomId
@@ -36,13 +31,11 @@ export class ChatUsecase implements IChatUseCase {
         } catch (error) {
             throw error
         }
-
     }
     
     async getChatUsersClient(input: IGetChatUsersInput): Promise<IGetChatUsersOutput> {
         try {
             const users = await this._chatRepository.findUserChats(input.userId);
-            console.log("Chat users fetched for client:", users);
             return { users };
         } catch (error) {
             throw error;
@@ -51,14 +44,18 @@ export class ChatUsecase implements IChatUseCase {
 
     async getChatUsers(input: IGetChatUsersInput): Promise<IGetChatUsersOutput> {
         try {
-
             const listChatUsers = await this._chatRepository.findUserChats(input.userId)
-            console.log("List of chat users fetched from repository:", listChatUsers)
             return { users: listChatUsers }
         } catch (error) {
             throw error
         }
     }
 
-
+    async markMessagesAsRead(roomId: string, userId: string): Promise<void> {
+        try {
+            await this._messageRepository.markAsRead(roomId, userId);
+        } catch (error) {
+            throw error;
+        }
+    }
 }

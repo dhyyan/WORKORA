@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Clock, Check, Loader2, Briefcase, FileText } from 'lucide-react';
 import { fetchJobs, fetchBids, fetchAcceptedJobs, fetchCompletedJobs } from '../../../service/freelancer/Jobs/JobService';
-import Navbar from '../../../components/freelancer/DashBoard/Navbar';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -196,10 +195,8 @@ const FreelancerJobListing = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-            <Navbar />
-
             {/* Main Layout - Offset for fixed navbar */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
                 {/* Header Section with Tabs */}
                 <div className="mb-8">

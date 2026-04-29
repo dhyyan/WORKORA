@@ -76,7 +76,7 @@ const EscrowList = () => {
                         <span className="text-sm text-gray-400">Pending Release</span>
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900">
-                        {/* ${transactions.filter(t => t.status === 'Funded').reduce((acc, curr) => acc + curr.amount, 0).toFixed(2)} */}
+                        ${totalEscrowAmount.toFixed(2)}
                     </h3>
                     <p className="text-xs text-gray-500 mt-1">Total value in escrow waiting for release</p>
                 </div>

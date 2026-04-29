@@ -64,7 +64,8 @@ export class PaymentReleseUseCase implements IPaymentRelesePaymentUseCase {
             if(!escrow||!escrow._id)throw new Error("escrow in this milestone id is missing")
 
             const updateEscrow = await this._escrowRepository.update(escrow._id!, { status: "released" })
-            console.log("updateEscrow",updateEscrow)
+            console.log("updateEscrow", updateEscrow)
+
             return { success: true }
 
         } catch (error) {

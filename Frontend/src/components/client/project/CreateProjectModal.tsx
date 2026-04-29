@@ -2,9 +2,13 @@ import { useState } from 'react';
 import ProjectModalWrapper from './ProjectModalWrapper';
 import { Plus, X, Calendar, DollarSign, Clock } from 'lucide-react';
 import { jobCreateService } from '../../../service/client/Project/jobService';
+import { createSubscriptionSession } from '../../../service/subscription/subscriptionService';
 import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import type { RootState } from '../../../store/store';
 import type { IJob } from '../../../types/client/jobs/IJob';
+import SubscriptionLimitModal from '../../common/SubscriptionLimitModal';
+
 
 interface CreateProjectModalProps {
     isOpen: boolean;
@@ -21,6 +25,8 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
     const [duration, setDuration] = useState("")
     const [summary, setSummary] = useState("")
     const [deadline, setDeadline] = useState("")
+    const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
+
 
     const addFeature = () => {
         if (currentFeature.trim()) {
@@ -38,7 +44,6 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
 
     const handleSubmitJov = async () => {
         try {
-            console.log('dfgd')
             const data: IJob = {
                 clientId: user?._id,
                 title,
@@ -51,11 +56,22 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
                 status: "open",
             };
             const response = await jobCreateService(data)
-            console.log('looo')
-            console.log("response form job creating", response)
-            refresh()
-        } catch (error) {
-            console.log(error)
+            
+            if (response) {
+                toast.success("Job posted successfully!");
+                refresh();
+                onClose();
+            }
+        } catch (error: any) {
+            console.log(error);
+            const errorMessage = error.response?.data?.message || error.message;
+            
+            if (errorMessage?.includes("limit reached")) {
+                setIsLimitModalOpen(true);
+            } else {
+                toast.error(errorMessage || "Failed to post job");
+            }
+
         }
     }
     return (
@@ -191,7 +207,15 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
                     </button>
                 </div>
             </form>
+            <SubscriptionLimitModal 
+                isOpen={isLimitModalOpen}
+                onClose={() => setIsLimitModalOpen(false)}
+                title="Free Job Limit Reached"
+                description="You've posted 5 free jobs. Upgrade to Workora Pro to post unlimited jobs and reach more talented freelancers."
+                role="client"
+            />
         </ProjectModalWrapper>
+
     );
 };
 

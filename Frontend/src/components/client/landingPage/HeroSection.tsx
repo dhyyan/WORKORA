@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const HeroSection = () => {
+  const navigate = useNavigate()
   return (
     <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -97,6 +99,7 @@ const HeroSection = () => {
             whileTap={{
               scale: 0.95,
             }}
+            onClick={() => navigate('/client/profile/projects')}
             className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full font-semibold text-lg shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 group"
           >
             Post a Job
@@ -108,6 +111,5 @@ const HeroSection = () => {
     </section>
   )
 }
-
 
 export default HeroSection

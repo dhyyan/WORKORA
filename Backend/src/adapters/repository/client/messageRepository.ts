@@ -7,4 +7,11 @@ export class MessageRepository extends BaseRepository<IMessage> implements IMess
     constructor(){
         super(messageModel)
     }
+
+    async markAsRead(roomId: string, userId: string): Promise<void> {
+        await messageModel.updateMany(
+            { roomId, receiverId: userId, isRead: false },
+            { $set: { isRead: true } }
+        );
+    }
 }

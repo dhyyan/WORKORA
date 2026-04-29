@@ -49,7 +49,8 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
         role: "client",
         phone:"",
         isBlocked:false,
-        isSubscribed:false
+        isSubscribed:false,
+        freeJobsCount: 0
       });
     }
 

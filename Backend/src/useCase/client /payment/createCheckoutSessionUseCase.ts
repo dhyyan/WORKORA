@@ -1,3 +1,4 @@
+
 import { createCheckoutInputDtos } from "../../../domain/interface/DTOs/client/escrowDtos";
 import { IMilestoneRepository } from "../../../domain/interface/repositoryInterface/IMilestoneRepository";
 import { ICreateCheckoutSessionUseCase } from "../../../domain/interface/useCaseInterface/client/payment/iCreateCheckoutSessionUseCase";
@@ -12,13 +13,14 @@ export class CreateCheckoutSessionUseCase implements ICreateCheckoutSessionUseCa
         this._stripeService = stripeService
     }
     async execute(input: createCheckoutInputDtos): Promise<null | string> {
-        console.log("mileston id in createchecout usecase",input.milestoneId)
+        console.log("mileston id in createchecout usecase", input.milestoneId)
         const milestone = await this._milestoneRepository.findById(input.milestoneId)
         if (!milestone) throw new Error("milestone in this id not found")
 
         return await this._stripeService.createChecoutSession(
             milestone._id!,
-            milestone.amount
+            milestone.amount,
+            input.clientId
         )
     }
 }

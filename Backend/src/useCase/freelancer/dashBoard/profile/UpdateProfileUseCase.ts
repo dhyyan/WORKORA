@@ -34,6 +34,7 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
                 bio: update.bio,
                 isSubscribed: update.isSubscribed,
                 isBlocked: update.isBlocked,
+                googleId: update.googleId,
             }
             console.log("completed full data",updatedFreelancer)
 

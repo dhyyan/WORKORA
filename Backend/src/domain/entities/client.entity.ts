@@ -16,6 +16,9 @@ export interface Client {
 
   isBlocked?: boolean;
   isSubscribed?: boolean;
+  freeJobsCount?: number;
+  stripeSubscriptionId?: string;
+  subscriptionExpiryDate?: Date;
 
   createdAt?: Date;
 }

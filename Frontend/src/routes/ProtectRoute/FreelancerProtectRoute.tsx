@@ -6,12 +6,13 @@ import { Navigate } from "react-router-dom"
 interface ProtectedRouteProps {
   children: ReactNode;
 }
-const FreelancerProtectRoute = ({children}:ProtectedRouteProps) => {
-    const userData=useSelector((state:RootState)=>state.freelancerAuth.freelancer)
-    const userToken=useSelector((state:RootState)=>state.freelancerToken.token)
-    if(userData&&userToken){
-        return <Navigate to="/freelancer"/>
-    }
+const FreelancerProtectRoute = ({ children }: ProtectedRouteProps) => {
+  const userData = useSelector((state: RootState) => state.freelancerAuth.freelancer)
+  const userToken = useSelector((state: RootState) => state.freelancerToken.token)
+
+  if (!userData || !userToken) {
+    return <Navigate to="/freelancer/login" replace />
+  }
   return <>{children}</>
 }
 
