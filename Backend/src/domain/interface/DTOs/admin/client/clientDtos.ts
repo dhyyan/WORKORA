@@ -45,7 +45,6 @@ export interface ICategoryOutputDtos {
     name: string
     isListed?:boolean
     createdAt?: Date;
+}export interface ICategoryListOutputDtos {
+    categories: ICategoryOutputDtos[]
 }
-
-
-

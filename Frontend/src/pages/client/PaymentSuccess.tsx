@@ -26,17 +26,24 @@ const PaymentSuccess: React.FC = () => {
 
                 <div className="pt-4 space-y-3">
                     <button
-                        onClick={() => navigate('/client/profile/projects')}
+                        onClick={() => {
+                            const jobId = localStorage.getItem('lastFundedJobId');
+                            if (jobId) {
+                                navigate(`/client/profile/projects/${jobId}`);
+                            } else {
+                                navigate('/client/profile/projects');
+                            }
+                        }}
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
                     >
-                        Go to Projects
+                        Go to Project
                     </button>
 
                     <button
-                        onClick={() => navigate('/client/profile')}
+                        onClick={() => navigate('/client/profile/projects')}
                         className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition duration-200"
                     >
-                        Back to Dashboard
+                        Back to Project List
                     </button>
                 </div>
             </div>

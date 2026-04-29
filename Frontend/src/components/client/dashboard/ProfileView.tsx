@@ -1,6 +1,6 @@
 import type { RootState } from '../../../store/store'
 import { motion } from 'framer-motion'
-import { Mail, Save } from 'lucide-react'
+import { Mail, Save, User, Phone, Edit3 } from 'lucide-react'
 import { useEffect, useState, type FormEvent, type ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateProfile } from '../../../service/client/authService'
@@ -8,6 +8,8 @@ import { addClient } from '../../../store/slice/client/clientSlice'
 import axios from 'axios'
 import { getUserDetails } from '../../../service/client/Dashboard/ProfileService'
 import type { IClient } from '../../../types/client/IClient'
+
+import toast from 'react-hot-toast'
 
 const ProfileView = () => {
   const userData = useSelector((state: RootState) => state.clientAuth.client)
@@ -17,60 +19,48 @@ const ProfileView = () => {
   const [data, setData] = useState<IClient | null>(null);
   const dispatch = useDispatch()
 
-
-  console.log("userdfasndaarrtt", userData)
-
-
   const handleUpdateProfile = async (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("looooopp", event.target.files?.[0])
-
     const file = event.target.files?.[0];
-    if (!file) {
-      return
-    }
+    if (!file) return;
 
-    // setIsUploading(true)
-    // setError('')
-
-    console.log("not file", file)
     const data = new FormData()
     data.append("file", file)
     data.append("upload_preset", "Workora_Profile")
     data.append("cloud_name", "dzrms0g2j")
 
     const url = "https://api.cloudinary.com/v1_1/dzrms0g2j/image/upload";
+    const loadingToast = toast.loading("Uploading image...")
     try {
       const response = await axios.post(url, data);
-      console.log("Uploaded Image URL:", response.data.secure_url);
       const imgurl = response.data.secure_url
       setImageUrl(imgurl)
-
-      // setSuccess('Profile picture uploaded successfully!')
+      toast.success("Image uploaded!", { id: loadingToast })
     } catch (err) {
       console.error("Cloudinary upload error:", err);
-      // setError('Failed to upload image. Please try again.')
-    } finally {
-      // setIsUploading(false)
+      toast.error("Failed to upload image", { id: loadingToast })
     }
   }
 
-  console.log("change phote ", imageUrl)
-  console.log("loged user profile data", userData?.email)
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    console.log("sumbit", imageUrl)
-    const data = {
+    const payload = {
       email: userData?.email ?? "",
       name,
       phone,
       profileImage: imageUrl
     }
-    const respone = await updateProfile(data)
-    console.log("response of update profile", respone.data)
-    dispatch(addClient(respone.data))
-
+    const loadingToast = toast.loading("Saving changes...")
+    try {
+        const respone = await updateProfile(payload)
+        dispatch(addClient(respone.data))
+        setData(respone.data)
+        toast.success("Profile updated successfully!", { id: loadingToast })
+    } catch (error) {
+        console.error("Profile update error:", error)
+        toast.error("Failed to update profile", { id: loadingToast })
+    }
   }
+
   useEffect(() => {
     const userId = userData?._id;
     if (!userId) return;
@@ -78,135 +68,142 @@ const ProfileView = () => {
     const fetchUser = async () => {
       try {
         const response = await getUserDetails({ userId });
-        console.log("refresh page responsee", response)
-        setData(response);
+        // The service returns the data directly if it's following the pattern
+        if (response.data) {
+          setData(response.data);
+        } else {
+          setData(response);
+        }
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchUser();
-  }, [userData]);
+  }, [userData?._id]);
 
-  console.log("dataaaaa", data)
   return (
     <>
       <motion.div
-        initial={{
-          opacity: 0,
-          y: 20,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.4,
-        }}
-        className="p-8 max-w-4xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="p-4 md:p-8 max-w-5xl mx-auto"
       >
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">My Profile</h1>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">My Profile</h1>
+          <div className="hidden md:flex items-center gap-2 text-sm text-gray-500">
+            <span>Client Dashboard</span>
+            <span>/</span>
+            <span className="text-emerald-600 font-medium">Profile</span>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Profile Card */}
-
-
-          <div className="md:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
-              <img
-                src={imageUrl ? imageUrl : "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
-                alt="Profile"
-                className="w-32 h-32 rounded-full object-cover border-4 border-purple-200 shadow-lg"
-              />
-              <div className="relative">
-                <input
-                  type="file"
-                  onChange={handleUpdateProfile}
-                  // disabled={isUploading || isUpdating}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
-                  accept="image/*"
-                />
-                <button
-                  type="button"
-                  // disabled={isUploading || isUpdating}
-                  className="bg-purple-100 hover:bg-purple-200 disabled:bg-gray-100 text-purple-700 disabled:text-gray-400 px-6 py-2 rounded-lg transition-colors duration-200 font-medium"
-                >
-                  change photo
-                  {/* {isUploading ? 'Uploading...' : 'Change Photo'} */}
-                </button>
-              </div>
-              <div className="text-xl font-bold text-gray-800">
-
-                <h2 >{data?.name}</h2>
-              </div><br />
-              {/* <p className="text-gray-500 text-sm mb-4">Senior UI/UX Designer</p> */}
-              <div className="flex items-center text-sm text-gray-600">
-                <Mail className="w-4 h-4 mr-3 text-gray-400" />
-                {data?.email}
+          <div className="lg:col-span-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center text-center">
+              <div className="relative group mb-6">
+                <div className="w-32 h-32 rounded-full border-4 border-emerald-50 shadow-inner overflow-hidden">
+                  <img
+                    src={imageUrl || "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
+                    alt="Profile"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <label className="absolute bottom-1 right-1 w-9 h-9 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-colors border-2 border-white">
+                  <Edit3 className="w-4 h-4" />
+                  <input
+                    type="file"
+                    onChange={handleUpdateProfile}
+                    className="hidden"
+                    accept="image/*"
+                  />
+                </label>
               </div>
 
-              <div>
-                <h1>{data?.phone}</h1>
+              <div className="space-y-1 mb-6">
+                <h2 className="text-xl font-bold text-gray-900">{data?.name || name || userData?.name}</h2>
+                <p className="text-emerald-600 font-medium text-sm">Verified Client</p>
               </div>
 
-
-
+              <div className="w-full space-y-3 pt-6 border-t border-gray-50">
+                <div className="flex items-center gap-3 text-sm text-gray-600 bg-gray-50 p-3 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-emerald-600 shadow-sm">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <span className="truncate flex-1 text-left">{data?.email || userData?.email}</span>
+                </div>
+                
+                <div className="flex items-center gap-3 text-sm text-gray-600 bg-gray-50 p-3 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-emerald-600 shadow-sm">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <span className="flex-1 text-left">{data?.phone || phone || userData?.phone || 'No phone provided'}</span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Edit Form */}
-          <div className="md:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-              <h3 className="text-lg font-semibold text-gray-800 mb-6">
-                Edit Details
-              </h3>
+          <div className="lg:col-span-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                  <User className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">
+                  Edit Personal Details
+                </h3>
+              </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">
-                      Name
+                    <label className="text-sm font-semibold text-gray-700 ml-1">
+                      Full Name
                     </label>
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"
+                      placeholder="Enter your name"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
                     />
                   </div>
 
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 ml-1">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Enter your phone"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Email Address (Not changable)
+                  <label className="text-sm font-semibold text-gray-700 ml-1">
+                    Email Address
                   </label>
                   <input
                     type="email"
                     value={userData?.email}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"
+                    disabled
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed outline-none"
                   />
+                  <p className="text-[10px] text-gray-400 ml-1">Email address cannot be changed for security reasons.</p>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Phone</label>
-                  <input
-                    type="text"
-                    onChange={(e) => setPhone(e.target.value)}
-                    value={phone}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"
-                  />
-                </div>
-
-
-
-                <div className="pt-4 flex justify-end">
+                <div className="pt-6 flex justify-end">
                   <button
-
                     type='submit'
-                    className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors shadow-sm shadow-emerald-200"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-600/20 active:scale-[0.98]"
                   >
-                    <Save className="w-4 h-4" />
+                    <Save className="w-5 h-5" />
                     Save Changes
                   </button>
                 </div>

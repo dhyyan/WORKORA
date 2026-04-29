@@ -15,7 +15,7 @@ export class ChatRepository extends BaseRepository<IChat> implements IChatReposi
                 { freelancerId: id }
             ]
         })
-        .populate("clientId", "name email")
-        .populate("freelancerId", "name email");
+        .populate("clientId", "name email profileImage")
+        .populate("freelancerId", "name email profileImage");
     }
 }

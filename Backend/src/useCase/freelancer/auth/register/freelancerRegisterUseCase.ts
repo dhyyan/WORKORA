@@ -45,6 +45,7 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
             profileImage: "",
             bio: "",
             isSubscribed: false,
+            freeApplicationsCount: 0,
             isBlocked: false,
             googleId:""
         })

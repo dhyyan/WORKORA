@@ -110,4 +110,11 @@ export interface FreelancerChangePassOutputDtos extends BaseFreelancerOutputDtos
    _id:Types.ObjectId
 }
 
+export interface AuthFreelancerChangePassInputDto {
+    userId: string | Types.ObjectId,
+    oldPassword?: string,
+    newPassword?: string
+}
+
+
 

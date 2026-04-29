@@ -34,7 +34,7 @@ export class UpateProfileUseCase implements IUpateProfileUseCase {
                 profileImage: updateProfile?.profileImage,
                 isBlocked: updateProfile?.isBlocked,
                 isSubscribed:updateProfile?.isSubscribed,
-               
+                googleId: updateProfile?.googleId,
             }
             return {
                 updatedUser,

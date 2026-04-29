@@ -7,6 +7,8 @@ export interface IClient{
     profileImage?: string;
     isBlocked?: boolean;
     isSubscribed?: boolean;
-    googleId?: string
-    createdAt?: Date
+    freeJobsCount?: number;
+    subscriptionExpiryDate?: string | Date;
+    googleId?: string;
+    createdAt?: Date;
 }

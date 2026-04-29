@@ -1,7 +1,8 @@
 export interface IChatUser {
     _id: string;
     name: string;
-    email:string
+    email:string;
+    profileImage?: string;
 }
 
 export interface IChat {

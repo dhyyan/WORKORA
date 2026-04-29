@@ -17,8 +17,10 @@ export class JobController{
                 res.status(HttpStatus.BAD_REQUEST).json({message:"job not created"})
             }
             res.status(HttpStatus.CREATED).json({message:"job created successfully",jobData:createJob,success:true})
-        } catch (error) {
-            console.log("error in job controller",error)
+        } catch (error: any) {
+            console.log("error in job controller", error)
+            res.status(HttpStatus.BAD_REQUEST).json({ message: error.message || "Internal server error" })
         }
+
     }
 }

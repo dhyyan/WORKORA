@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@theme {
+  --color-workora-50: #f0fdfa;
+  --color-workora-100: #ccfbf1;
+  --color-workora-200: #99f6e4;
+  --color-workora-300: #5eead4;
+  --color-workora-400: #2dd4bf;
+  --color-workora-500: #14b8a6;
+  --color-workora-600: #0d9488;
+  --color-workora-700: #0f766e;
+  --color-workora-800: #115e59;
+  --color-workora-900: #134e4a;
+  --color-workora-950: #042f2e;
+}

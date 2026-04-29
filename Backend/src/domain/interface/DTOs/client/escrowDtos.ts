@@ -20,6 +20,7 @@ export interface MilestoneFundOutputDtos{
 //stripe
 export interface createCheckoutInputDtos{
     milestoneId:Types.ObjectId
+    clientId:Types.ObjectId
 }
 
 // export interface createCheckoutOutputDtos{

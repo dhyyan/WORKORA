@@ -63,3 +63,40 @@ export const categoryService=async(name:string)=>{
         console.log("error in create category",error)
     }
 }
+
+export const listCategoryService=async()=>{
+    try {
+        const response=await adminAxios.get("/admin/categories")
+        return response.data
+    } catch (error) {
+        console.log("error in list category",error)
+    }
+}
+
+export const toggleCategoryStatusService=async(id:string)=>{
+    try {
+        const response=await adminAxios.patch(`/admin/categories/status/${id}`)
+        return response.data
+    } catch (error) {
+        console.log("error in toggle category status",error)
+    }
+}
+
+//concerns
+export const listConcernService=async()=>{
+    try {
+        const response=await adminAxios.get("/admin/concern")
+        return response.data
+    } catch (error) {
+        console.log("error in list concern",error)
+    }
+}
+
+export const releaseConcernPaymentService=async(id: string, receiver: 'client' | 'freelancer')=>{
+    try {
+        const response=await adminAxios.post(`/admin/concern/release/${id}`, { receiver })
+        return response.data
+    } catch (error) {
+        console.log("error in release concern payment",error)
+    }
+}

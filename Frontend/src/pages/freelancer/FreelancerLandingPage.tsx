@@ -1,11 +1,9 @@
 import HeroSection from '../../components/freelancer/LandingPage/HeroSection'
-import Header from '../../components/freelancer/LandingPage/Header'
 
 const FreelancerLandingPage = () => {
   return (
     <>
-         <div className="min-h-screen bg-gray-50 font-sans">
-      <Header />
+         <div className="bg-gray-50 font-sans">
       <main>
         <HeroSection />
         {/* <FeatureCards /> */}

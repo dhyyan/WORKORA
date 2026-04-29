@@ -16,6 +16,10 @@ export const freelancerSceema = new Schema<Freelancer>({
     profileImage: { type: String },
     bio: { type: String },
     isSubscribed: { type: Boolean, default: false },
+    freeApplicationsCount: { type: Number, default: 0 },
+    stripeSubscriptionId: { type: String, required: false },
+    subscriptionExpiryDate: { type: Date, required: false },
     isBlocked: { type: Boolean, default: false },
+    googleId: { type: String, required: false },
 },
     { timestamps: true });

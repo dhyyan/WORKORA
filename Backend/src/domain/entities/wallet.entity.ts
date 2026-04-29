@@ -15,7 +15,7 @@ export interface IWallet {
   _id?: Types.ObjectId;
 
   userId: Types.ObjectId;  
-  role: "client" | "freelancer";
+  role: "client" | "freelancer" | "admin";
 
   balance: number;
 

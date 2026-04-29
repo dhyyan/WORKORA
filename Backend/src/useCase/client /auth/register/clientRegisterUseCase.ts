@@ -41,6 +41,7 @@ export class RegisterClientUseCase implements IRegisterClientUseCase {
             authProvider: "local",
             profileImage: "",
             isSubscribed: false,
+            freeJobsCount: 0,
             isBlocked: false,
 
         })

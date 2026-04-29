@@ -8,13 +8,16 @@ import type { IJob } from '../../../types/client/jobs/IJob';
 import ApplyBidModal from './ApplyBidModal';
 import toast from 'react-hot-toast';
 import { createBidService } from '../../../service/freelancer/bid/bidService';
+import { createSubscriptionSession } from '../../../service/subscription/subscriptionService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
-import type { AxiosError } from 'axios';
 import type { IMilestone, SubmitMiestone } from '../../../types/client/milestone/IMilestone';
 import SubmitWorkModal from './SubmitWorkModal';
-import { submitMilestoneService } from '../../../service/freelancer/milestone/milestoneService';
+import { submitMilestoneService, createConcernService } from '../../../service/freelancer/milestone/milestoneService';
 import type { IUser } from '../../../types/auth/IUser';
+import RaiseDisputeModal from './RaiseDisputeModal';
+import SubscriptionLimitModal from '../../../components/common/SubscriptionLimitModal';
+
 
 const JobDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -27,8 +30,11 @@ const JobDetails = () => {
     const [milestones, setMilestones] = useState<IMilestone[]>([])
     const [isSubmitWorkModalOpen, setIsSubmitWorkModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [isRaiseDisputeModalOpen, setIsRaiseDisputeModalOpen] = useState(false);
     const [selectedMilestone, setSelectedMilestone] = useState<IMilestone | null>(null);
     const [refresh, setRefresh] = useState(false)
+    const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
+
 
     const userData = useSelector((state: RootState) => state.freelancerAuth.freelancer);
 
@@ -69,7 +75,7 @@ const JobDetails = () => {
         }
 
         listMilestone()
-    }, [id])
+    }, [id, refresh])
 
 
 
@@ -82,28 +88,32 @@ const JobDetails = () => {
             }
             const response = await createBidService({
                 jobId: id!,
-                freelancerId: userData?._id, // This should come from authenticated user context
+                freelancerId: userData?._id,
                 coverLetter: data.coverLetter,
                 bidAmount: parseFloat(data.bidAmount),
             });
             console.log("response create bid", response)
             toast.success("Proposal sent successfully!");
+            setIsApplyModalOpen(false);
 
-        } catch (error) {
-            const axiosError = error as AxiosError<{ message: string }>
+        } catch (error: any) {
+            console.error("Error submitting proposal:", error);
+            const errorMessage = error.response?.data?.message || error.message;
 
-            const message = axiosError.response?.data?.message || "Failed to hire freelancer"
+            if (errorMessage?.includes("limit reached")) {
+                setIsLimitModalOpen(true);
+            } else {
+                toast.error(errorMessage || "Failed to submit proposal");
+            }
 
-            toast.error(message)
         }
-        // Here you would typically call an API to submit the proposal
     };
 
     const handleSubmitWork = async (data: SubmitMiestone) => {
         try {
             const response = await submitMilestoneService(data)
             console.log('response of submit milestone', response)
-            setRefresh(true)
+            setRefresh(prev => !prev)
 
         } catch (error) {
 
@@ -111,10 +121,17 @@ const JobDetails = () => {
         }
     };
 
-    //page refresh
-    useEffect(() => {
-        setRefresh(false)
-    }, [refresh])
+    const handleRaiseDisputeSubmit = async (data: { contractId: string, description: string, amount: number, milestoneId: string }) => {
+        try {
+            const response = await createConcernService(data)
+            console.log('response of raise dispute', response)
+            toast.success("Dispute raised successfully!")
+            setRefresh(prev => !prev)
+        } catch (error) {
+            console.log("error while raising dispute ", error);
+            toast.error("Failed to raise dispute")
+        }
+    };
 
     if (loading) {
         return (
@@ -383,8 +400,7 @@ const JobDetails = () => {
                                 <button
                                     onClick={() => {
                                         setIsRejectModalOpen(false);
-                                        setSelectedMilestone(null);
-                                        console.log("Raise Dispute clicked for", selectedMilestone._id);
+                                        setIsRaiseDisputeModalOpen(true);
                                     }}
                                     className="px-6 py-2.5 border-2 border-red-500 text-red-600 hover:bg-red-50 rounded-xl transition-all font-semibold flex items-center justify-center"
                                 >
@@ -404,8 +420,33 @@ const JobDetails = () => {
                     </div>
                 )}
 
+                {/* Raise Dispute Modal */}
+                {selectedMilestone && (
+                    <RaiseDisputeModal
+                        isOpen={isRaiseDisputeModalOpen}
+                        onClose={() => {
+                            setIsRaiseDisputeModalOpen(false);
+                            setSelectedMilestone(null);
+                        }}
+                        milestoneTitle={selectedMilestone.title}
+                        contractId={selectedMilestone.contractId}
+                        milestoneId={selectedMilestone._id!}
+                        amount={selectedMilestone.amount}
+                        onSubmit={handleRaiseDisputeSubmit}
+                    />
+                )}
+                
+                <SubscriptionLimitModal 
+                    isOpen={isLimitModalOpen}
+                    onClose={() => setIsLimitModalOpen(false)}
+                    title="Free Application Limit Reached"
+                    description="You've applied to 5 free jobs. Upgrade to Workora Pro to apply for unlimited jobs and access premium projects."
+                    role="freelancer"
+                />
+
             </div>
         </div>
+
     );
 };
 

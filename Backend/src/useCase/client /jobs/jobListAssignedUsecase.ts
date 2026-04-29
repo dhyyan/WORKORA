@@ -10,7 +10,7 @@ export class JobListAssignedUsecase implements IJobListAssignedUseCase {
     }
     async listJobs(input: JobListAssignInputDtos): Promise<JobListAssignOutputDtos[]> {
         try {
-            const joblist = await this._jobRepository.findAll({ clientId: input.clientId, status: "assigned" })
+            const joblist = await this._jobRepository.findAll({ clientId: input.clientId, status: { $in: ["assigned", "closed"] } })
             if (!joblist) throw new Error("jobs in this client not found")
 
             // const jobs = 
@@ -24,7 +24,7 @@ export class JobListAssignedUsecase implements IJobListAssignedUseCase {
                 duration: job.duration,
                 deadline: job.deadline,
                 price: job.price,
-                status: "assigned",
+                status: job.status as "assigned" | "closed",
             }));
 
         } catch (error) {

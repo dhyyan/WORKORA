@@ -1,40 +1,75 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, LayoutGrid, AlertCircle, X, CheckCircle, XCircle } from 'lucide-react';
 import Pagination from '../../common/Pagination';
-import { categoryService } from '../../../service/admin/Dashboard/client/clientService';
+import { categoryService, listCategoryService, toggleCategoryStatusService } from '../../../service/admin/Dashboard/client/clientService';
 import toast from 'react-hot-toast';
 
+// interface Category {
+//     id: string;
+//     name: string;
+//     description: string;
+//     status: 'Listed' | 'Unlisted';
+// }
+
+// const mockCategories: Category[] = [
+//     { id: '1', name: 'Web Development', description: 'Websites, web apps, full-stack dev', status: 'Listed' },
+//     { id: '2', name: 'UI/UX Design', description: 'App design, web design, user experience', status: 'Listed' },
+//     { id: '3', name: 'Content Writing', description: 'Articles, blogs, copywriting', status: 'Unlisted' },
+//     { id: '4', name: 'Digital Marketing', description: 'SEO, SMM, email marketing', status: 'Listed' },
+//     { id: '5', name: 'Mobile App Dev', description: 'iOS, Android, React Native', status: 'Listed' },
+// ];
+
 interface Category {
-    id: string;
+    _id: string;
     name: string;
-    description: string;
-    status: 'Listed' | 'Unlisted';
+    isListed: boolean;
+    createdAt: string;
 }
 
-const mockCategories: Category[] = [
-    { id: '1', name: 'Web Development', description: 'Websites, web apps, full-stack dev', status: 'Listed' },
-    { id: '2', name: 'UI/UX Design', description: 'App design, web design, user experience', status: 'Listed' },
-    { id: '3', name: 'Content Writing', description: 'Articles, blogs, copywriting', status: 'Unlisted' },
-    { id: '4', name: 'Digital Marketing', description: 'SEO, SMM, email marketing', status: 'Listed' },
-    { id: '5', name: 'Mobile App Dev', description: 'iOS, Android, React Native', status: 'Listed' },
-];
-
 const CategoryList = () => {
-    const [categories, setCategories] = useState<Category[]>(mockCategories);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [newCategoryName, setNewCategoryName] = useState('');
 
     const limit = 5;
-    const totalPages = Math.ceil(categories.length / limit);
 
-    const handleToggleStatus = (id: string, currentStatus: string) => {
-        setCategories(categories.map(cat =>
-            cat.id === id
-                ? { ...cat, status: currentStatus === 'Listed' ? 'Unlisted' : 'Listed' }
-                : cat
-        ));
+    const fetchCategories = async () => {
+        setIsLoading(true);
+        try {
+            const response = await listCategoryService();
+            if (response && response.success) {
+                setCategories(response.categories || []);
+            } else {
+                toast.error("Failed to fetch categories");
+            }
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+            toast.error("An error occurred while fetching categories");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const handleToggleStatus = async (id: string, currentStatus: boolean) => {
+        try {
+            const response = await toggleCategoryStatusService(id);
+            if (response && response.success) {
+                toast.success(`Category ${currentStatus ? 'unlisted' : 'listed'} successfully`);
+                fetchCategories(); // Refresh the list from backend
+            } else {
+                toast.error(response?.message || 'Failed to update category status');
+            }
+        } catch (error) {
+            console.error("Error toggling category status:", error);
+            toast.error("An error occurred while updating category status");
+        }
     };
 
     const handleAddCategory = async (e: React.FormEvent) => {
@@ -43,12 +78,11 @@ const CategoryList = () => {
 
         try {
             const response = await categoryService(newCategoryName)
-            console.log("response", response)
             if (response && response.success) {
                 toast.success('Category created successfully');
                 setNewCategoryName('');
                 setIsAddModalOpen(false);
-                // Optionally add the new category to the list or refresh
+                fetchCategories(); // Refresh the list
             } else {
                 toast.error(response?.message || 'Failed to create category');
             }
@@ -56,9 +90,9 @@ const CategoryList = () => {
             console.log(error)
             toast.error('An error occurred while creating category');
         }
-
     };
 
+    const totalPages = Math.ceil(categories.length / limit);
     const currentCategories = categories.slice((currentPage - 1) * limit, currentPage * limit);
 
     return (
@@ -89,8 +123,17 @@ const CategoryList = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {currentCategories.map((category) => (
-                                <tr key={category.id} className="hover:bg-gray-50 transition-colors">
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={3} className="px-6 py-10 text-center text-gray-500">
+                                        <div className="flex items-center justify-center gap-2">
+                                            <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                                            Loading categories...
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : currentCategories.map((category) => (
+                                <tr key={category._id} className="hover:bg-gray-50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-start gap-3">
                                             <div className="p-2 bg-gray-50 rounded-lg shrink-0 mt-1">
@@ -98,29 +141,29 @@ const CategoryList = () => {
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="text-sm font-medium text-gray-900">{category.name}</span>
-                                                <span className="text-xs text-gray-500 mt-0.5">{category.description}</span>
+                                                <span className="text-xs text-gray-500 mt-0.5">Created on {new Date(category.createdAt).toLocaleDateString()}</span>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                                            ${category.status === 'Listed'
+                                            ${category.isListed
                                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                                 : 'bg-red-50 text-red-700 border-red-200'
                                             }
                                         `}>
-                                            {category.status}
+                                            {category.isListed ? 'Listed' : 'Unlisted'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <button
-                                            onClick={() => handleToggleStatus(category.id, category.status)}
-                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${category.status === 'Listed'
+                                            onClick={() => handleToggleStatus(category._id, category.isListed)}
+                                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${category.isListed
                                                 ? 'text-red-600 bg-red-50 hover:bg-red-100 border-red-100'
                                                 : 'text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border-emerald-100'
                                                 }`}
                                         >
-                                            {category.status === 'Listed' ? (
+                                            {category.isListed ? (
                                                 <>
                                                     <XCircle className="w-3.5 h-3.5" />
                                                     Unlist

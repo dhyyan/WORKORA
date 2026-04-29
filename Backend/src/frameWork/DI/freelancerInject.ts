@@ -1,4 +1,6 @@
 import { FreelancerChagePassController } from "../../adapters/controllers/freelancer/Auth/freelancerChangePassword";
+import { AuthFreelancerChangePasswordController } from "../../adapters/controllers/freelancer/Auth/AuthFreelancerChangePasswordController";
+
 import { FreelancerForgotPassOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerForgotPassOtpController";
 import { FreelancerForgotPassController } from "../../adapters/controllers/freelancer/Auth/freelancerFrogotPassController";
 import { FreelancerLoginController } from "../../adapters/controllers/freelancer/Auth/freelancerLoginController";
@@ -7,11 +9,14 @@ import { FreelancerResendOtpController } from "../../adapters/controllers/freela
 import { FreelancerVerifyOtpController } from "../../adapters/controllers/freelancer/Auth/freelancerVerifyOtpController";
 import { FreelancerDataController } from "../../adapters/controllers/freelancer/Dashboard/FreelancerDataController";
 import { FreelancerUpdateProfileController } from "../../adapters/controllers/freelancer/Dashboard/UpdateProfileController";
+import { WalletController } from "../../adapters/controllers/freelancer/Dashboard/WalletController";
 import { ClientRepository } from "../../adapters/repository/client/clientRepository";
 import { FreelancerRepository } from "../../adapters/repository/freelancer/freelancerRepository";
 import { FreelancerGoogleController } from "../../adapters/controllers/freelancer/Auth/freelancerGoogleAuthController";
 import { FreelancerGoogleAuthUseCase } from "../../useCase/freelancer/auth/login/freelancerGoogleAuthUseCase";
 import { FreelancerChangePassUseCase } from "../../useCase/freelancer/auth/login/freelancerChangePassUseCase";
+import { AuthFreelancerChangePasswordUseCase } from "../../useCase/freelancer/auth/login/AuthFreelancerChangePasswordUseCase";
+
 import { FreelancerForgotPassOtpUseCase } from "../../useCase/freelancer/auth/login/freelancerForgotPassOtpUseCase";
 import { FreelancerForgotPassUseCase } from "../../useCase/freelancer/auth/login/freelancerForgotPassUseCase";
 import { FreelancerLoginUseCase } from "../../useCase/freelancer/auth/login/freelancerLoginUseCase";
@@ -21,6 +26,7 @@ import { FreelancerSentOtpUseCase } from "../../useCase/freelancer/auth/register
 import { FreelancerVerifyOtpUseCase } from "../../useCase/freelancer/auth/register/freelancerVerifyOtpUseCase";
 import { GetUserUseCase } from "../../useCase/freelancer/dashBoard/profile/GetUserDetailsUseCase";
 import { UpdateProfileUseCase } from "../../useCase/freelancer/dashBoard/profile/UpdateProfileUseCase";
+import { GetWalletUseCase } from "../../useCase/freelancer/dashBoard/wallet/GetWalletUseCase";
 import { EmailService } from "../service/emailService";
 import { HashPasswordService } from "../service/hashPasswordService";
 import { JwtService } from "../service/jwtService";
@@ -41,6 +47,13 @@ import { ListCopletedJobsUsecase } from "../../useCase/freelancer/jobs/listCople
 import { MilestoneSubmitController } from "../../adapters/controllers/freelancer/milestone/milestoneSubmitController";
 import { SubmitMilestoneUsecase } from "../../useCase/freelancer/milestone/submitMilestoneUsecase";
 import { MileStoneRepository } from "../../adapters/repository/client/milestoneRepository";
+import { ConcernRepository } from "../../adapters/repository/freelancer/concernRepository";
+import { ConcernUseCase } from "../../useCase/freelancer/jobs/concerUseCase";
+import { ConcernController } from "../../adapters/controllers/freelancer/jobs/concerController";
+import { ContractRepository } from "../../adapters/repository/client/contractRepository";
+import { StripeService } from "../service/stripe/stripeService";
+import { CreateSubscriptionSessionUseCase } from "../../useCase/client /payment/createSubscriptionSessionUseCase";
+import { SubscriptionController } from "../../adapters/controllers/client/payment/subscriptionController";
 
 
 //signup
@@ -86,16 +99,22 @@ export const freelancerForgotPassOtpController = new FreelancerForgotPassOtpCont
 const freelancerChangePassUseCase = new FreelancerChangePassUseCase(freelancerRepository, clientRepository, hashPassword)
 export const freelancerChangePassController = new FreelancerChagePassController(freelancerChangePassUseCase)
 
+const authFreelancerChangePasswordUseCase = new AuthFreelancerChangePasswordUseCase(freelancerRepository, hashPassword);
+export const authFreelancerChangePasswordController = new AuthFreelancerChangePasswordController(authFreelancerChangePasswordUseCase);
+
+
 
 //update Profile
 
 const updateProfileUseCase = new UpdateProfileUseCase(freelancerRepository)
 export const freelancerUpdateProfileController = new FreelancerUpdateProfileController(updateProfileUseCase)
 
-// FreelancerData
-
 const getUserUseCase = new GetUserUseCase(freelancerRepository)
 export const freelancerDataController = new FreelancerDataController(getUserUseCase)
+
+// Wallet
+const getWalletUseCase = new GetWalletUseCase(walletRepository)
+export const walletController = new WalletController(getWalletUseCase)
 
 //freelancer list jobs
 
@@ -106,7 +125,7 @@ export const freelancerJobListController=new FreelancerJobListController(freelan
 
 // bid create controller
 const bidRepository=new BidRepository()
-const createBidUseCase=new CreateBidUseCase(bidRepository)
+const createBidUseCase=new CreateBidUseCase(bidRepository, freelancerRepository)
 export const bidCreateController=new BidCreateController(createBidUseCase)
 
 //list accept jobs
@@ -128,3 +147,12 @@ export const listCompletedJobsController=new ListCompletedJobsController(listcom
 const milestoneRepository=new MileStoneRepository()
 const submitMilestoneUsecase=new SubmitMilestoneUsecase(milestoneRepository)
 export const milestoneSubmitController=new MilestoneSubmitController(submitMilestoneUsecase)
+
+//concern
+const contractRepository=new ContractRepository()
+const concernRepository=new ConcernRepository()
+const concernUsecase=new ConcernUseCase(concernRepository,contractRepository)
+export const concernController=new ConcernController(concernUsecase)
+const stripeService = new StripeService()
+const createSubscriptionSessionUseCase = new CreateSubscriptionSessionUseCase(stripeService)
+export const subscriptionController = new SubscriptionController(createSubscriptionSessionUseCase)

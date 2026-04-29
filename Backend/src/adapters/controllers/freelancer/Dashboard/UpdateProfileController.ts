@@ -27,8 +27,10 @@ export class FreelancerUpdateProfileController{
                 skills:updatedFreelancer.skills,
                 linkedInUrl:updatedFreelancer.linkedInUrl,
                 gitHubUrl:updatedFreelancer.gitHubUrl,
-                profileImage:updatedFreelancer.profileImage
-
+                profileImage:updatedFreelancer.profileImage,
+                isSubscribed: updatedFreelancer.isSubscribed,
+                isBlocked: updatedFreelancer.isBlocked,
+                googleId: updatedFreelancer.googleId,
             }
             res.status(HttpStatus.OK).json({message:"update profile success",data:data,success:true})
         } catch (error) {

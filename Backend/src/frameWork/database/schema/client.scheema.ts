@@ -12,5 +12,8 @@ export const clientSchem = new Schema<Client>({
     role: { type: String, required: false },
     isBlocked: { type: Boolean, required: false },
     isSubscribed: { type: Boolean, required: false },
+    freeJobsCount: { type: Number, default: 0 },
+    stripeSubscriptionId: { type: String, required: false },
+    subscriptionExpiryDate: { type: Date, required: false },
     googleId: { type: String, required: false },
 }, { timestamps: true }) 
