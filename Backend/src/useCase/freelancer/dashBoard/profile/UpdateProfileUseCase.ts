@@ -16,7 +16,17 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
 
             const exist = await this._freelancerRepository.findByEmail(input.email)
             if (!exist) throw new Error("user in this email not existed")
-            const update = await this._freelancerRepository.update(exist._id!, input)
+            const { name, phone, bio, experience, skills, gitHubUrl, linkedInUrl, profileImage } = input
+            const update = await this._freelancerRepository.update(exist._id!, {
+                name,
+                phone,
+                bio,
+                experience,
+                skills,
+                gitHubUrl,
+                linkedInUrl,
+                profileImage
+            })
 
             if (!update) throw new Error("error while updating profile")
             const updatedFreelancer: BaseFreelancerOutputDtos = {
@@ -33,6 +43,7 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
                 profileImage: update.profileImage,
                 bio: update.bio,
                 isSubscribed: update.isSubscribed,
+                subscriptionExpiryDate: update.subscriptionExpiryDate,
                 isBlocked: update.isBlocked,
                 googleId: update.googleId,
             }

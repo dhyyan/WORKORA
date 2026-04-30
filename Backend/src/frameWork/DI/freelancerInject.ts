@@ -52,7 +52,7 @@ import { ConcernUseCase } from "../../useCase/freelancer/jobs/concerUseCase";
 import { ConcernController } from "../../adapters/controllers/freelancer/jobs/concerController";
 import { ContractRepository } from "../../adapters/repository/client/contractRepository";
 import { StripeService } from "../service/stripe/stripeService";
-import { CreateSubscriptionSessionUseCase } from "../../useCase/client /payment/createSubscriptionSessionUseCase";
+import { CreateSubscriptionSessionUseCase } from "../../useCase/client/payment/createSubscriptionSessionUseCase";
 import { SubscriptionController } from "../../adapters/controllers/client/payment/subscriptionController";
 
 

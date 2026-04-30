@@ -12,10 +12,11 @@ interface ViewBidsModalProps {
     onClose: () => void;
     project: IJob;
     onViewProposal: (bid: IBid) => void;
+    refresh?: boolean;
 }
 
 
-const ViewBidsModal: React.FC<ViewBidsModalProps> = ({ isOpen, onClose, project, onViewProposal }) => {
+const ViewBidsModal: React.FC<ViewBidsModalProps> = ({ isOpen, onClose, project, onViewProposal, refresh }) => {
     const [bids, setBids] = React.useState<IBid[]>([]);
     console.log("view bid open",project)
     useEffect(() => {
@@ -33,7 +34,7 @@ const ViewBidsModal: React.FC<ViewBidsModalProps> = ({ isOpen, onClose, project,
             }
         }
         fetchBids();
-    }, [project]);
+    }, [project, refresh]);
 
     
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { StripeWebhookUseCase } from "../../../../useCase/client /payment/stripeWebHookUseCase";
+import { StripeWebhookUseCase } from "../../../../useCase/client/payment/stripeWebHookUseCase";
 
 export class StripeWebhookController {
 

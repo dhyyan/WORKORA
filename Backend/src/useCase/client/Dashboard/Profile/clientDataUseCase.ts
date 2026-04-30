@@ -21,6 +21,7 @@ export class ClientDataUseCasse implements IClientDataUseCase {
                 profileImage: user.profileImage,
                 isBlocked: user.isBlocked,
                 isSubscribed: user.isSubscribed,
+                subscriptionExpiryDate: user.subscriptionExpiryDate,
                 googleId: user.googleId,
                 createdAt: user.createdAt
             }

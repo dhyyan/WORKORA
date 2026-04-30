@@ -13,11 +13,19 @@ import toast from 'react-hot-toast'
 
 const ProfileView = () => {
   const userData = useSelector((state: RootState) => state.clientAuth.client)
-  const [name, setName] = useState(userData?.name)
-  const [phone, setPhone] = useState(userData?.phone)
-  const [imageUrl, setImageUrl] = useState(userData?.profileImage)
+  const [name, setName] = useState(userData?.name || "")
+  const [phone, setPhone] = useState(userData?.phone || "")
+  const [profileImage, setProfileImage] = useState(userData?.profileImage || "")
   const [data, setData] = useState<IClient | null>(null);
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (userData) {
+      setName(userData.name || "");
+      setPhone(userData.phone || "");
+      setProfileImage(userData.profileImage || "");
+    }
+  }, [userData]);
 
   const handleUpdateProfile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -33,7 +41,7 @@ const ProfileView = () => {
     try {
       const response = await axios.post(url, data);
       const imgurl = response.data.secure_url
-      setImageUrl(imgurl)
+      setProfileImage(imgurl)
       toast.success("Image uploaded!", { id: loadingToast })
     } catch (err) {
       console.error("Cloudinary upload error:", err);
@@ -47,13 +55,13 @@ const ProfileView = () => {
       email: userData?.email ?? "",
       name,
       phone,
-      profileImage: imageUrl
+      profileImage: profileImage
     }
     const loadingToast = toast.loading("Saving changes...")
     try {
         const respone = await updateProfile(payload)
-        dispatch(addClient(respone.data))
-        setData(respone.data)
+        dispatch(addClient(respone.updatedUser))
+        setData(respone.updatedUser)
         toast.success("Profile updated successfully!", { id: loadingToast })
     } catch (error) {
         console.error("Profile update error:", error)
@@ -105,7 +113,7 @@ const ProfileView = () => {
               <div className="relative group mb-6">
                 <div className="w-32 h-32 rounded-full border-4 border-emerald-50 shadow-inner overflow-hidden">
                   <img
-                    src={imageUrl || "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
+                    src={profileImage || data?.profileImage || "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
                     alt="Profile"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />

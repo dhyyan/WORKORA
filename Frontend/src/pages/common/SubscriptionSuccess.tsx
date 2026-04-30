@@ -62,7 +62,7 @@ const SubscriptionSuccess = ({ role }: { role: 'client' | 'freelancer' }) => {
                     </p>
 
                     <button
-                        onClick={() => navigate(role === 'client' ? '/profile' : '/jobs')}
+                        onClick={() => navigate(role === 'client' ? '/client/profile' : '/freelancer/dashboard')}
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group text-lg"
                     >
                         Go to {role === 'client' ? 'Dashboard' : 'Jobs'}

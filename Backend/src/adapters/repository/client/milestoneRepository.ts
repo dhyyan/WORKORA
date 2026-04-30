@@ -9,14 +9,20 @@ export class MileStoneRepository extends BaseRepository<IMilestone> implements I
     constructor() {
         super(milestoneModel as unknown as Model<IMilestone>)
     }
-    async findAllMilestone(page: number, limit: number): Promise<{ milestone: IMilestone[]; totalMilestone: number; }> {
-        const query: any = {}
+    async findAllMilestone(page: number, limit: number): Promise<{ milestone: IMilestone[]; totalMilestone: number; totalEscrowAmount: number }> {
         const skipAmount = (page - 1) * limit;
 
-        const [milestone, totalMilestone] = await Promise.all([
-            milestoneModel.find().skip(skipAmount).limit(limit),
-            milestoneModel.countDocuments()
+        const [milestone, totalMilestone, escrowStats] = await Promise.all([
+            milestoneModel.find().sort({ createdAt: -1 }).skip(skipAmount).limit(limit),
+            milestoneModel.countDocuments(),
+            milestoneModel.aggregate([
+                { $match: { status: { $in: ['funded', 'approved'] } } },
+                { $group: { _id: null, total: { $sum: '$amount' } } }
+            ])
         ])
-        return { milestone: milestone as unknown as IMilestone[], totalMilestone }
+
+        const totalEscrowAmount = escrowStats.length > 0 ? escrowStats[0].total : 0;
+
+        return { milestone: milestone as unknown as IMilestone[], totalMilestone, totalEscrowAmount }
     }
 }

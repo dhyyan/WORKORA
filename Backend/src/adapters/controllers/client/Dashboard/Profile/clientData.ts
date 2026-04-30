@@ -11,7 +11,7 @@ export class ClientDataController{
     async data(req:Request,res:Response):Promise<void>{
         try {
             console.log("loooo")
-            const userId = new Types.ObjectId(req.params.id);
+            const userId = new Types.ObjectId(req.params.userId);
 
             const {client,success}=await this._clientDataUseCase.fetchData({userId})
             if(!client){

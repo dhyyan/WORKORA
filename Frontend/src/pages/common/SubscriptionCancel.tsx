@@ -45,7 +45,7 @@ const SubscriptionCancel = ({ role }: { role: 'client' | 'freelancer' }) => {
                             Try Again
                         </button>
                         <button
-                            onClick={() => navigate(role === 'client' ? '/profile' : '/jobs')}
+                            onClick={() => navigate(role === 'client' ? '/client/profile' : '/freelancer/dashboard')}
                             className="w-full bg-white border-2 border-gray-100 hover:bg-gray-50 text-gray-600 font-bold py-4 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                         >
                             <ArrowLeft className="w-5 h-5" />

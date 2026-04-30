@@ -26,15 +26,17 @@ export class ClientProfileUpdateController{
             }
         
                 const data={
+                    _id: updatedUser?._id,
                     email:updatedUser?.email,
                     name:updatedUser?.name,
                     phone:updatedUser?.phone,
+                    role: "client",
                     profileImage:updatedUser?.profileImage,
                     isSubscribed: updatedUser?.isSubscribed,
                     isBlocked: updatedUser?.isBlocked,
                     googleId: updatedUser?.googleId,
                 }
-                res.status(HttpStatus.OK).json({message:"profile updated success",data})
+                res.status(HttpStatus.OK).json({message:"profile updated success", updatedUser: data})
             
         } catch (error) {
             console.log(error)

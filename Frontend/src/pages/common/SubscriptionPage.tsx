@@ -145,19 +145,27 @@ const SubscriptionPage = ({ role, showNavbar = true }: { role: 'client' | 'freel
                                 <div className="flex items-center justify-between">
                                     <span className="text-gray-500 font-medium">Access expires in</span>
                                     <span className="text-gray-900 font-black text-xl">
-                                        {Math.max(0, Math.ceil((new Date(user.subscriptionExpiryDate!).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} Days
+                                        {user.subscriptionExpiryDate ? (
+                                            <>
+                                                {Math.max(0, Math.ceil((new Date(user.subscriptionExpiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} Days
+                                            </>
+                                        ) : (
+                                            "30 Days"
+                                        )}
                                     </span>
                                 </div>
                                 <div className="mt-6 h-2 bg-gray-200 rounded-full overflow-hidden">
                                     <div 
                                         className="h-full bg-emerald-500 transition-all duration-1000" 
-                                        style={{ width: `${Math.min(100, (Math.max(0, Math.ceil((new Date(user.subscriptionExpiryDate!).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) / 30) * 100)}%` }}
+                                        style={{ 
+                                            width: `${user.subscriptionExpiryDate ? Math.min(100, (Math.max(0, Math.ceil((new Date(user.subscriptionExpiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) / 30) * 100) : 100}%` 
+                                        }}
                                     ></div>
                                 </div>
                             </div>
 
                             <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-                                You have full access to all premium features. Your subscription will automatically renew on {new Date(user.subscriptionExpiryDate!).toLocaleDateString()}.
+                                You have full access to all premium features. Your subscription will automatically renew on {user.subscriptionExpiryDate ? new Date(user.subscriptionExpiryDate).toLocaleDateString() : 'the end of your billing cycle'}.
                             </p>
                         </div>
                     ) : (

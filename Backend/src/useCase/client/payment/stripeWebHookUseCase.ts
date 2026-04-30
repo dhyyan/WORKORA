@@ -102,11 +102,11 @@ export class StripeWebhookUseCase {
     const { userId, role } = sub.metadata;
 
     if (userId && role) {
-      const { clietModel } = await import("../../../frameWork/database/models/client.model");
+      const { clientModel } = await import("../../../frameWork/database/models/client.model");
       const { freelacerModel } = await import("../../../frameWork/database/models/freelancerModel");
 
       if (role === "client" || role === "admin") {
-        await clietModel.findByIdAndUpdate(userId, { isSubscribed: false, stripeSubscriptionId: "" });
+        await clientModel.findByIdAndUpdate(userId, { isSubscribed: false, stripeSubscriptionId: "" });
       } else {
         await freelacerModel.findByIdAndUpdate(userId, { isSubscribed: false, stripeSubscriptionId: "" });
       }
@@ -115,14 +115,14 @@ export class StripeWebhookUseCase {
   }
 
   private async _activateSubscription(userId: string, role: string, subId: string) {
-    const { clietModel } = await import("../../../frameWork/database/models/client.model");
+    const { clientModel } = await import("../../../frameWork/database/models/client.model");
     const { freelacerModel } = await import("../../../frameWork/database/models/freelancerModel");
 
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 30); // 30 days from now
 
     if (role === "client" || role === "admin") {
-      await clietModel.findByIdAndUpdate(userId, { isSubscribed: true, stripeSubscriptionId: subId, subscriptionExpiryDate: expiryDate });
+      await clientModel.findByIdAndUpdate(userId, { isSubscribed: true, stripeSubscriptionId: subId, subscriptionExpiryDate: expiryDate });
     } else {
       await freelacerModel.findByIdAndUpdate(userId, { isSubscribed: true, stripeSubscriptionId: subId, subscriptionExpiryDate: expiryDate });
     }
@@ -145,9 +145,9 @@ export class StripeWebhookUseCase {
   }
 
   private async _creditAdminWallet(amount: number, description: string) {
-    const { clietModel } = await import("../../../frameWork/database/models/client.model");
+    const { clientModel } = await import("../../../frameWork/database/models/client.model");
     // Find the first admin
-    const admin = await clietModel.findOne({ role: "admin" });
+    const admin = await clientModel.findOne({ role: "admin" });
     if (admin) {
       const existWallet = await this._walletRepository.findByUserId(admin._id!);
       if (!existWallet) {

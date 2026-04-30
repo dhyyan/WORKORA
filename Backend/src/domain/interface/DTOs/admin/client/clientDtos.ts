@@ -33,7 +33,8 @@ export interface IMilestoneListInputDtos {
 
 export interface IMilestoneListOutputDtos {
     miletstone: BaseMilestoneOutputDtos[],
-    totalMilestone: number
+    totalMilestone: number,
+    totalEscrowAmount: number
 }
 
 export interface ICategoryInputDtos {
