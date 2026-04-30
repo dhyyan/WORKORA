@@ -34,12 +34,14 @@ const FreelancerRoutes = () => {
         <Route element={<FreelancerLayout />}>
           <Route path='' element={<FreelancerLandingPage />} />
 
-          <Route path='dashboard' element={<FreelancerProtectRoute><DashBoardLayout /></FreelancerProtectRoute>}>
-            <Route index element={<Profile />} />
-            <Route path='editprofile' element={<EditProfilePage />} />
-            <Route path='wallet' element={<Wallet />} />
-            <Route path='password' element={<ChangePassword />} />
+          <Route element={<FreelancerProtectRoute><DashBoardLayout /></FreelancerProtectRoute>}>
             <Route path='subscription' element={<SubscriptionPage role="freelancer" showNavbar={false} />} />
+            <Route path='dashboard'>
+              <Route index element={<Profile />} />
+              <Route path='editprofile' element={<EditProfilePage />} />
+              <Route path='wallet' element={<Wallet />} />
+              <Route path='password' element={<ChangePassword />} />
+            </Route>
           </Route>
 
           <Route path='jobs' element={

@@ -17,7 +17,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     { id: "/freelancer/dashboard", label: "Profile", icon: User },
     { id: "/freelancer/dashboard/wallet", label: "Wallet", icon: Wallet },
     { id: "/freelancer/dashboard/password", label: "Change Password", icon: Lock },
-    { id: "/freelancer/dashboard/subscription", label: "Subscription", icon: ShieldCheck },
+    { id: "/freelancer/subscription", label: "Subscription", icon: ShieldCheck },
   ].filter(item => {
     if (item.id.includes("password") && userdata?.googleId) return false
     return true

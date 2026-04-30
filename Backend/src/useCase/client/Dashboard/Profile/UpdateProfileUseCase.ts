@@ -18,13 +18,16 @@ export class UpateProfileUseCase implements IUpateProfileUseCase {
             console.log("looooogoogo")
             const exist = await this._clientRepository.findByEmail(email)
             if (!exist||!exist._id) throw new Error("user in this email and id not founded ")
-            const updateProfile = await this._clientRepository.update(
+            console.log("user profile usecase data", input)
+            const updateProfile = await this._clientRepository.updateProfile(
                 exist._id,
-                input,
-
-                
+                {
+                    name,
+                    phone,
+                    profileImage
+                },
             )
-            console.log("updateduser dataa", updateProfile)
+            console.log("Database update result:", updateProfile)
             const updatedUser: BaseClientOutputDtos = {
                 _id: updateProfile?._id,
                 name: updateProfile?.name??'',
@@ -34,6 +37,7 @@ export class UpateProfileUseCase implements IUpateProfileUseCase {
                 profileImage: updateProfile?.profileImage,
                 isBlocked: updateProfile?.isBlocked,
                 isSubscribed:updateProfile?.isSubscribed,
+                subscriptionExpiryDate: updateProfile?.subscriptionExpiryDate,
                 googleId: updateProfile?.googleId,
             }
             return {

@@ -10,6 +10,7 @@ export interface BaseClientOutputDtos {
     googleId?: string,
     isBlocked?: boolean,
     isSubscribed?: boolean,
+    subscriptionExpiryDate?: Date | string,
     createdAt?: Date;
 }
 

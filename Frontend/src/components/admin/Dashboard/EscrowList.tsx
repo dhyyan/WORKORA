@@ -75,9 +75,12 @@ const EscrowList = () => {
                         </div>
                         <span className="text-sm text-gray-400">Pending Release</span>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">
-                        ${totalEscrowAmount.toFixed(2)}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                        <IndianRupee className="w-6 h-6 text-gray-900" />
+                        <h3 className="text-2xl font-bold text-gray-900">
+                            {totalEscrowAmount.toFixed(2)}
+                        </h3>
+                    </div>
                     <p className="text-xs text-gray-500 mt-1">Total value in escrow waiting for release</p>
                 </div>
                 {/* ... other stats could go here */}

@@ -14,10 +14,11 @@ import { useNavigate } from 'react-router-dom';
 interface ViewProposalModalProps {
     isOpen: boolean;
     onClose: () => void;
+    refresh: () => void;
     bid: IBid;
 }
 
-const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, bid }) => {
+const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, refresh, bid }) => {
     const [freelancerDetails, setFreelancerDetails] = useState<IFreelancer>({} as IFreelancer)
     const navigate = useNavigate()
 
@@ -49,9 +50,9 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
             }
             console.log("mwoneee", data)
             const response = await hireFreelancerService(data)
-            navigate("/client/profile/projects")
             toast.success("Freelancer hired successfully")
-
+            refresh()
+            onClose()
             console.log("response of hirefreelancer", response)
         } catch (error) {
             const axiosError = error as AxiosError<{ message: string }>
@@ -69,8 +70,9 @@ const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, 
             if (!bid._id) return toast.error("Invalid bid id")
 
             const response = await rejectFreelancerService(bid._id)
-            navigate("/client/profile/projects")
             toast.success("Freelancer Rejected successfully")
+            refresh()
+            onClose()
             console.log("response of hirefreelancer", response)
 
         } catch (error) {

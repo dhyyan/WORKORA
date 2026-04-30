@@ -11,6 +11,6 @@ export class MilestoneListUsecase implements IMilestoneListUseCase {
 
         const listmilestone=await this._milestoneRepository.findAllMilestone(input.page,input.limit)
         if(!listmilestone)throw new Error("error while listing milestones in admin usecase")
-            return {miletstone:listmilestone.milestone,totalMilestone:listmilestone.totalMilestone}
+            return {miletstone:listmilestone.milestone,totalMilestone:listmilestone.totalMilestone,totalEscrowAmount:listmilestone.totalEscrowAmount}
     }
 }

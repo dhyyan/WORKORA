@@ -14,8 +14,9 @@ export interface BaseFreelancerOutputDtos {
     profileImage?: string,
     bio?: string,
     isSubscribed?: boolean,
+    subscriptionExpiryDate?: Date | string,
     isBlocked?: boolean,
-    googleId?:string
+    googleId?:string,
     createdAt?: Date,
 }
 

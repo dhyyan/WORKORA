@@ -8,23 +8,31 @@ export class AdminLoginController{
         this._clientLoginUseCase=clientLoginUseCase
         
     }
-    async login(req:Request,res:Response):Promise<void>{
-        const {email,password}=req.body
+    async login(req: Request, res: Response): Promise<void> {
+        const { email, password } = req.body
         console.log('req.body :>> ', req.body);
-        if(!email||!password)console.log("required fields are missing")
-        try {
-    const {createdUser,accessToken,refreshToken}=await this._clientLoginUseCase.logiClient({email,password})
-    const data={
-        email:createdUser.email,
-        name:createdUser.name
-    }
-    console.log("wodkk",data)
-            if(createdUser){
-                res.status(HttpStatus.OK).json({message:"admin login success",data:data,accessToken})
-            }
         
-        } catch (error) {
+        if (!email || !password) {
+            res.status(HttpStatus.BAD_REQUEST).json({ message: "Email and password are required" });
+            return;
+        }
+
+        try {
+            const { createdUser, accessToken, refreshToken } = await this._clientLoginUseCase.logiClient({ email, password })
             
+            const data = {
+                email: createdUser.email,
+                name: createdUser.name
+            }
+            
+            if (createdUser) {
+                res.status(HttpStatus.OK).json({ message: "Admin login successful", data: data, accessToken })
+            } else {
+                res.status(HttpStatus.UNAUTHORIZED).json({ message: "Invalid credentials" });
+            }
+        } catch (error: any) {
+            console.error("Login controller error:", error);
+            res.status(HttpStatus.UNAUTHORIZED).json({ message: error.message || "Login failed" });
         }
     }
 }

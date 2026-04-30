@@ -14,8 +14,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     }
     async create(data: T): Promise<T> {
         console.log("create data in base repo", data)
-        const created= await this.model.create(data)
-        console.log("created",created)
+        const created = await this.model.create(data)
+        console.log("created", created)
         return created
     }
     delete(id: Types.ObjectId): Promise<T | null> {

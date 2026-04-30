@@ -10,7 +10,8 @@ export interface IClientRepository extends IBaseRepository<Client> {
     // // googleLogin(user:Client):Promise<Client|null>
     // updateProfile(id: Types.ObjectId, user: Partial<Client>): Promise<Client | null>
     // findAll(): Promise<Client[] | null>
-    findAllClient(page:number,limit:number,search:string):Promise<{ client: Client[], totalClients: number }>
+    updateProfile(id: Types.ObjectId, user: Partial<Client>): Promise<Client | null>
+    findAllClient(page: number, limit: number, search: string): Promise<{ client: Client[], totalClients: number }>
     changePassword(id: Types.ObjectId | undefined, password: string): Promise<Client | null>
 
 }

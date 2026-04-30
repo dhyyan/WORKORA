@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ForgotOtpPasswordUseCase } from "../../../useCase/client /auth/password/forgotOtpPasswordUseCase";
+import { ForgotOtpPasswordUseCase } from "../../../useCase/client/auth/password/forgotOtpPasswordUseCase";
 import { IForgotOtpPasswordUseCase } from "../../../domain/interface/useCaseInterface/client/auth/password/IForgotOtpPasswordUseCase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 

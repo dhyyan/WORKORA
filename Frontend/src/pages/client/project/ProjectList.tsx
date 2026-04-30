@@ -296,6 +296,7 @@ const ProjectList = () => {
                         onClose={() => setIsBidsModalOpen(false)}
                         project={selectedProject}
                         onViewProposal={handleViewProposal}
+                        refresh={refresh}
                     />
                 )}
 
@@ -303,6 +304,7 @@ const ProjectList = () => {
                     <ViewProposalModal
                         isOpen={isProposalModalOpen}
                         onClose={() => setIsProposalModalOpen(false)}
+                        refresh={() => setRefresh(prev => !prev)}
                         bid={selectedBid}
                     />
                 )}

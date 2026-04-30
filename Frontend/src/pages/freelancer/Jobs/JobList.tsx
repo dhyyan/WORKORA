@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Clock, Check, Loader2, Briefcase, FileText } from 'lucide-react';
 import { fetchJobs, fetchBids, fetchAcceptedJobs, fetchCompletedJobs } from '../../../service/freelancer/Jobs/JobService';
+import { listCategoryService } from '../../../service/admin/Dashboard/client/clientService';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -46,9 +46,28 @@ const FreelancerJobListing = () => {
     const [totalPages, setTotalPages] = useState(1);
     const limit = 5;
 
-    // Mock Data for filters
-    const categories = ['Development', 'Design', 'Marketing', 'Writing', 'Admin'];
+    // Categories and Skills
+    const [categories, setCategories] = useState<string[]>([]);
     const skills = ['React', 'Node.js', 'UI/UX', 'SEO', 'Python', 'Figma', 'TypeScript'];
+
+
+    // Load categories
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const response = await listCategoryService();
+                if (response && response.categories) {
+                    const categoryNames = response.categories
+                        .filter((cat: any) => cat.isListed !== false)
+                        .map((cat: any) => cat.name);
+                    setCategories(categoryNames);
+                }
+            } catch (error) {
+                console.error("Failed to fetch categories", error);
+            }
+        };
+        loadCategories();
+    }, []);
 
 
     //Load jobs

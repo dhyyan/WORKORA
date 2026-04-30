@@ -32,13 +32,15 @@ export function ClientRoutes() {
 
         <Route element={<ClientLayout />}>
           <Route path="" element={<ClientLandingPage />} />
-          <Route path="profile" element={<ClientProtectRoute><Dashboard /></ClientProtectRoute>}>
-            <Route index element={<ProfileView />} />
-            <Route path="projects" element={<ProjectList />} />
-            <Route path="projects/:id" element={<ProjectDetails />} />
-            <Route path="wallet" element={<Wallet />} />
-            <Route path="password" element={<ChangePassword />} />
+          <Route element={<ClientProtectRoute><Dashboard /></ClientProtectRoute>}>
             <Route path="subscription" element={<SubscriptionPage role="client" showNavbar={false} />} />
+            <Route path="profile">
+              <Route index element={<ProfileView />} />
+              <Route path="projects" element={<ProjectList />} />
+              <Route path="projects/:id" element={<ProjectDetails />} />
+              <Route path="wallet" element={<Wallet />} />
+              <Route path="password" element={<ChangePassword />} />
+            </Route>
           </Route>
 
           <Route path="payment-success" element={<PaymentSuccess />} />

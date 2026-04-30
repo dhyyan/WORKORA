@@ -23,7 +23,7 @@ const LeftSideBar = ({ isOpen, onClose }: LeftSideBarProps) => {
     { id: "/client/profile/projects", label: "My Projects", icon: Briefcase },
     { id: "/client/profile/wallet", label: "Wallet", icon: Wallet },
     { id: "/client/profile/password", label: "Change Password", icon: Lock },
-    { id: "/client/profile/subscription", label: "Subscription", icon: ShieldCheck },
+    { id: "/client/subscription", label: "Subscription", icon: ShieldCheck },
   ].filter(item => {
     if (item.id.includes("password") && userData?.googleId) return false
     return true
