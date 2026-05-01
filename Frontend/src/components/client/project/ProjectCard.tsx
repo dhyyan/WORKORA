@@ -8,7 +8,7 @@ interface ProjectCardProps {
     description: string;
     category: string;
     budget: string;
-    status: "open" | "assigned" | "close";
+    status: "open" | "assigned" | "closed";
     postedDate: string;
     onViewDetails: () => void;
     onEdit: () => void;
@@ -30,12 +30,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     onBids
 }) => {
     const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'Open':
+        switch (status.toLowerCase()) {
+            case 'open':
                 return 'bg-green-100 text-green-700 border-green-200';
-            case 'Assigned':
+            case 'assigned':
                 return 'bg-blue-100 text-blue-700 border-blue-200';
-            case 'Closed':
+            case 'closed':
                 return 'bg-gray-100 text-gray-600 border-gray-200';
             default:
                 return 'bg-gray-100 text-gray-600 border-gray-200';
@@ -62,7 +62,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 <div className="flex-1 min-w-0 pr-4">
                     <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-lg font-semibold text-gray-900 truncate">{title}</h3>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${getStatusColor(status)}`}>
                             {status}
                         </span>
                     </div>
