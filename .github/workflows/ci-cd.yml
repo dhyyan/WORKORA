@@ -1,0 +1,60 @@
+name: Workora CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  backend-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Backend/package-lock.json
+      - name: Install dependencies
+        run: cd Backend && npm ci
+      - name: Run lint
+        run: cd Backend && npm run lint
+
+  frontend-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Frontend/package-lock.json
+      - name: Install dependencies
+        run: cd Frontend && npm ci
+      - name: Run lint
+        run: cd Frontend && npm run lint
+
+  docker-build:
+    needs: [backend-lint, frontend-lint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Backend
+          push: false # Set to true and add registry credentials for real deployment
+          tags: workora-backend:latest
+          
+      - name: Build Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Frontend
+          push: false
+          tags: workora-frontend:latest
