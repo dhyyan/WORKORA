@@ -8,6 +8,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "google-auth-library": "^10.5.0",
+    "helmet": "^8.1.0",
     "init": "^0.1.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.19.3",
@@ -41,16 +42,22 @@
   },
   "homepage": "https://github.com/dhyyan/WORKORA#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/axios": "^0.9.36",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.12.2",
     "@types/socket.io": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.1",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.59.1"
   }
 }

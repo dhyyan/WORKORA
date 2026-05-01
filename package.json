@@ -1,0 +1,35 @@
+{
+  "name": "workora",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhyyan/WORKORA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dhyyan/WORKORA/issues"
+  },
+  "homepage": "https://github.com/dhyyan/WORKORA#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.8.3"
+  },
+  "lint-staged": {
+    "Backend/src/**/*.ts": [
+      "npm run lint --prefix Backend -- --fix"
+    ],
+    "Frontend/src/**/*.{js,jsx,ts,tsx}": [
+      "npm run lint --prefix Frontend -- --fix"
+    ]
+  }
+}

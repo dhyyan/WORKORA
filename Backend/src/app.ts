@@ -7,6 +7,7 @@ import { UserRoutes } from "./frameWork/routes/client/clientRoutes"
 import { FreelancerRoutes } from './frameWork/routes/freelancers/freelancerRoutes'
 import { AdminRoutes } from './frameWork/routes/admin/adminRoutes'
 import { ChatRoute } from './frameWork/routes/chat/chatRoute'
+import helmet from 'helmet'
 
 //socket.io
 import { createServer } from 'http'
@@ -26,11 +27,12 @@ export class App {
     public io: SocketIoServer
     constructor() {
         this._app = express()
+        this._app.use(helmet())
         this._port = process.env.PORT || 3560
         this.httpServer = createServer(this._app)
         this.io = new SocketIoServer(this.httpServer, {
             cors: {
-                origin: "http://localhost:5173",
+                origin: process.env.FRONTEND_URL || "http://localhost:5173",
                 credentials: true
             }
         })
@@ -39,7 +41,7 @@ export class App {
         this._database.connectDB()
         this._app.use(
             cors({
-                origin: "http://localhost:5173",
+                origin: process.env.FRONTEND_URL || "http://localhost:5173",
                 credentials: true
             })
         )
