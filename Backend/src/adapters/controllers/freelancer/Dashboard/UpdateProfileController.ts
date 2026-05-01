@@ -8,35 +8,40 @@ export class FreelancerUpdateProfileController{
         this._updateProfileUseCase=updateProfileUseCase
     }
 
-    async update(req:Request,res:Response):Promise<void>{
-        const {name,email,phone,bio,experience,skills,gitHubUrl,linkedInUrl,profileImage}=req.body
+    async update(req: Request, res: Response): Promise<void> {
+        const { name, email, phone, bio, experience, skills, gitHubUrl, linkedInUrl, profileImage } = req.body
         console.log("data of updated user", req.body)
 
         try {
-            const {updatedFreelancer,success}= await this._updateProfileUseCase.update({name,email,phone,bio,experience,skills,gitHubUrl,linkedInUrl,profileImage})
-            if(!updatedFreelancer){
-             res.status(HttpStatus.BAD_REQUEST).json({message:"user while updating error",success:false})
+            const response = await this._updateProfileUseCase.update({ name, email, phone, bio, experience, skills, gitHubUrl, linkedInUrl, profileImage })
+            const { updatedFreelancer, success } = response
+            if (!updatedFreelancer) {
+                res.status(HttpStatus.BAD_REQUEST).json({ message: "user while updating error", success: false })
+                return
             }
-            const data={
-                _id:updatedFreelancer._id,
-                name:updatedFreelancer.name,
-                email:updatedFreelancer.email,
-                phone:updatedFreelancer.phone,
-                bio:updatedFreelancer.bio,
-                experience:updatedFreelancer.experience,
-                skills:updatedFreelancer.skills,
-                linkedInUrl:updatedFreelancer.linkedInUrl,
-                gitHubUrl:updatedFreelancer.gitHubUrl,
-                profileImage:updatedFreelancer.profileImage
-
+            const data = {
+                _id: updatedFreelancer._id,
+                name: updatedFreelancer.name,
+                email: updatedFreelancer.email,
+                phone: updatedFreelancer.phone,
+                role: "freelancer",
+                bio: updatedFreelancer.bio,
+                experience: updatedFreelancer.experience,
+                skills: updatedFreelancer.skills,
+                linkedInUrl: updatedFreelancer.linkedInUrl,
+                gitHubUrl: updatedFreelancer.gitHubUrl,
+                profileImage: updatedFreelancer.profileImage,
+                isSubscribed: updatedFreelancer.isSubscribed,
+                isBlocked: updatedFreelancer.isBlocked,
+                googleId: updatedFreelancer.googleId,
             }
-            res.status(HttpStatus.OK).json({message:"update profile success",data:data,success:true})
+            res.status(HttpStatus.OK).json({ message: "update profile success", updatedFreelancer: data, success: true })
         } catch (error) {
             console.log(error)
             res.status(HttpStatus.BAD_REQUEST).json({
                 message: 'error while update profile',
                 error: error instanceof Error ? error.message : 'error while updating profile'
-        })
+            })
+        }
     }
-}
 }

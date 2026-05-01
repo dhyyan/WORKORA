@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IGetUserUseCase } from "../../../../domain/interface/useCaseInterface/freelancer/dashboard/Profile/IGetProfileUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class FreelancerDataController {
     private _getUserUseCase: IGetUserUseCase
@@ -9,9 +10,14 @@ export class FreelancerDataController {
     }
 
     async userData(req: Request, res: Response): Promise<void> {
-        const { userId } = req.params
-        console.log("refresh id form controller",userId)
-        try { 
+        // const { userId } = req.params
+        if (!Types.ObjectId.isValid(req.params.userId)) {
+            res.status(HttpStatus.BAD_REQUEST).json({ message: "Invalid user ID" });
+            return;
+        }
+        const userId = new Types.ObjectId(req.params.userId)
+        console.log("refresh id form controller", userId)
+        try {
 
             const userDetails = await this._getUserUseCase.getUser({ userId })
 

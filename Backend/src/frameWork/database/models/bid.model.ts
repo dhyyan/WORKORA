@@ -7,4 +7,4 @@ export interface IBidModel extends Omit<Bid, '_id'>, Document {
     _id: ObjectId
 }
 
-export const bidModel = model<Bid>('bid', bidSchema)
+export const bidModel = model<Bid>('Bid', bidSchema)

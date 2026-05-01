@@ -7,13 +7,13 @@ interface ProtectedRouteProps {
   children: ReactNode;
 }
 
-const ClientProtectRoute = ({children}:ProtectedRouteProps) => {
-    const userData = useSelector((state: RootState) => state.clientAuth.client)
-    const userToken= useSelector((state:RootState)=>state.clientToken.token)
+const ClientProtectRoute = ({ children }: ProtectedRouteProps) => {
+  const userData = useSelector((state: RootState) => state.clientAuth.client)
+  const userToken = useSelector((state: RootState) => state.clientToken.token)
 
-    if(userData&&userToken){
-      return <Navigate to="/client" replace/>
-    }
+  if (!userData || !userToken) {
+    return <Navigate to="/client/login" replace />
+  }
   return <>{children}</>
 }
 

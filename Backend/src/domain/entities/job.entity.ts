@@ -1,7 +1,9 @@
-export interface Job {
-    _id?: string;
-    clientId: string ;  // from logged-in client
+import { Types } from "mongoose";
 
+export interface Job {
+    _id?: Types.ObjectId;
+    clientId: Types.ObjectId ;  // from logged-in client
+    freelancerId?:Types.ObjectId,
     title: string;
     summary: string;
     features?: string[];

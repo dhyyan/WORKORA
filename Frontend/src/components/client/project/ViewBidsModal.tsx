@@ -12,17 +12,20 @@ interface ViewBidsModalProps {
     onClose: () => void;
     project: IJob;
     onViewProposal: (bid: IBid) => void;
+    refresh?: boolean;
 }
 
 
-const ViewBidsModal: React.FC<ViewBidsModalProps> = ({ isOpen, onClose, project, onViewProposal }) => {
+const ViewBidsModal: React.FC<ViewBidsModalProps> = ({ isOpen, onClose, project, onViewProposal, refresh }) => {
     const [bids, setBids] = React.useState<IBid[]>([]);
-    console.log("view bid open")
+    console.log("view bid open",project)
     useEffect(() => {
-        console.log("project in bids modal", project)
+        console.log("project in bids modal", project._id)
         const fetchBids = async () => {
             if(!project?._id) return;
             try {
+                setBids([]);
+                console.log("woekke")
                 const response=await listBidsByProject(project._id);
                 console.log("bids response", response.bids)
                 setBids(response.bids);
@@ -31,7 +34,7 @@ const ViewBidsModal: React.FC<ViewBidsModalProps> = ({ isOpen, onClose, project,
             }
         }
         fetchBids();
-    }, [project]);
+    }, [project, refresh]);
 
     
 

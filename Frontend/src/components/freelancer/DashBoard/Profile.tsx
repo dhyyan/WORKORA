@@ -24,8 +24,8 @@ const Profile = () => {
     
     const fetchUser = async () => {
       try {
-        const response = await getUserDetails({ userId });
-        console.log("refresh data from profil",response.data.userDetails)
+        const response = await getUserDetails({ userId: userId.toString() });
+        console.log("refresh data from profil",response.data)
         setData(response.data.userDetails);
       } catch (error) {
         console.error(error);
@@ -35,8 +35,10 @@ const Profile = () => {
     fetchUser();
     console.log("calleddddd")
   },[userdata?._id]);
-  console.log("iddddey",userdata?._id)
-  console.log("iddddey",userdata)
+
+  // Use userdata from Redux as the primary source of truth, fallback to fetched data
+  const profileData = userdata || data;
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-8 lg:px-10">
       {/* Header */}
@@ -50,15 +52,15 @@ const Profile = () => {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* LEFT COLUMN */}
-        <div className="lg:col-span-4 xl:col-span-3">
+        <div className="md:col-span-4 xl:col-span-3">
           {/* Profile Card */}
           <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
             <div className="relative mx-auto mb-4 w-24 h-24">
               <img
                 src={
-                  data?.profileImage ||
+                  profileData?.profileImage ||
                   "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"
                 }
                 alt="Profile"
@@ -68,17 +70,17 @@ const Profile = () => {
             </div>
 
             <h2 className="text-xl font-semibold text-gray-900">
-              {data?.name || "—"}
+              {profileData?.name || "—"}
             </h2>
 
             <p className="text-sm text-emerald-600 font-medium">
-              Full Stack Developer
+              Freelancer
             </p>
 
             <div className="mt-6 space-y-3 text-sm text-gray-600 text-left">
-              <p>📧 {data?.email || "—"}</p>
-              <p>📞 {data?.phone || "—"}</p>
-              <p>📍 San Francisco, CA</p>
+              <p>📧 {profileData?.email || "—"}</p>
+              <p>📞 {profileData?.phone || "—"}</p>
+             
             </div>
 
             <NavLink to="/freelancer/dashboard/editprofile">
@@ -90,14 +92,14 @@ const Profile = () => {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="lg:col-span-8 xl:col-span-9 space-y-6">
+        <div className="md:col-span-8 xl:col-span-9 space-y-6">
           {/* About */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               About Me
             </h3>
             <p className="text-gray-600 leading-relaxed">
-              {data?.bio || "—"}
+              {profileData?.bio || "—"}
             </p>
           </div>
 
@@ -109,7 +111,7 @@ const Profile = () => {
                 Experience Level
               </h3>
               <span className="font-medium text-gray-800">
-                {data?.experience || "—"}
+                {profileData?.experience || "—"}
               </span>
             </div>
 
@@ -120,40 +122,38 @@ const Profile = () => {
               </h3>
 
               <div className="space-y-3">
-                <a className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition cursor-pointer">
-                  <span className="font-medium text-gray-700">LinkedIn</span>
-                  <span className="text-gray-400">↗</span>
-                </a>
-
-                {data?.linkedInUrl && (
+                {profileData?.linkedInUrl ? (
                   <a
                     target="_blank"
                     rel="noreferrer"
-                    href={data.linkedInUrl}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition cursor-pointer"
+                    href={profileData.linkedInUrl}
+                    className="flex items-center justify-between p-3 rounded-lg bg-blue-50/50 hover:bg-blue-50 transition border border-transparent hover:border-blue-100 group"
                   >
-                    <span className="font-medium text-gray-700">LinkedIn</span>
-                    <span className="text-gray-400">↗</span>
+                    <span className="font-medium text-blue-700">LinkedIn</span>
+                    <span className="text-blue-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
                   </a>
+                ) : (
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 text-gray-400 border border-gray-100">
+                    <span className="font-medium">LinkedIn</span>
+                    <span className="text-xs">Not added</span>
+                  </div>
                 )}
-              </div>
 
-                <div className="space-y-3">
-                <a className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition cursor-pointer">
-                  <span className="font-medium text-gray-700">GitHub</span>
-                  <span className="text-gray-400">↗</span>
-                </a>
-
-                {data?.linkedInUrl && (
+                {profileData?.gitHubUrl ? (
                   <a
                     target="_blank"
                     rel="noreferrer"
-                    href={data.linkedInUrl}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition cursor-pointer"
+                    href={profileData.gitHubUrl}
+                    className="flex items-center justify-between p-3 rounded-lg bg-gray-900/5 hover:bg-gray-900/10 transition border border-transparent hover:border-gray-200 group"
                   >
-                    <span className="font-medium text-gray-700">GitHub</span>
-                    <span className="text-gray-400">↗</span>
+                    <span className="font-medium text-gray-900">GitHub</span>
+                    <span className="text-gray-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
                   </a>
+                ) : (
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 text-gray-400 border border-gray-100">
+                    <span className="font-medium">GitHub</span>
+                    <span className="text-xs">Not added</span>
+                  </div>
                 )}
               </div>
 
@@ -167,8 +167,8 @@ const Profile = () => {
             </h3>
 
             <div className="flex flex-wrap gap-2">
-              {data?.skills?.length ? (
-                data.skills.map((skill, index) => (
+              {profileData?.skills?.length ? (
+                profileData.skills.map((skill, index) => (
                   <span
                     key={index}
                     className="px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700 font-medium"

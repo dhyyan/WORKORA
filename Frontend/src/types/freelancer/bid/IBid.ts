@@ -4,6 +4,7 @@ export interface IBid {
     freelancerId: string,
     coverLetter: string,
     bidAmount: number,
+    // deadline: string,
     status?: "pending" | "accepted" | "rejected",
     createdAt?: Date,
 }

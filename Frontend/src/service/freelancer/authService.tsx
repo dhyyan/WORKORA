@@ -99,3 +99,17 @@ export const freelancerGoogleAuth = async ({ token }: any) => {
         throw error;
     }
 }
+
+
+export const freelancerChangePassword = async ({ currentPassword, newPassword }: any) => {
+    try {
+        const response = await freelancerAxios.post("/freelancer/change-password", {
+            currentPassword,
+            newPassword
+        })
+        return response.data
+    } catch (error) {
+        console.error("Change password error:", error);
+        throw error;
+    }
+}

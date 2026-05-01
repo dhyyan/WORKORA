@@ -7,4 +7,4 @@ export interface IJobModel extends Omit<Job, '_id'>, Document {
     _id: ObjectId
 }
 
-export const jobModel = model<Job>('job', jobSchema)
+export const jobModel = model<Job>('Job', jobSchema)

@@ -6,4 +6,4 @@ export interface IFreelancerModel extends Omit<Freelancer, '_id'>, Document {
     _id: ObjectId
 }
 
-export const freelacerModel = model<Freelancer>('freelancer', freelancerSceema)
+export const freelacerModel = model<Freelancer>('Freelancer', freelancerSceema)

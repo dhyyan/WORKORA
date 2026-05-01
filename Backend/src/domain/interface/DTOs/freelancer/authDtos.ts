@@ -1,5 +1,7 @@
+import { Types } from "mongoose";
+
 export interface BaseFreelancerOutputDtos {
-    _id?: string,
+    _id?: Types.ObjectId,
     name: string,
     email: string,
     phone?: string,
@@ -12,8 +14,9 @@ export interface BaseFreelancerOutputDtos {
     profileImage?: string,
     bio?: string,
     isSubscribed?: boolean,
+    subscriptionExpiryDate?: Date | string,
     isBlocked?: boolean,
-    googleId?:string
+    googleId?:string,
     createdAt?: Date,
 }
 
@@ -50,7 +53,7 @@ export interface FreelancerRegisterInputDtos {
 }
 
 export interface FreelancerRegisterOutputDtos extends BaseFreelancerOutputDtos {
-    _id: string
+    _id: Types.ObjectId
 }
 
 
@@ -105,7 +108,14 @@ export interface FreelancerChangePassInputDtos{
 }
 
 export interface FreelancerChangePassOutputDtos extends BaseFreelancerOutputDtos{
-   _id:string
+   _id:Types.ObjectId
 }
+
+export interface AuthFreelancerChangePassInputDto {
+    userId: string | Types.ObjectId,
+    oldPassword?: string,
+    newPassword?: string
+}
+
 
 

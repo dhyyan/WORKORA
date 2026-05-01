@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProjectModalWrapper from './ProjectModalWrapper';
 import { Save } from 'lucide-react';
 import { updateJob } from '../../../service/client/Project/jobService';
+import { listCategoryService } from '../../../service/admin/Dashboard/client/clientService';
 import type { IJob } from '../../../types/client/jobs/IJob';
 
 interface EditProjectModalProps {
@@ -21,6 +22,21 @@ interface EditProjectModalProps {
 const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, project, refresh }) => {
     const [jobUpdate, setJobUpdate] = useState<IJob | null>(null);
     const [newFeature, setNewFeature] = useState<string>("");
+    const [availableCategories, setAvailableCategories] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await listCategoryService();
+                if (response && response.categories) {
+                    setAvailableCategories(response.categories.filter((cat: any) => cat.isListed !== false));
+                }
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
 
@@ -38,8 +54,8 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, pr
         if (!jobUpdate.features || !feature.trim()) return;
         setJobUpdate({ ...jobUpdate, features: [...jobUpdate.features, feature.trim()] });
     }
-    
-    
+
+
 
     // ✅ remove feature
     const removeFeature = (index: number) => {
@@ -79,10 +95,10 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, pr
                         onChange={(e) => setJobUpdate({ ...jobUpdate, category: e.target.value })}
                         className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#10C0A2] focus:ring-2 focus:ring-[#10C0A2]/20 outline-none transition-all bg-white"
                     >
-                        <option>Web Design</option>
-                        <option>Mobile Development</option>
-                        <option>Marketing</option>
-                        <option>Content Writing</option>
+                        <option value="">Select Category</option>
+                        {availableCategories.map((cat) => (
+                            <option key={cat._id} value={cat.name}>{cat.name}</option>
+                        ))}
                     </select>
                 </div>
 
@@ -165,7 +181,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, pr
 
                         className="flex items-center gap-2 px-6 py-2.5 bg-[#10C0A2] hover:bg-[#0EA085] text-white text-sm font-semibold rounded-xl shadow-lg shadow-teal-500/20 transition-all active:scale-95 cursor-pointer"
                     >
-                    
+
                         <Save size={18} />
                         Save Changes
                     </button>

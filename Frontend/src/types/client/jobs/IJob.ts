@@ -1,3 +1,4 @@
+
 export interface IJob {
   _id?: string;
   clientId?: string;
@@ -7,8 +8,8 @@ export interface IJob {
   duration?: string;
   deadline?: string;
   summary: string;
-  skill?:string[],
+  skill?: string[],
   features?: string[];
-  status?: "open" 
+  status?: "open" | "assigned" | "closed";
   createdAt?: Date;
 }

@@ -1,5 +1,7 @@
+import { Types } from "mongoose";
+
 export interface Client {
-  _id?: string;
+  _id?: Types.ObjectId;
 
   name: string;
   email: string;
@@ -14,6 +16,9 @@ export interface Client {
 
   isBlocked?: boolean;
   isSubscribed?: boolean;
+  freeJobsCount?: number;
+  stripeSubscriptionId?: string;
+  subscriptionExpiryDate?: Date;
 
   createdAt?: Date;
 }

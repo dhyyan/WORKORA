@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { updateProfile } from "../../../service/freelancer/Dashboard/profileService";
@@ -17,13 +17,26 @@ const EditProfilePage = () => {
     const [experience, setExperience] = useState<string>(userData?.experience ?? "")
     const [skills, setSkills] = useState<string[]>(userData?.skills ?? [])
     const [skillvalue, setSkillValue] = useState("")
-    const [githubUrl, setGitHubUrl] = useState(userData?.gitHubUrl)
+    const [gitHubUrl, setGitHubUrl] = useState(userData?.gitHubUrl)
     const [linkedInUrl, setLinkedInUrl] = useState(userData?.linkedInUrl)
 
     console.log("skills", skills)
 
     const [profileImage, setProfileImage] = useState(userData?.profileImage)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (userData) {
+            setName(userData.name ?? "");
+            setPhone(userData.phone ?? "");
+            setBio(userData.bio ?? "");
+            setExperience(userData.experience ?? "");
+            setSkills(userData.skills ?? []);
+            setGitHubUrl(userData.gitHubUrl ?? "");
+            setLinkedInUrl(userData.linkedInUrl ?? "");
+            setProfileImage(userData.profileImage);
+        }
+    }, [userData]);
 
     const exp = [
         "Beginner",
@@ -87,7 +100,7 @@ const EditProfilePage = () => {
             bio,
             experience,
             skills,
-            githubUrl,
+            gitHubUrl,
             linkedInUrl,
             profileImage
         }
@@ -95,10 +108,14 @@ const EditProfilePage = () => {
         try {
             const response = await updateProfile(data)
 
-            console.log("responseeee", response.data)
-            dispatch(addFreelancer(response.data))
-            toast.success("update profile success")
-            navigate("/freelancer/dashboard",{replace:true})
+            console.log("responseeee", response.updatedFreelancer)
+            if (response.updatedFreelancer) {
+                dispatch(addFreelancer(response.updatedFreelancer))
+                toast.success("Profile updated successfully")
+                navigate("/freelancer/dashboard", { replace: true })
+            } else {
+                toast.error("Failed to update profile data")
+            }
 
         } catch (error) {
             console.error(error)
@@ -115,34 +132,34 @@ const EditProfilePage = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Left Profile Preview */}
                 <div className="bg-white border rounded-xl p-6 text-center">
-                    <img
-                        src={profileImage ? profileImage : "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
-                        alt="Profile"
-                        className="w-32 h-32 ml-16 rounded-full object-cover border-4 border-purple-200 shadow-lg"
-                    />
-                    <div className="relative">
-                        <input
-                            type="file"
-                            onChange={handleUpdateProfile}
-                            // disabled={isUploading || isUpdating}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
-                            accept="image/*"
-                        />
+                    <div className="flex flex-col items-center">
+                        <div className="relative mb-4">
+                            <img
+                                src={profileImage ? profileImage : "https://t3.ftcdn.net/jpg/07/95/95/14/360_F_795951406_h17eywwIo36DU2L8jXtsUcEXqPeScBUq.jpg"}
+                                alt="Profile"
+                                className="w-32 h-32 rounded-full object-cover border-4 border-purple-200 shadow-lg"
+                            />
+                            <div className="absolute inset-0 w-full h-full">
+                                <input
+                                    type="file"
+                                    onChange={handleUpdateProfile}
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    accept="image/*"
+                                />
+                            </div>
+                        </div>
                         <button
                             type="button"
-                            // disabled={isUploading || isUpdating}
-                            className="bg-purple-100 hover:bg-purple-200 disabled:bg-gray-100 text-purple-700 disabled:text-gray-400 px-6 py-2 rounded-lg transition-colors duration-200 font-medium"
+                            className="bg-purple-100 hover:bg-purple-200 text-purple-700 px-6 py-2 rounded-lg transition-colors duration-200 font-medium w-full max-w-[200px]"
                         >
                             change photo
-                            {/* {isUploading ? 'Uploading...' : 'Change Photo'} */}
                         </button>
-                    </div>
 
-                    <h3 className="text-xl font-bold"></h3>
-                    <p className="text-gray-500 text-sm mb-4">Freelancer</p>
+                        <p className="text-gray-500 text-sm mt-4 mb-4">Freelancer</p>
+                    </div>
 
                     <div className="text-left space-y-3">
                         <div>
@@ -154,7 +171,7 @@ const EditProfilePage = () => {
                             />
                         </div>
 
-                      
+
                     </div>
 
                     {/* Section 5: Professional Links */}
@@ -163,27 +180,32 @@ const EditProfilePage = () => {
                             Professional Links
                         </h4>
                         <div className="space-y-4">
-                            <input
-                                name="github"
-                                value={githubUrl}
-                                onChange={(e) => setGitHubUrl(e.target.value)}
-                                placeholder="https://github.com/username"
-                            //   leftIcon={<Github className="h-4 w-4" />}
-                            />
-                            <input
-                                //   label="LinkedIn Profile"
-                                name="linkedin"
-                                value={linkedInUrl}
-                                onChange={(e) => setLinkedInUrl(e.target.value)}
-                                placeholder="https://linkedin.com/in/username"
-                            //   leftIcon={<Linkedin className="h-4 w-4" />}
-                            />
+                            <div className="space-y-1">
+                                <label className="text-xs font-medium text-gray-500 ml-1">GitHub Profile</label>
+                                <input
+                                    name="github"
+                                    value={gitHubUrl}
+                                    onChange={(e) => setGitHubUrl(e.target.value)}
+                                    className="w-full border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                                    placeholder="https://github.com/username"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-medium text-gray-500 ml-1">LinkedIn Profile</label>
+                                <input
+                                    name="linkedin"
+                                    value={linkedInUrl}
+                                    onChange={(e) => setLinkedInUrl(e.target.value)}
+                                    className="w-full border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                                    placeholder="https://linkedin.com/in/username"
+                                />
+                            </div>
                         </div>
                     </section>
                 </div>
 
                 {/* Right Editable Form */}
-                <div className="lg:col-span-2 bg-white border rounded-xl p-6 space-y-6">
+                <div className="md:col-span-2 bg-white border rounded-xl p-6 space-y-6">
                     {/* Personal Information */}
                     <div>
                         <h4 className="font-semibold mb-3">Personal Information</h4>
@@ -205,7 +227,8 @@ const EditProfilePage = () => {
                             <input
                                 placeholder="Location"
                                 value="New York, USA"
-                                className="border px-3 py-2 rounded sm:col-span-2"
+                                readOnly
+                                className="border px-3 py-2 rounded sm:col-span-2 bg-gray-50 cursor-not-allowed"
                             />
                         </div>
                     </div>
@@ -228,12 +251,16 @@ const EditProfilePage = () => {
                     {/* Experience Level */}
                     <div>
                         <h4 className="font-semibold mb-3">Experience Level</h4>
-                        <div className="flex gap-3">
+                        <div className="flex flex-wrap gap-3">
 
                             {exp.map((item, index) => (
                                 <div key={index}>
                                     <button
-                                        className="pr-20 border"
+                                        className={`px-4 py-2 border rounded-lg transition-all duration-200 ${
+                                            experience === item 
+                                            ? "bg-purple-600 text-white border-purple-600 shadow-md" 
+                                            : "bg-white text-gray-700 border-gray-300 hover:border-purple-300"
+                                        }`}
                                         onClick={() => setExperience(item)}>
                                         {item}
                                     </button>
@@ -279,11 +306,11 @@ const EditProfilePage = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex justify-end gap-3 pt-4 border-t">
-                        <button className="px-4 py-2 border rounded">
+                    <div className="flex flex-wrap justify-center sm:justify-end gap-3 pt-6 border-t">
+                        <button className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                             Cancel
                         </button>
-                        <button className="px-4 py-2 bg-emerald-600 text-white rounded" onClick={() => handleSubmit()}>
+                        <button className="px-8 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition-all duration-200 font-medium" onClick={() => handleSubmit()}>
                             Save Changes
                         </button>
                     </div>

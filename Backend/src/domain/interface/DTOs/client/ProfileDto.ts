@@ -1,3 +1,4 @@
+import { Types } from "mongoose"
 import { BaseClientOutputDtos } from "./AuthDto"
 
  export interface UpateProfileInputDtos{
@@ -13,7 +14,7 @@ import { BaseClientOutputDtos } from "./AuthDto"
  }
 
  export interface ClientDataInputDtos{
-  userId:string
+  userId:Types.ObjectId
  }
 
  export interface ClientDataOutputDtos{

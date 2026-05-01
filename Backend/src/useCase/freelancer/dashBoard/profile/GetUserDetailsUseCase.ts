@@ -32,8 +32,9 @@ export class GetUserUseCase implements IGetUserUseCase {
                 bio: user.bio,
                 rating: user.rating,
                 isSubscribed: user.isSubscribed,
+                subscriptionExpiryDate: user.subscriptionExpiryDate,
                 isBlocked: user.isBlocked,
-
+                googleId: user.googleId,
             }
             return {
                 userDetails

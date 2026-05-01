@@ -13,9 +13,7 @@ const NavBar = () => {
               >
                 <MenuIcon className="w-6 h-6" />
               </button>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Admin Dashboard
-              </h2>
+          
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">

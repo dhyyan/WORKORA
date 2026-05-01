@@ -154,3 +154,16 @@ export const clientGoogleAuth=async({token}:{ token: string })=>{
         throw error;
     }
 }
+
+export const clientChangePassword = async ({ currentPassword, newPassword }: any) => {
+    try {
+        const response = await clientAxios.post("/client/change-password", {
+            currentPassword,
+            newPassword
+        })
+        return response.data
+    } catch (error) {
+        console.error("Change password error:", error);
+        throw error;
+    }
+}

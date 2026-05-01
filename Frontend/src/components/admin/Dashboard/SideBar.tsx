@@ -1,13 +1,27 @@
-import { BarChart3Icon, LogOutIcon, MenuIcon, UsersIcon } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { BarChart3Icon, LogOutIcon, MenuIcon, UsersIcon, BadgeIndianRupee, LayoutGrid, AlertCircle, CreditCard } from 'lucide-react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { removeAdmin } from '../../../store/slice/admin/AdminSlice'
+import { adminRemoveToken } from '../../../store/slice/admin/AdminTokenSlice'
 
 const SideBar = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        dispatch(removeAdmin())
+        dispatch(adminRemoveToken())
+        navigate('/admin/login')
+    }
 
     const menuItems = [
         { id: "dashboard", icon: BarChart3Icon, label: "Dashboard" },
         { id: "clients", icon: UsersIcon, label: "Clients" },
         { id: "freelancers", icon: UsersIcon, label: "Freelancers" },
-
+        { id: "escrow", icon: BadgeIndianRupee, label: "Escrow" },
+        { id: "categories", icon: LayoutGrid, label: "Category" },
+        { id: "concerns", icon: AlertCircle, label: "Concerns" },
+        { id: "subscriptions", icon: CreditCard, label: "Subscriptions" }
     ]
     return (
         <>
@@ -19,7 +33,7 @@ const SideBar = () => {
                 >
                     <div className="flex flex-col h-full">
                         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                            <h1 className="text-2xl font-bold text-gray-900">FreelanceHub</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">Workora</h1>
                             <button className="md:hidden">
                                 <MenuIcon className="w-6 h-6" />
                             </button>
@@ -67,7 +81,7 @@ const SideBar = () => {
                         </nav>
                         <div className="p-4 border-t border-gray-200">
                             <button
-
+                                onClick={handleLogout}
                                 className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             >
                                 <LogOutIcon className="w-5 h-5" />

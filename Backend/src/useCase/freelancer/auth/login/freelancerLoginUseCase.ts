@@ -59,6 +59,7 @@ export class FreelancerLoginUseCase implements IFreelancerLoginUseCase {
             profileImage: user.profileImage,
             bio: user.bio,
             isSubscribed: user.isSubscribed,
+            subscriptionExpiryDate: user.subscriptionExpiryDate,
             isBlocked: user.isBlocked,
             googleId: user.googleId
         }

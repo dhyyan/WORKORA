@@ -1,41 +1,57 @@
 import { NavLink } from "react-router-dom"
 import {
   Briefcase,
-  //   LayoutDashboard,
   LogOut,
   User,
   Wallet,
-  Lock
+  Lock,
+  ShieldCheck,
+  X
 } from "lucide-react"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../../store/store"
 
-const LeftSideBar = () => {
+interface LeftSideBarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const LeftSideBar = ({ isOpen, onClose }: LeftSideBarProps) => {
+  const userData = useSelector((state: RootState) => state.clientAuth.client)
   const menuItems = [
-    // { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "", label: "Profile", icon: User },
-    { id: "projects", label: "My Projects", icon: Briefcase },
-    { id: "wallet", label: "Wallet", icon: Wallet },
-    { id: "password", label: "Change Password", icon: Lock },
-  ]
+    { id: "/client/profile", label: "Profile", icon: User },
+    { id: "/client/profile/projects", label: "My Projects", icon: Briefcase },
+    { id: "/client/profile/wallet", label: "Wallet", icon: Wallet },
+    { id: "/client/profile/password", label: "Change Password", icon: Lock },
+    { id: "/client/subscription", label: "Subscription", icon: ShieldCheck },
+  ].filter(item => {
+    if (item.id.includes("password") && userData?.googleId) return false
+    return true
+  })
 
   return (
-    <aside className="w-72 h-full bg-[#f8fafc] border-r border-gray-200 px-6 py-6 flex flex-col">
-
-      {/* Logo */}
-      <div className="flex items-center gap-3 mb-10">
-        <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center">
-          <span className="text-white font-bold text-lg">W</span>
-        </div>
-        <span className="text-2xl font-bold text-gray-800">
-          Workora
-        </span>
-      </div>
+    <aside className={`
+      fixed inset-y-0 left-0 z-40 w-72 bg-[#f8fafc] border-r border-gray-200 px-6 py-6 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-full
+      ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    `}>
+      {/* Mobile Close Button */}
+      <button 
+        className="lg:hidden absolute top-4 right-4 p-2 text-gray-500 hover:bg-gray-100 rounded-lg"
+        onClick={onClose}
+      >
+        <X className="w-6 h-6" />
+      </button>
 
       {/* Menu */}
       <nav className="flex-1 space-y-2">
         {menuItems.map(({ id, label, icon: Icon }) => (
           <NavLink
             key={id}
-            to={id} // ✅ correct for nested routing
+            to={id}
+            end={id === "/client/profile"}
+            onClick={() => {
+              if (window.innerWidth < 1024) onClose();
+            }}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl transition-all
               ${isActive

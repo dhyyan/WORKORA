@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IJobDeleteUseCase } from "../../../../domain/interface/useCaseInterface/client/jobs/IJobDeleteUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 export class JobDeleteController {
     private _jobDeleteUseCase: IJobDeleteUseCase
@@ -9,7 +10,7 @@ export class JobDeleteController {
     }
     async delete(req: Request, res: Response): Promise<void> {
         try {
-            const id = req.params.id
+            const id = new Types.ObjectId(req.params.id)
             console.log("delete id",id)
             const response = await this._jobDeleteUseCase.deleteJob({ id })
             if (!response) {

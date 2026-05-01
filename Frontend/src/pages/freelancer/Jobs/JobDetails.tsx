@@ -1,26 +1,44 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, DollarSign, Calendar, Star, Shield, Globe } from 'lucide-react';
-import { fetchJobById } from '../../../service/freelancer/Jobs/JobService';
+import { ArrowLeft, Clock, DollarSign, Calendar } from 'lucide-react';
+import { fetchJobById, milestoneListService } from '../../../service/freelancer/Jobs/JobService';
 import Navbar from '../../../components/freelancer/DashBoard/Navbar';
 import type { IJob } from '../../../types/client/jobs/IJob';
 import ApplyBidModal from './ApplyBidModal';
 import toast from 'react-hot-toast';
 import { createBidService } from '../../../service/freelancer/bid/bidService';
+import { createSubscriptionSession } from '../../../service/subscription/subscriptionService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
+import type { IMilestone, SubmitMiestone } from '../../../types/client/milestone/IMilestone';
+import SubmitWorkModal from './SubmitWorkModal';
+import { submitMilestoneService, createConcernService } from '../../../service/freelancer/milestone/milestoneService';
+import type { IUser } from '../../../types/auth/IUser';
+import RaiseDisputeModal from './RaiseDisputeModal';
+import SubscriptionLimitModal from '../../../components/common/SubscriptionLimitModal';
+
 
 const JobDetails = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [job, setJob] = useState<IJob | null>(null);
+    const [user, setUser] = useState<IUser | null>(null)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+    const [milestones, setMilestones] = useState<IMilestone[]>([])
+    const [isSubmitWorkModalOpen, setIsSubmitWorkModalOpen] = useState(false);
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [isRaiseDisputeModalOpen, setIsRaiseDisputeModalOpen] = useState(false);
+    const [selectedMilestone, setSelectedMilestone] = useState<IMilestone | null>(null);
+    const [refresh, setRefresh] = useState(false)
+    const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
 
-    const userData= useSelector((state:RootState)=>state.freelancerAuth.freelancer);
 
+    const userData = useSelector((state: RootState) => state.freelancerAuth.freelancer);
+
+    //list job refresh
     useEffect(() => {
         const loadJob = async () => {
             if (!id) return;
@@ -28,7 +46,8 @@ const JobDetails = () => {
                 const data = await fetchJobById(id);
                 // Handle different response structures gracefully
                 const jobData = data?.response || data?.job || data;
-                setJob(jobData);
+                setJob(jobData.jobDetail);
+                setUser(jobData.user)
             } catch (err) {
                 console.error(err);
                 setError('Failed to load job details');
@@ -38,28 +57,80 @@ const JobDetails = () => {
         };
         loadJob();
     }, [id]);
+    console.log("jobbbe", job)
 
-    const handleSubmitProposal = async(data: { coverLetter: string; bidAmount: string }) => {
+
+    //list milestone 
+    useEffect(() => {
+        const listMilestone = async () => {
+            if (!id) return
+            try {
+                const response = await milestoneListService({ jobId: id })
+                console.log("response of milestone", response)
+                setMilestones(response.milestones)
+            } catch (error) {
+                console.error(error);
+                setError('Failed to load job details');
+            }
+        }
+
+        listMilestone()
+    }, [id, refresh])
+
+
+
+    const handleSubmitProposal = async (data: { coverLetter: string; bidAmount: string }) => {
         console.log("Proposal Submitted:", data);
         try {
-            if(!userData||!userData._id){
+            if (!userData || !userData._id) {
                 toast.error("Please login to apply for a job.");
                 return;
             }
             const response = await createBidService({
                 jobId: id!,
-                freelancerId: userData?._id, // This should come from authenticated user context
+                freelancerId: userData?._id,
                 coverLetter: data.coverLetter,
                 bidAmount: parseFloat(data.bidAmount),
             });
-            console.log("response create bid",response)
+            console.log("response create bid", response)
             toast.success("Proposal sent successfully!");
-            
-        } catch (error) {
+            setIsApplyModalOpen(false);
+
+        } catch (error: any) {
             console.error("Error submitting proposal:", error);
-            toast.error("Failed to send proposal. Please try again.");
+            const errorMessage = error.response?.data?.message || error.message;
+
+            if (errorMessage?.includes("limit reached")) {
+                setIsLimitModalOpen(true);
+            } else {
+                toast.error(errorMessage || "Failed to submit proposal");
+            }
+
         }
-        // Here you would typically call an API to submit the proposal
+    };
+
+    const handleSubmitWork = async (data: SubmitMiestone) => {
+        try {
+            const response = await submitMilestoneService(data)
+            console.log('response of submit milestone', response)
+            setRefresh(prev => !prev)
+
+        } catch (error) {
+
+            console.log("error while submit milestone ", error);
+        }
+    };
+
+    const handleRaiseDisputeSubmit = async (data: { contractId: string, description: string, amount: number, milestoneId: string }) => {
+        try {
+            const response = await createConcernService(data)
+            console.log('response of raise dispute', response)
+            toast.success("Dispute raised successfully!")
+            setRefresh(prev => !prev)
+        } catch (error) {
+            console.log("error while raising dispute ", error);
+            toast.error("Failed to raise dispute")
+        }
     };
 
     if (loading) {
@@ -83,7 +154,7 @@ const JobDetails = () => {
             </div>
         );
     }
-
+    console.log("mileee", milestones)
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
             <Navbar />
@@ -152,6 +223,60 @@ const JobDetails = () => {
                                 </div>
                             )}
                         </div>
+
+                        {/* Milestones Card */}
+                        {milestones && milestones.length > 0 && (
+                            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm space-y-6">
+                                <h3 className="text-lg font-bold text-gray-900 mb-4">Project Milestones</h3>
+                                <div className="space-y-4">
+                                    {milestones.map((milestone) => (
+                                        <div key={milestone._id || milestone.title} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50">
+                                            <div className="space-y-1">
+                                                <h4 className="font-semibold text-gray-800">{milestone.title}</h4>
+                                                <div className="flex items-center gap-3 text-sm">
+                                                    <span className="text-emerald-600 font-medium">${milestone.amount}</span>
+                                                    <span className="text-gray-400">•</span>
+                                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${milestone.status === 'funded' ? 'bg-blue-100 text-blue-700' :
+                                                        milestone.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                                                            milestone.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                                                'bg-gray-100 text-gray-700'
+                                                        }`}>
+                                                        {milestone.status}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {milestone.status === 'rejected' ? (
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedMilestone(milestone);
+                                                        setIsRejectModalOpen(true);
+                                                    }}
+                                                    className="px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all focus:ring-2 focus:outline-none bg-red-600 hover:bg-red-700 text-white shadow-red-200 hover:shadow-red-300 active:scale-95 flex items-center justify-center gap-2"
+                                                >
+                                                    View
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => {
+                                                        if (milestone.status === 'funded') {
+                                                            setSelectedMilestone(milestone);
+                                                            setIsSubmitWorkModalOpen(true);
+                                                        }
+                                                    }}
+                                                    disabled={milestone.status === 'pending' || milestone.status === 'submited' || milestone.status === 'approved' || milestone.status === 'released'}
+                                                    className={`px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all focus:ring-2 focus:outline-none ${milestone.status === 'funded'
+                                                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200 hover:shadow-emerald-300 active:scale-95'
+                                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                                        }`}
+                                                >
+                                                    Submit Work
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column: Client & Action */}
@@ -193,31 +318,27 @@ const JobDetails = () => {
 
                             <div className="space-y-5">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                                        C
+                                    <div className="w-11 h-12 bg-gradient-to-br  to-gray-900 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                                        <img src={user?.profileImage} alt="" />
                                     </div>
                                     <div>
                                         <p className="font-bold text-gray-900">Client Info</p>
-                                        <p className="text-xs text-gray-500">Member since 2024</p>
+                                        {/* <p className="text-xs text-gray-500">Member since 2024</p> */}
                                     </div>
                                 </div>
 
                                 <div className="space-y-3 pt-2">
                                     <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                                        <span className="font-medium">4.9/5 Rating</span>
+                                        {/* <Star className="w-4 h-4 text-amber-400 fill-amber-400" /> */}
+                                        <span className="font-medium">{user?.name}</span>
                                     </div>
                                     <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <MapPin className="w-4 h-4 text-gray-400" />
-                                        <span>New York, USA</span>
+                                        {/* <MapPin className="w-4 h-4 text-gray-400" /> */}
+                                        <span>{user?.email} </span>
                                     </div>
                                     <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <Shield className="w-4 h-4 text-emerald-500" />
-                                        <span className="text-emerald-700 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">Payment Verified</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <Globe className="w-4 h-4 text-gray-400" />
-                                        <span>30+ Jobs Posted</span>
+                                        {/* <Shield className="w-4 h-4 text-emerald-500" /> */}
+                                        <span className="text-emerald-700 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">{user?.phone}</span>
                                     </div>
                                 </div>
                             </div>
@@ -237,8 +358,95 @@ const JobDetails = () => {
                     />
                 )}
 
+                {/* Submit Work Modal */}
+                {selectedMilestone && (
+                    <SubmitWorkModal
+                        isOpen={isSubmitWorkModalOpen}
+                        onClose={() => setIsSubmitWorkModalOpen(false)}
+                        milestoneTitle={selectedMilestone.title}
+                        milestoneId={selectedMilestone._id!}
+                        onSubmit={handleSubmitWork}
+                    />
+                )}
+
+                {/* Reject Reason Modal */}
+                {isRejectModalOpen && selectedMilestone && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                        <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-xl border border-gray-100 flex flex-col gap-6 transform transition-all">
+                            <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                                <div>
+                                    <h3 className="text-xl font-bold text-gray-900">Changes Requested</h3>
+                                    <p className="text-sm text-gray-500 mt-1">{selectedMilestone.title}</p>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setIsRejectModalOpen(false);
+                                        setSelectedMilestone(null);
+                                    }}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
+                                >
+                                    <span className="text-xl font-bold">&times;</span>
+                                </button>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">Reason for modification</label>
+                                <div className="p-4 bg-red-50 rounded-xl border border-red-100 text-gray-700 whitespace-pre-wrap min-h-[100px] leading-relaxed">
+                                    {selectedMilestone.reason || 'No reason provided by the client.'}
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 mt-2">
+                                <button
+                                    onClick={() => {
+                                        setIsRejectModalOpen(false);
+                                        setIsRaiseDisputeModalOpen(true);
+                                    }}
+                                    className="px-6 py-2.5 border-2 border-red-500 text-red-600 hover:bg-red-50 rounded-xl transition-all font-semibold flex items-center justify-center"
+                                >
+                                    Raise Dispute
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIsRejectModalOpen(false);
+                                        setIsSubmitWorkModalOpen(true);
+                                    }}
+                                    className="px-6 py-2.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl transition-all font-semibold shadow-sm hover:shadow-md flex items-center justify-center"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Raise Dispute Modal */}
+                {selectedMilestone && (
+                    <RaiseDisputeModal
+                        isOpen={isRaiseDisputeModalOpen}
+                        onClose={() => {
+                            setIsRaiseDisputeModalOpen(false);
+                            setSelectedMilestone(null);
+                        }}
+                        milestoneTitle={selectedMilestone.title}
+                        contractId={selectedMilestone.contractId}
+                        milestoneId={selectedMilestone._id!}
+                        amount={selectedMilestone.amount}
+                        onSubmit={handleRaiseDisputeSubmit}
+                    />
+                )}
+                
+                <SubscriptionLimitModal 
+                    isOpen={isLimitModalOpen}
+                    onClose={() => setIsLimitModalOpen(false)}
+                    title="Free Application Limit Reached"
+                    description="You've applied to 5 free jobs. Upgrade to Workora Pro to apply for unlimited jobs and access premium projects."
+                    role="freelancer"
+                />
+
             </div>
         </div>
+
     );
 };
 

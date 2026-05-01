@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IBidsListsUseCase } from "../../../../domain/interface/useCaseInterface/client/bid/iBidsListsUseCase";
 import { HttpStatus } from "../../../../domain/entities/httpStatus";
+import { Types } from "mongoose";
 
 
 export class BidViewController {
@@ -13,7 +14,7 @@ export class BidViewController {
 
     async listBids(req: Request, res: Response) {
         try {
-            const jobId = req.params.jobId
+            const jobId = new Types.ObjectId(req.params.jobId)
             console.log("jobid",jobId)
             const bids = await this._bidListUseCase.listBids({ jobId })
             if (!bids || bids.bids.length === 0) {

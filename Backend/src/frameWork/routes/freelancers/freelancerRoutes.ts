@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
-import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController } from "../../DI/freelancerInject";
+import { freelancerChangePassController, freelancerDataController, freelancerForgotPassController, freelancerForgotPassOtpController, freelancerLoginController, freelancerResendOtpController, freelancerSendOtpController, freelancerUpdateProfileController, freelancerVerifyOtpController, freelancerGoogleController, freelancerJobListController, bidCreateController, listAcceptJobsController, listBidController, listCompletedJobsController, milestoneSubmitController, walletController, concernController, authFreelancerChangePasswordController, subscriptionController } from "../../DI/freelancerInject";
+
 import { tokenVerifyMiddleware } from "../../../adapters/middlewares/tokenVerifyMiddleware";
 import { authMiddleware } from "../../../adapters/middlewares/authMiddleware";
 
@@ -45,6 +46,11 @@ export class FreelancerRoutes {
             freelancerUpdateProfileController.update(req, res)
         })
 
+        this.FreelancerRoutes.post("/change-password", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            authFreelancerChangePasswordController.changePassword(req, res)
+        })
+
+
         this.FreelancerRoutes.get("/userdata/:userId", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
             freelancerDataController.userData(req, res)
         })
@@ -63,6 +69,34 @@ export class FreelancerRoutes {
 
         this.FreelancerRoutes.post("/createbid", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
             bidCreateController.createBid(req,res)
+        })
+
+        this.FreelancerRoutes.get("/list/accept/jobs/:freelancerId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
+            listAcceptJobsController.list(req,res)
+        })
+
+        this.FreelancerRoutes.get("/list/bids/:freelancerId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
+            listBidController.list(req,res)
+        })
+
+        this.FreelancerRoutes.get("/list/completed/jobs/:freelancerId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
+            listCompletedJobsController.list(req,res)
+        })
+
+        this.FreelancerRoutes.post("/milestone/sumbmit/:milestoneId", tokenVerifyMiddleware, authMiddleware,(req:Request,res:Response)=>{
+            milestoneSubmitController.submit(req,res)
+        })
+
+        this.FreelancerRoutes.get("/wallet/:userId", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            walletController.getWallet(req, res)
+        })
+
+        this.FreelancerRoutes.post("/concern", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            concernController.create(req, res)
+        })
+
+        this.FreelancerRoutes.post("/subscription", tokenVerifyMiddleware, authMiddleware, (req: Request, res: Response) => {
+            subscriptionController.createSubscription(req, res)
         })
     }
 }

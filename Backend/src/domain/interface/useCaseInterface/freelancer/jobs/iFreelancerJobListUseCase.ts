@@ -1,6 +1,8 @@
-import { JobListOutPutDtos } from "../../../DTOs/freelancer/JobDtos";
+import { Types } from "mongoose";
+import { JobListOutPutDtos, JobViewOutputDtos, ListJobInputDtos } from "../../../DTOs/freelancer/JobDtos";
+// import { BaseJobOutPutDtos, JobViewOutputDtos } from "../../../DTOs/client/JobDto";
 
 export interface IFreelancerListJobUseCase {
-    listJobs(): Promise<JobListOutPutDtos>
-    findJobById(id: string): Promise<BaseJobOutPutDtos | null>
+    listJobs(input:ListJobInputDtos): Promise<JobListOutPutDtos>
+    findJobById(id: Types.ObjectId): Promise<JobViewOutputDtos | null>
 }

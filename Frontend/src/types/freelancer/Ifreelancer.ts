@@ -13,6 +13,7 @@ export interface IFreelancer{
     profileImage?: string,
     bio?: string,
     isSubscribed?: boolean,
+    subscriptionExpiryDate?: string | Date,
     isBlocked?: boolean,
     googleId:string,
     createdAt?: Date,
