@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 // Replace this with your actual backend URL if it is different
-const BACKEND_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3560';
+const BACKEND_URL = import.meta.env.VITE_API_BASEURL
 
 // Initialize the socket connection
 // We set autoConnect to false so it doesn't immediately connect when imported.
