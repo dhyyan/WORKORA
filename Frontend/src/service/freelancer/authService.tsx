@@ -87,7 +87,7 @@ export const freelancerResendOtp = async ({ email }: IOtp) => {
 }
 
 //google auth  
-export const freelancerGoogleAuth = async ({ token }: any) => {
+export const freelancerGoogleAuth = async ({ token }: { token: string }) => {
     try {
         console.log("google token", token)
         const response = await freelancerAxios.post("/freelancer/google", {
@@ -101,7 +101,7 @@ export const freelancerGoogleAuth = async ({ token }: any) => {
 }
 
 
-export const freelancerChangePassword = async ({ currentPassword, newPassword }: any) => {
+export const freelancerChangePassword = async ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
     try {
         const response = await freelancerAxios.post("/freelancer/change-password", {
             currentPassword,

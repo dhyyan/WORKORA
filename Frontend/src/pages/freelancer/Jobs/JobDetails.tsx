@@ -8,7 +8,7 @@ import type { IJob } from '../../../types/client/jobs/IJob';
 import ApplyBidModal from './ApplyBidModal';
 import toast from 'react-hot-toast';
 import { createBidService } from '../../../service/freelancer/bid/bidService';
-import { createSubscriptionSession } from '../../../service/subscription/subscriptionService';
+// import { createSubscriptionSession } from '../../../service/subscription/subscriptionService';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import type { IMilestone, SubmitMiestone } from '../../../types/client/milestone/IMilestone';
@@ -96,9 +96,10 @@ const JobDetails = () => {
             toast.success("Proposal sent successfully!");
             setIsApplyModalOpen(false);
 
-        } catch (error: any) {
-            console.error("Error submitting proposal:", error);
-            const errorMessage = error.response?.data?.message || error.message;
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string } }; message?: string };
+            console.error("Error submitting proposal:", err);
+            const errorMessage = err.response?.data?.message || err.message;
 
             if (errorMessage?.includes("limit reached")) {
                 setIsLimitModalOpen(true);

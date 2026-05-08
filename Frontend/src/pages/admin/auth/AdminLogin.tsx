@@ -56,9 +56,9 @@ const AdminLogin = () => {
       } else {
         toast.error("Invalid credentials or server error")
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Login error:", error)
-      toast.error(error?.response?.data?.message || "Login failed. Please try again.")
+      toast.error((error as { response?: { data?: { message?: string } } })?.response?.data?.message || "Login failed. Please try again.")
     } finally {
       setIsLoading(false)
     }

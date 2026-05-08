@@ -25,7 +25,7 @@ const SignUp = () => {
     const {
         register,
         handleSubmit,
-        watch,
+        getValues,
         formState: { errors, isSubmitting }
     } = useForm<ISignUp>();
 
@@ -206,7 +206,7 @@ const SignUp = () => {
                                         type={showConfirmPassword ? "text" : "password"}
                                         {...register("confirmPassword", {
                                             required: "Confirm Password is required",
-                                            validate: (value) => value === watch("password") || "Passwords do not match"
+                                            validate: (value) => value === getValues("password") || "Passwords do not match"
                                         })}
                                         placeholder="Confirm your password"
                                         className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 transition"

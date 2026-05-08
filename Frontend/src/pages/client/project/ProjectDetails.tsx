@@ -114,9 +114,10 @@ const ProjectDetails = () => {
                 console.error("Payment checkout failed. Response:", response);
                 toast.error("Payment checkout failed. Please try again.");
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.log(error)
-            const errorMsg = error.response?.data?.error || "Payment checkout failed";
+            const err = error as { response?: { data?: { error?: string } } };
+            const errorMsg = err.response?.data?.error || "Payment checkout failed";
             if (errorMsg.includes("must convert to at least 50 cents") || errorMsg.includes("amount_too_small")) {
                 toast.error("Amount too small. The minimum payment allowed is ₹50.");
             } else {
@@ -159,7 +160,7 @@ const ProjectDetails = () => {
 
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } }
     };
 
     const getStatusColor = (status?: string) => {

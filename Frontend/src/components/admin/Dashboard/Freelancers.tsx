@@ -16,14 +16,7 @@ const Freelancers = () => {
   const [totalPages, setTotalPages] = useState(4);
   const limit = 5;
 
-  const refreshFreelancers = async () => {
-    const response = await listFreelancers(currentPage, limit, search);
-    console.log("resssss", response)
-    if (response?.response) {
-      setFreelancers(response.response.freelancers || []);
-      setTotalPages(Math.ceil((response.response.totalFreelancer || 0) / limit));
-    }
-  };
+
 
   const handleToggleStatus = async (id: string, isBlocked: boolean) => {
     // console.log("claeedddd", id)
@@ -44,11 +37,17 @@ const Freelancers = () => {
   }
 
   useEffect(() => {
+    let isMounted = true;
     const loadFreelancers = async () => {
-      await refreshFreelancers()
-    }
-    loadFreelancers()
-  }, [block, currentPage, search]);
+      const response = await listFreelancers(currentPage, limit, search);
+      if (isMounted && response?.response) {
+        setFreelancers(response.response.freelancers || []);
+        setTotalPages(Math.ceil((response.response.totalFreelancer || 0) / limit));
+      }
+    };
+    loadFreelancers();
+    return () => { isMounted = false; };
+  }, [block, currentPage, limit, search]);
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CheckCircle, Clock, IndianRupee, ArrowUpRight, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Pagination from '../../common/Pagination';
@@ -16,7 +16,7 @@ const EscrowList = () => {
     const [isReleasing, setIsReleasing] = useState(false);
     const limit = 5;
 
-    const fetchMilestones = async () => {
+    const fetchMilestones = useCallback(async () => {
         try {
             const res = await listMilestoneService(currentPage, limit);
             if (res && res.response) {
@@ -27,11 +27,11 @@ const EscrowList = () => {
         } catch (error) {
             console.error("Failed to fetch milestones:", error);
         }
-    };
+    }, [currentPage]);
 
     useEffect(() => {
         fetchMilestones();
-    }, [currentPage]);
+    }, [fetchMilestones]);
 
     const handleReleaseClick = (id: string) => {
         setSelectedMilestoneId(id);

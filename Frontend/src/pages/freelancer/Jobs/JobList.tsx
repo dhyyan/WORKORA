@@ -58,8 +58,8 @@ const FreelancerJobListing = () => {
                 const response = await listCategoryService();
                 if (response && response.categories) {
                     const categoryNames = response.categories
-                        .filter((cat: any) => cat.isListed !== false)
-                        .map((cat: any) => cat.name);
+                        .filter((cat: { isListed?: boolean; name: string }) => cat.isListed !== false)
+                        .map((cat: { name: string }) => cat.name);
                     setCategories(categoryNames);
                 }
             } catch (error) {
@@ -75,8 +75,7 @@ const FreelancerJobListing = () => {
         const loadJobs = async () => {
             try {
                 const data = await fetchJobs(selectedCategory, selectedSkills, priceRange, currentPage, limit, activeSearch);
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const responseData = (data as any)?.response || data;
+                const responseData = (data as { response?: { jobs?: IJob[]; totalJobs?: number } })?.response || data;
                 const jobsData = responseData?.jobs || (Array.isArray(data) ? data : []);
                 const totalCount = responseData?.totalJobs || 0;
 

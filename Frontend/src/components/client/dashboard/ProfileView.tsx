@@ -19,13 +19,13 @@ const ProfileView = () => {
   const [data, setData] = useState<IClient | null>(null);
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (userData) {
-      setName(userData.name || "");
-      setPhone(userData.phone || "");
-      setProfileImage(userData.profileImage || "");
-    }
-  }, [userData]);
+  const [prevUserData, setPrevUserData] = useState(userData);
+  if (userData && userData !== prevUserData) {
+    setPrevUserData(userData);
+    setName(userData.name || "");
+    setPhone(userData.phone || "");
+    setProfileImage(userData.profileImage || "");
+  }
 
   const handleUpdateProfile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

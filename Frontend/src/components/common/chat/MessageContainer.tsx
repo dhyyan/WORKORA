@@ -6,6 +6,7 @@ import MessageInput from './MessageInput';
 import socket from '../../../hooks/ConnectSocketIo';
 import { clientChatHistoryService, clientChatService } from '../../../service/chat/chatService';
 import { Check, CheckCheck } from 'lucide-react';
+import type { IChat } from '../../../types/chat/IChat';
 
 interface IMessage {
     _id?: string;
@@ -47,7 +48,7 @@ const MessageContainer = () => {
                 const response = await clientChatService(currentUserId);
                 const chats = response?.data?.users;
                 if (chats) {
-                    const currentChat = chats.find((chat: any) => {
+                    const currentChat = chats.find((chat: IChat) => {
                         const cid = typeof chat.clientId === 'object' ? chat.clientId._id : chat.clientId;
                         const fid = typeof chat.freelancerId === 'object' ? chat.freelancerId._id : chat.freelancerId;
                         return cid === params.clientId && fid === params.freelancerId;
@@ -162,7 +163,7 @@ const MessageContainer = () => {
                 user={{
                     _id: receiverId,
                     name: recipientInfo?.name || 'Chat Partner',
-                    avatar: (recipientInfo as any)?.profileImage || recipientInfo?.avatar || '',
+                    avatar: (recipientInfo as { profileImage?: string; avatar?: string })?.profileImage || recipientInfo?.avatar || '',
                     isOnline: true,
                     lastSeen: 'Online'
                 }}
@@ -185,8 +186,8 @@ const MessageContainer = () => {
                             >
                                 {!isMine && (
                                     <div className="w-8 h-8 rounded-full flex-shrink-0 mb-1 ring-2 ring-white shadow-sm overflow-hidden bg-emerald-100 flex items-center justify-center border border-emerald-200">
-                                        {(recipientInfo as any)?.profileImage ? (
-                                            <img src={(recipientInfo as any).profileImage} alt="" className="w-full h-full object-cover" />
+                                        {(recipientInfo as { profileImage?: string })?.profileImage ? (
+                                            <img src={(recipientInfo as { profileImage?: string }).profileImage} alt="" className="w-full h-full object-cover" />
                                         ) : (
                                             <span className="text-[10px] font-bold text-emerald-700 uppercase">
                                                 {recipientInfo?.name?.charAt(0) || '?'}

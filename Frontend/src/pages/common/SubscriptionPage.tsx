@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, Shield, Zap, Star, Loader2, Sparkles } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../store/store';
@@ -69,9 +69,9 @@ const SubscriptionPage = ({ role, showNavbar = true }: { role: 'client' | 'freel
             } else {
                 toast.error("Failed to initiate subscription");
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            toast.error(error.response?.data?.message || "Something went wrong");
+            toast.error((error as { response?: { data?: { message?: string } } }).response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }

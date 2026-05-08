@@ -41,7 +41,7 @@ const ChatSidebar = ({ isOpen, onClose }: UserSidebarProps) => {
         fetchChatUsers();
     }, [userId]);
 
-    const handleUserSelect = (clientId: string, freelancerId: string, otherUser: any) => {
+    const handleUserSelect = (clientId: string, freelancerId: string, otherUser: { _id: string; name: string; profileImage: string }) => {
         const path = userRole === 'client'
             ? `/client/chat/${freelancerId}/${clientId}`
             : `/freelancer/chat/${freelancerId}/${clientId}`;
@@ -52,13 +52,13 @@ const ChatSidebar = ({ isOpen, onClose }: UserSidebarProps) => {
     // Deduplicate chats based on the other user's ID
     const uniqueChats = chatUsers.reduce((acc: IChat[], current) => {
         const currentOtherId = userRole === 'client'
-            ? (typeof current.freelancerId === 'object' ? (current.freelancerId as any)._id : current.freelancerId)
-            : (typeof current.clientId === 'object' ? (current.clientId as any)._id : current.clientId);
+            ? (typeof current.freelancerId === 'object' ? (current.freelancerId as { _id: string })._id : current.freelancerId)
+            : (typeof current.clientId === 'object' ? (current.clientId as { _id: string })._id : current.clientId);
 
         const isDuplicate = acc.some(chat => {
             const otherId = userRole === 'client'
-                ? (typeof chat.freelancerId === 'object' ? (chat.freelancerId as any)._id : chat.freelancerId)
-                : (typeof chat.clientId === 'object' ? (chat.clientId as any)._id : chat.clientId);
+                ? (typeof chat.freelancerId === 'object' ? (chat.freelancerId as { _id: string })._id : chat.freelancerId)
+                : (typeof chat.clientId === 'object' ? (chat.clientId as { _id: string })._id : chat.clientId);
             return otherId === currentOtherId;
         });
 
@@ -124,7 +124,7 @@ const ChatSidebar = ({ isOpen, onClose }: UserSidebarProps) => {
                                 <motion.div
                                     key={chat._id}
                                     whileTap={{ scale: 0.98 }}
-                                    onClick={() => handleUserSelect(clientId, freelancerId, otherUser)}
+                                    onClick={() => otherUserObj && handleUserSelect(clientId, freelancerId, { _id: otherUserObj._id, name: otherUserObj.name, profileImage: otherUserObj.profileImage || "" })}
                                     className={`px-4 py-4 cursor-pointer transition-all duration-300 rounded-2xl border relative group ${isActive
                                         ? 'bg-emerald-50 shadow-sm border-emerald-200'
                                         : 'border-transparent hover:bg-gray-50 hover:border-gray-200'

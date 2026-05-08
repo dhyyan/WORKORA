@@ -155,7 +155,7 @@ export const clientGoogleAuth=async({token}:{ token: string })=>{
     }
 }
 
-export const clientChangePassword = async ({ currentPassword, newPassword }: any) => {
+export const clientChangePassword = async ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) => {
     try {
         const response = await clientAxios.post("/client/change-password", {
             currentPassword,

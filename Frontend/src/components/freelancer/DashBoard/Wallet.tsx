@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Wallet as WalletIcon, ArrowUpRight, ArrowDownLeft, Calendar, Loader2, IndianRupee } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -16,13 +16,7 @@ const Wallet: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const limit = 5;
 
-    useEffect(() => {
-        if (userId) {
-            fetchWalletData(currentPage);
-        }
-    }, [userId, currentPage]);
-
-    const fetchWalletData = async (page: number) => {
+    const fetchWalletData = useCallback(async (page: number) => {
         setLoading(true);
         try {
             const response = await getWallet(userId!, page, limit);
@@ -34,7 +28,13 @@ const Wallet: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [userId]);
+
+    useEffect(() => {
+        if (userId) {
+            fetchWalletData(currentPage);
+        }
+    }, [userId, currentPage, fetchWalletData]);
 
     if (loading && !walletData) {
         return (

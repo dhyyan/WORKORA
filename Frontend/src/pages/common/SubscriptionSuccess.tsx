@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -15,7 +15,7 @@ const SubscriptionSuccess = ({ role }: { role: 'client' | 'freelancer' }) => {
 
         const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-        const interval: any = setInterval(function() {
+        const interval: ReturnType<typeof setInterval> = setInterval(function() {
             const timeLeft = animationEnd - Date.now();
 
             if (timeLeft <= 0) {

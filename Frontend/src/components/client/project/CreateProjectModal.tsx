@@ -26,7 +26,7 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
     const [summary, setSummary] = useState("")
     const [deadline, setDeadline] = useState("")
     const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
-    const [availableCategories, setAvailableCategories] = useState<any[]>([]);
+    const [availableCategories, setAvailableCategories] = useState<{ _id: string; name: string; isListed?: boolean }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -36,7 +36,7 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
             try {
                 const response = await listCategoryService();
                 if (response && response.categories) {
-                    setAvailableCategories(response.categories.filter((cat: any) => cat.isListed !== false));
+                    setAvailableCategories(response.categories.filter((cat: { isListed?: boolean }) => cat.isListed !== false));
                 }
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -115,9 +115,10 @@ const CreateProjectModal = ({ isOpen, onClose, refresh }: CreateProjectModalProp
                 refresh();
                 onClose();
             }
-        } catch (error: any) {
-            console.error(error);
-            const errorMessage = error.response?.data?.message || error.message;
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string } }; message?: string };
+            console.error(err);
+            const errorMessage = err.response?.data?.message || err.message;
             
             if (errorMessage?.includes("limit reached")) {
                 setIsLimitModalOpen(true);

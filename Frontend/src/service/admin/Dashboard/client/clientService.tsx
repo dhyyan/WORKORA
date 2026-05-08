@@ -83,9 +83,9 @@ export const toggleCategoryStatusService=async(id:string)=>{
 }
 
 //concerns
-export const listConcernService=async()=>{
+export const listConcernService=async(p: number = 1, l: number = 5)=>{
     try {
-        const response=await adminAxios.get("/admin/concern")
+        const response=await adminAxios.get("/admin/concern", { params: { page: p, limit: l } })
         return response.data
     } catch (error) {
         console.log("error in list concern",error)

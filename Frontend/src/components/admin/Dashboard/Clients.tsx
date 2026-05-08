@@ -13,15 +13,7 @@ const Clients = () => {
     const [totalPages, setTotalPages] = useState(1);
     const limit = 5;
 
-    const refreshClients = async () => {
 
-        const response = await listClients(currentPage, limit, search);
-        console.log("response", response)
-        if (response?.response) {
-            setUsers(response.response.clients || []);
-            setTotalPages(Math.ceil((response.response.totalClients || 0) / limit));
-        }
-    };
 
 
     const handleToggleStatus = async (id: string, isBlocked: boolean) => {
@@ -44,11 +36,17 @@ const Clients = () => {
 
     //list clients
     useEffect(() => {
+        let isMounted = true;
         const loadClients = async () => {
-            await refreshClients()
-        }
-        loadClients()
-    },[block, currentPage, search])
+            const response = await listClients(currentPage, limit, search);
+            if (isMounted && response?.response) {
+                setUsers(response.response.clients || []);
+                setTotalPages(Math.ceil((response.response.totalClients || 0) / limit));
+            }
+        };
+        loadClients();
+        return () => { isMounted = false; };
+    }, [block, currentPage, limit, search]);
 
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm">

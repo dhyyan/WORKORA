@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { AxiosError } from "axios"
 
 // import { u } from 'framer-motion/client';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 interface ViewProposalModalProps {
     isOpen: boolean;
@@ -20,7 +20,7 @@ interface ViewProposalModalProps {
 
 const ViewProposalModal: React.FC<ViewProposalModalProps> = ({ isOpen, onClose, refresh, bid }) => {
     const [freelancerDetails, setFreelancerDetails] = useState<IFreelancer>({} as IFreelancer)
-    const navigate = useNavigate()
+
 
     useEffect(() => {
         if (!bid || !bid.freelancerId) return;

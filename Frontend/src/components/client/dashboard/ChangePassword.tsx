@@ -42,8 +42,8 @@ const ChangePassword = () => {
       setCurrentPassword('')
       setNewPassword('')
       setConfirmPassword('')
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to update password")
+    } catch (error: unknown) {
+      toast.error((error as { response?: { data?: { message?: string } } })?.response?.data?.message || "Failed to update password")
     } finally {
       setLoading(false)
     }

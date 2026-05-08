@@ -22,14 +22,14 @@ interface EditProjectModalProps {
 const EditProjectModal: React.FC<EditProjectModalProps> = ({ isOpen, onClose, project, refresh }) => {
     const [jobUpdate, setJobUpdate] = useState<IJob | null>(null);
     const [newFeature, setNewFeature] = useState<string>("");
-    const [availableCategories, setAvailableCategories] = useState<any[]>([]);
+    const [availableCategories, setAvailableCategories] = useState<{ _id: string; name: string; isListed?: boolean }[]>([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await listCategoryService();
                 if (response && response.categories) {
-                    setAvailableCategories(response.categories.filter((cat: any) => cat.isListed !== false));
+                    setAvailableCategories(response.categories.filter((cat: { isListed?: boolean }) => cat.isListed !== false));
                 }
             } catch (error) {
                 console.error("Error fetching categories:", error);

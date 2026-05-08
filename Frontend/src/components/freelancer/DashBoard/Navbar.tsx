@@ -9,7 +9,7 @@ import type { IProfile } from '../../../types/freelancer/Dashboard/IProfile'
 import type { RootState } from "../../../store/store";
 
 interface NavbarProps {
-  onMenuClick: () => void;
+  onMenuClick?: () => void;
 }
 
 const Navbar = ({ onMenuClick }: NavbarProps) => {

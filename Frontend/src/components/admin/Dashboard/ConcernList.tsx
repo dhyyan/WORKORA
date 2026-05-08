@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { CheckCircle, AlertCircle, Eye, ArrowUpRight, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Pagination from '../../common/Pagination';
@@ -20,32 +20,26 @@ const ConcernList = () => {
     const [selectedConcern, setSelectedConcern] = useState<IConcern | null>(null);
     const limit = 5;
 
-    const fetchConcerns = async () => {
+
+
+    const fetchConcerns = useCallback(async () => {
         try {
-            const res = await listConcernService();
-            if (res && res.success) {
-                // Mocking pagination for now since backend doesn't paginate
-                let allConcerns: IConcern[] = [];
-                if (Array.isArray(res.concern)) {
-                    allConcerns = res.concern;
-                } else if (res.concern && Array.isArray(res.concern.concern)) {
-                    allConcerns = res.concern.concern;
-                }
-
-                setTotalPages(Math.ceil(allConcerns.length / limit) || 1);
-
-                const startIndex = (currentPage - 1) * limit;
-                setConcerns(allConcerns.slice(startIndex, startIndex + limit));
+            const response = await listConcernService(currentPage, limit);
+            if (response?.response) {
+                setConcerns(response.response.concern || []);
+                setTotalPages(Math.ceil((response.response.totalConcern || 0) / limit) || 1);
             }
         } catch (error) {
             console.error("Failed to fetch concerns:", error);
-            toast.error("Failed to fetch concerns");
         }
-    };
+    }, [currentPage, limit]);
 
     useEffect(() => {
-        fetchConcerns();
-    }, [currentPage]);
+        const timer = setTimeout(() => {
+            fetchConcerns();
+        }, 0);
+        return () => clearTimeout(timer);
+    }, [fetchConcerns]);
 
     const handleViewClick = (concern: IConcern) => {
         setSelectedConcern(concern);
