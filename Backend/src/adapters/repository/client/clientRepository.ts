@@ -1,9 +1,8 @@
-import { Query, Types } from "mongoose";
+import {  Types } from "mongoose";
 import { Client } from "../../../domain/entities/client.entity";
 import { IClientRepository } from "../../../domain/interface/repositoryInterface/IClientRepository";
 import { clientModel } from "../../../frameWork/database/models/client.model";
 import { BaseRepository } from "../BaseRepo/baseRepository";
-import { jobModel } from "../../../frameWork/database/models/job.model";
 
 export class ClientRepository extends BaseRepository<Client> implements IClientRepository {
     constructor() {

@@ -41,7 +41,7 @@ export const verifyGoogleToken = async (token: string) => {
 
         } catch (accessTokenError) {
             console.error("Access Token verification also failed:", accessTokenError);
-            throw new Error("Invalid Google Token");
+            throw new Error("Invalid Google Token", { cause: accessTokenError });
         }
     }
 };

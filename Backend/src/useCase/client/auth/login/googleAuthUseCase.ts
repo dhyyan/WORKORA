@@ -19,8 +19,7 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
 
 
     async googleSign(input: GoogeleAuthInputDtos): Promise<GoogeleAuthOutPutDtos> {
-  try {
-    const payload = await verifyGoogleToken(input.token);
+  const payload = await verifyGoogleToken(input.token);
 
     if (!payload || !payload.email) {
       throw new Error("Invalid Google token");
@@ -79,9 +78,6 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
       accessToken,
       refreshToken,
     };
-  } catch (error) {
-    throw error;
-  }
 }
 
 }

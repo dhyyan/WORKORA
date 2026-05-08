@@ -8,16 +8,12 @@ export class JobViewUseCase implements IJobViewUseCase {
         this._jobRepository = jobRepository
     }
     async viewJob(input: JobViewInputDtos): Promise<JobViewOutputDtos> {
-        try {
-            if (!input) throw new Error("job id is missing")
+        if (!input) throw new Error("job id is missing")
             const job = await this._jobRepository.findById(input.id)
             console.log("job view detail in use case",job)
             if(!job)throw new Error("job not found")
                 return{
                     job
                 }
-        } catch (error) {
-            throw error
-        }
     }
 }

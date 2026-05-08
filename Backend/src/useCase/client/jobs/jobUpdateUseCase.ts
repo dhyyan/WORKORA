@@ -11,9 +11,7 @@ export class JobUpdateUseCase implements IJobUpdateUseCase {
         const job = input
         if (!job._id) throw new Error("job id is missing")
         console.log("input in usecase", job._id)
-        try {
-
-            const findJob = await this._jobRepository.findById(job._id!)
+        const findJob = await this._jobRepository.findById(job._id!)
             console.log("findeeeyyyy", findJob)
             if (!findJob) throw new Error('job in this id not found')
 
@@ -25,9 +23,5 @@ export class JobUpdateUseCase implements IJobUpdateUseCase {
             return {
                 jobs
             }
-
-        } catch (error) {
-            throw error
-        }
     }
 }

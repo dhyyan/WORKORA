@@ -9,8 +9,7 @@ export class CategoryUsecase implements ICategoryUsecase{
         this._categoryRepository=categoryRepository
     }
     async createCategory(input: ICategoryInputDtos): Promise<ICategoryOutputDtos> {
-        try {
-            if(!input)throw new Error("category name is missing")
+        if(!input)throw new Error("category name is missing")
 
                 const category=await this._categoryRepository.create(input)
                 console.log("category",category)
@@ -22,15 +21,10 @@ export class CategoryUsecase implements ICategoryUsecase{
                         isListed:category.isListed,
                         createdAt:category.createdAt
                     }
-
-        } catch (error) {
-            throw error
-        }
     }
 
     async listCategory(): Promise<ICategoryListOutputDtos> {
-        try {
-            const categories = await this._categoryRepository.findAll()
+        const categories = await this._categoryRepository.findAll()
             const mappedCategories = categories.map(cat => ({
                 _id: cat._id!,
                 name: cat.name,
@@ -38,21 +32,14 @@ export class CategoryUsecase implements ICategoryUsecase{
                 createdAt: cat.createdAt
             }))
             return { categories: mappedCategories }
-        } catch (error) {
-            throw error
-        }
     }
 
     async toggleCategoryStatus(id: string): Promise<boolean> {
-        try {
-            const category = await this._categoryRepository.findById(new Types.ObjectId(id));
+        const category = await this._categoryRepository.findById(new Types.ObjectId(id));
             if (!category) throw new Error("Category not found");
 
             const updatedStatus = !category.isListed;
             const updated = await this._categoryRepository.update(new Types.ObjectId(id), { isListed: updatedStatus });
             return !!updated;
-        } catch (error) {
-            throw error
-        }
     }
 }

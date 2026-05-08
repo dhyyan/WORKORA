@@ -1,9 +1,7 @@
-import { create } from "axios";
 import { BidListInputDtos, BidListOutputDtos } from "../../../domain/interface/DTOs/client/bidDtos";
 import { BaseBidOutPutDtos } from "../../../domain/interface/DTOs/freelancer/bidDtos";
 import { IBidRepository } from "../../../domain/interface/repositoryInterface/IBidRepository";
 import { IBidsListsUseCase } from "../../../domain/interface/useCaseInterface/client/bid/iBidsListsUseCase";
-import { IFreelancerRepository } from "../../../domain/interface/repositoryInterface/IFreelancerRepository";
 
 export class BidListUseCase implements IBidsListsUseCase {
     private _bidRepository: IBidRepository
@@ -16,9 +14,7 @@ export class BidListUseCase implements IBidsListsUseCase {
     async listBids(input: BidListInputDtos): Promise<BidListOutputDtos> {
 
         if (!input.jobId) throw new Error("jobId is required")
-            try {
-                
-        const jobId = input.jobId
+            const jobId = input.jobId
         const bidsData = await this._bidRepository.findAll({ jobId: jobId })
        
         console.log("bids find", bidsData)
@@ -37,9 +33,6 @@ export class BidListUseCase implements IBidsListsUseCase {
             }
         })
         return { bids }
-            } catch (error) {
-                throw error
-            }
 
     }
 

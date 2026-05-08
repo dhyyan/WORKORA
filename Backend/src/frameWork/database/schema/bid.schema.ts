@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema} from "mongoose";
 import { Bid } from "../../../domain/entities/bid.entity";
 
 export const bidSchema = new Schema<Bid>({

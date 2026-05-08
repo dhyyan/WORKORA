@@ -13,13 +13,13 @@ export class ClientDataController{
             console.log("loooo")
             const userId = new Types.ObjectId(req.params.userId);
 
-            const {client,success}=await this._clientDataUseCase.fetchData({userId})
+            const {client}=await this._clientDataUseCase.fetchData({userId})
             if(!client){
                 res.status(HttpStatus.FORBIDDEN).json({message:"user not fect"})
             }
             res.status(HttpStatus.OK).json({message:"user fetch success",data:client})
             
-        } catch (error) {
+        } catch (_error) {
               res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .json({ message: "something went wrong" });

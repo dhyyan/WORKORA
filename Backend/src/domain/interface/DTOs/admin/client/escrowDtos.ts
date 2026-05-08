@@ -1,5 +1,4 @@
 import { Types } from "mongoose"
-import { BaseMilestoneOutputDtos } from "../../client/milestoneDtos"
 
 export interface IPaymentReleseInputDtos{
     milestoneId:Types.ObjectId 

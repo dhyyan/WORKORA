@@ -24,7 +24,7 @@ export class AmdinLoginUseCase implements IClientLoginUseCase {
                  if (!adminExist.password) {
             throw new Error("Password authentication not available");
         }
-            let isMatch = await this._hashPasswordService.comparePassword(password, adminExist?.password)
+            const isMatch = await this._hashPasswordService.comparePassword(password, adminExist?.password)
 
             if (!isMatch) throw new Error("password not match")
             const ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY as string;

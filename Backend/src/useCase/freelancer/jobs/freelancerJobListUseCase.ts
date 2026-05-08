@@ -13,8 +13,7 @@ export class FreelancerJobListUseCase implements IFreelancerListJobUseCase {
         this._clientRepository = clientRepository
     }
     async listJobs({ category, skills, priceRange, page, limit, search }: ListJobInputDtos): Promise<JobListOutPutDtos> {
-        try {
-            console.log("f job list useCase called")
+        console.log("f job list useCase called")
             const response = await this._jobRepository.listJob("open", category, skills, priceRange, page, limit, search);
             console.log('response of job list  :>> ', response);
             if (!response || !response.jobs) throw new Error("connot find any jobs")
@@ -33,14 +32,10 @@ export class FreelancerJobListUseCase implements IFreelancerListJobUseCase {
             }));
 
             return { jobs, totalJobs: response.totalJobs }
-        } catch (error) {
-            throw error
-        }
     }
 
     async findJobById(id: Types.ObjectId): Promise<JobViewOutputDtos | null> {
-        try {
-            console.log("job id", id)
+        console.log("job id", id)
             const job = await this._jobRepository.findById(id);
             if (!job) throw new Error("job in this id not found")
 
@@ -68,8 +63,5 @@ export class FreelancerJobListUseCase implements IFreelancerListJobUseCase {
                 profileImage: findUser.profileImage
             }
             return { jobDetail, user };
-        } catch (error) {
-            throw error;
-        }
     }
 }

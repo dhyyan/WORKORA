@@ -30,7 +30,7 @@ export class EmailService implements IEmailService {
             console.log(`otp sended to ${email}`)
         } catch (error) {
             console.log('error while sending otp', error)
-            throw new Error('failed to send otp')
+            throw new Error('failed to send otp', { cause: error })
         }
     }
 }

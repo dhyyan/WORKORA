@@ -9,8 +9,7 @@ export class ListAcceptJobsUsecse implements IListAcceptJobUseCase{
         this._jobRepository=jobRepository
     }
     async listJobs(input: ListAcceptJobInputDtos): Promise<ListAcceptJobOutputDtos> {
-        try {
-            const jobList=await this._jobRepository.findAll({freelancerId:input.freelancerId,status:"assigned"})
+        const jobList=await this._jobRepository.findAll({freelancerId:input.freelancerId,status:"assigned"})
             if(!jobList)throw new Error("jobs in this freelancer id not found")
 
                 console.log("listed jobs",jobList)
@@ -30,8 +29,5 @@ export class ListAcceptJobsUsecse implements IListAcceptJobUseCase{
             }));
 
             return { jobs };
-        } catch (error) {
-            throw error
-        }
     }
 }

@@ -16,7 +16,7 @@ export class FreelancerGoogleController {
             // it will be { freelancer, accessToken, refreshToken } effectively.
             // The DTO might overlap or sharing DTOs might cause property naming mismatch if not careful.
             // In the usecase I returned `client: freelancer`.
-            const { client, accessToken, refreshToken } = await this._googleAuthUseCase.googleSign({ token })
+            const { client, accessToken} = await this._googleAuthUseCase.googleSign({ token })
 
             if (client) {
                 res.status(HttpStatus.OK).json({ message: "google sign success", data: client, accessToken })

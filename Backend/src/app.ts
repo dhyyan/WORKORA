@@ -30,7 +30,7 @@ export class App {
         this._app.use(helmet())
         this._port = process.env.PORT || 3560
         this.httpServer = createServer(this._app)
-        const origin = process.env.FRONTEND_URL ;
+        const origin = process.env.FRONTEND_URL;
         
         this.io = new SocketIoServer(this.httpServer, {
             cors: {
@@ -134,4 +134,4 @@ export class App {
     }
 }
 
-const app = new App()
+const _app = new App()

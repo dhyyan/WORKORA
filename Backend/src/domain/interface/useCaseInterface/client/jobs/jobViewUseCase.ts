@@ -1,4 +1,3 @@
-import { promises } from "dns";
 import { JobViewInputDtos, JobViewOutputDtos } from "../../../DTOs/client/JobDto";
 
 export interface IJobViewUseCase{

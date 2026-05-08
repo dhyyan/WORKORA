@@ -16,7 +16,7 @@ export class ConcernListController {
             }else{
                 res.status(HttpStatus.NOT_FOUND).json({success:false,message:"No concern found"})
             }
-        } catch (error) {
+        } catch (_error) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({success:false,message:"Internal server error"})
         }
     }

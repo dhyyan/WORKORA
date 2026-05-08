@@ -1,4 +1,4 @@
-import mongoose, { Types } from "mongoose";
+import  { Types } from "";
 import { Freelancer } from "../../../domain/entities/freelancerntity";
 import { IFreelancerRepository } from "../../../domain/interface/repositoryInterface/IFreelancerRepository";
 import { freelacerModel } from "../../../frameWork/database/models/freelancerModel";

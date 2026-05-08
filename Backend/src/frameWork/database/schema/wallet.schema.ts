@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema} from "mongoose";
 import { IWallet } from "../../../domain/entities/wallet.entity";
 
 export const walletSchema = new Schema<IWallet>(

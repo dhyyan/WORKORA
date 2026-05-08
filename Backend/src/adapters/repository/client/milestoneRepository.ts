@@ -1,6 +1,5 @@
 import { IMilestone } from "../../../domain/entities/milestone.entity";
 import { IMilestoneRepository } from "../../../domain/interface/repositoryInterface/IMilestoneRepository";
-import { jobModel } from "../../../frameWork/database/models/job.model";
 import { milestoneModel } from "../../../frameWork/database/models/milestone.modes";
 import { BaseRepository } from "../BaseRepo/baseRepository";
 import { Model } from "mongoose";

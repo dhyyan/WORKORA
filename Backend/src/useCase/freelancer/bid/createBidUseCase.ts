@@ -12,8 +12,7 @@ export class CreateBidUseCase implements ICreateBidUseCase {
     }
     async create(input: BidCreateInputDtos): Promise<BidCreateOutPutDtos> {
         console.log("data in bid create in usecase", input)
-        try {
-            const freelancer = await this._freelancerRepository.findById(input.freelancerId);
+        const freelancer = await this._freelancerRepository.findById(input.freelancerId);
             if (!freelancer) throw new Error("Freelancer not found");
 
             if (!freelancer.isSubscribed && (freelancer.freeApplicationsCount ?? 0) >= 5) {
@@ -45,9 +44,5 @@ export class CreateBidUseCase implements ICreateBidUseCase {
                 status: "pending"
             }
             return { bid }
-            
-        } catch (error) {
-            throw error
-        }
     }
 }

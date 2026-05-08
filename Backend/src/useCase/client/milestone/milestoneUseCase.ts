@@ -12,8 +12,7 @@ export class MilestoneUseCase implements IMilestoneUseCase {
         this._milestoneRepository = milestoneRepository
     }
     async createMilestone(input: CreateMilestoneInputDtos): Promise<CreateMilestoneOutputDtos> {
-        try {
-            const contract = await this._contractRepository.findContractByJobId(input.jobId)
+        const contract = await this._contractRepository.findContractByJobId(input.jobId)
             if (!contract) throw new Error("Contract not found")
             if (!contract._id) throw new Error("Contract id not found")
 
@@ -34,9 +33,6 @@ export class MilestoneUseCase implements IMilestoneUseCase {
                 milestone,
                 success: true
             }
-        } catch (error) {
-            throw error
-        }
     }
 
     async getMilestones(jobId: Types.ObjectId): Promise<GetMilestoneOutputDtos> {

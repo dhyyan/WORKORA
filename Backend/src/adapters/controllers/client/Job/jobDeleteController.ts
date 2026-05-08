@@ -18,7 +18,8 @@ export class JobDeleteController {
             }
             res.status(HttpStatus.OK).json({ message: "delete job successfully", success:true })
         } catch (error) {
-
+            console.error("Error in delete job:", error);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
         }
     }
 }

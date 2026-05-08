@@ -11,8 +11,7 @@ export class JobCreateUseCase implements IJobCreateUseCase {
         this._clientRepository = clientRepository
     }
     async create(input: JobCreateInputDtos): Promise<JobCreateOutPutDtos> {
-        try {
-            console.log("job data in usecase", input)
+        console.log("job data in usecase", input)
 
             const client = await this._clientRepository.findById(input.clientId);
             if (!client) throw new Error("Client not found");
@@ -37,9 +36,5 @@ export class JobCreateUseCase implements IJobCreateUseCase {
                 job,
                 success: true
             }
-
-        } catch (error) {
-            throw error
-        }
     }
 }

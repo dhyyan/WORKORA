@@ -18,7 +18,8 @@ export class JobViewController{
             res.status(HttpStatus.FORBIDDEN).json({message:"job fetch falied",success:false})
 
         } catch (error) {
-            
+            console.error("Error in view job:", error);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
         }
     }
 }

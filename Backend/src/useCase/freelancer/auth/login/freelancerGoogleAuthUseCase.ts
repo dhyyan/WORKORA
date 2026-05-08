@@ -1,4 +1,4 @@
-import { GoogeleAuthInputDtos, GoogeleAuthOutPutDtos } from "../../../../domain/interface/DTOs/client/AuthDto";
+import { GoogeleAuthInputDtos} from "../../../../domain/interface/DTOs/client/AuthDto";
 import { IClientRepository } from "../../../../domain/interface/repositoryInterface/IClientRepository";
 import { IFreelancerRepository } from "../../../../domain/interface/repositoryInterface/IFreelancerRepository";
 import { IJwtService } from "../../../../domain/interface/serviceInterface/IJwtService";
@@ -19,8 +19,7 @@ export class FreelancerGoogleAuthUseCase implements IGoogleAuthUseCase {
 
 
     async googleSign(input: GoogeleAuthInputDtos): Promise<any> {
-        try {
-            const payload = await verifyGoogleToken(input.token);
+        const payload = await verifyGoogleToken(input.token);
 
             if (!payload || !payload.email) {
                 throw new Error("Invalid Google token");
@@ -86,9 +85,6 @@ export class FreelancerGoogleAuthUseCase implements IGoogleAuthUseCase {
                 accessToken,
                 refreshToken,
             };
-        } catch (error) {
-            throw error;
-        }
     }
 
 }

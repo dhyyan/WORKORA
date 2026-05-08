@@ -1,4 +1,3 @@
-import { emitWarning } from "process";
 import { IApproveMilestonePaymentInputDtos, IApproveMilestonePaymentOutputDtos } from "../../../domain/interface/DTOs/client/milestoneDtos";
 import { IContractRepository } from "../../../domain/interface/repositoryInterface/IContractRepository";
 import { IJobRepository } from "../../../domain/interface/repositoryInterface/IJobRepository";
@@ -15,8 +14,7 @@ export class ApproveMilestonePaymentUsecase implements IApproveMilestonePaymentU
         this._jobRepository=jobRepository
     }
     async approvePayment(input: IApproveMilestonePaymentInputDtos): Promise<IApproveMilestonePaymentOutputDtos> {
-       try {
-        const findMilestone=await this._milestoneRepository.findById(input.milestoneId)
+       const findMilestone=await this._milestoneRepository.findById(input.milestoneId)
         if(!findMilestone)throw new Error("milestone in this id not find")
             console.log("finde Milestone",findMilestone)
 
@@ -38,8 +36,5 @@ export class ApproveMilestonePaymentUsecase implements IApproveMilestonePaymentU
         }
 
         return{success:true}
-       } catch (error) {
-        throw error
-       }
     }
 }

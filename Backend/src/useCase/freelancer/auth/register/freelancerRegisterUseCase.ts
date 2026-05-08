@@ -1,4 +1,3 @@
-import { error } from "console";
 import { FreelancerRegisterInputDtos, FreelancerRegisterOutputDtos } from "../../../../domain/interface/DTOs/freelancer/authDtos";
 import { IClientRepository } from "../../../../domain/interface/repositoryInterface/IClientRepository";
 import { IFreelancerRepository } from "../../../../domain/interface/repositoryInterface/IFreelancerRepository";
@@ -28,9 +27,9 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
 
         if (freelancerExist || clientExist) throw new Error("user in this email already exist")
 
-        let hashPassword = await this._hashPassword.hashPassword(password)
+        const hashPassword = await this._hashPassword.hashPassword(password)
 
-        let newUser = await this._freelancerRepository.create({
+        const newUser = await this._freelancerRepository.create({
             
             name,
             email,
@@ -49,9 +48,11 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
             isBlocked: false,
             googleId:""
         })
+        
+        if (!newUser) throw new Error("Error while creating new User")
 
         const walletData: IWallet = {
-                    userId:newUser?._id!,
+                    userId:newUser._id!,
                     role:"freelancer",
                     balance:0,
         
@@ -60,7 +61,6 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
                 const wallet = await this._walletRepository.create(walletData)
                 console.log("wallet created",wallet)
         
-        if (!newUser) throw new Error("Error while creating new User")
 
         const returnUser: FreelancerRegisterOutputDtos = {
             _id: newUser._id!,
@@ -81,8 +81,5 @@ export class FreelacerRegisterUseCase implements IFreelancerRegisterUseCase {
             
         }
         return returnUser
-
-
-
     }
 }

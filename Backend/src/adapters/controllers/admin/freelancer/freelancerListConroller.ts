@@ -21,11 +21,15 @@ export class FreelancerListController {
 
             const response = await this._freelancerListUseCase.listFreelancer({page,limit,search})
             
-            if(response)res.status(HttpStatus.OK).json({ message: "fetch freelancer Datas success", response })
-                res.status(HttpStatus.FORBIDDEN).json({ message: "fetch freelancer Datas failed"})
+            if(response) {
+                res.status(HttpStatus.OK).json({ message: "fetch freelancer Datas success", response })
+                return;
+            }
+            res.status(HttpStatus.FORBIDDEN).json({ message: "fetch freelancer Datas failed"})
             
         } catch (error) {
-
+            console.error("Error in listFreelancer:", error);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
         }
     }
 }

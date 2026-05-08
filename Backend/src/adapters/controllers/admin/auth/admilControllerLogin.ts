@@ -18,7 +18,7 @@ export class AdminLoginController{
         }
 
         try {
-            const { createdUser, accessToken, refreshToken } = await this._clientLoginUseCase.logiClient({ email, password })
+            const { createdUser, accessToken} = await this._clientLoginUseCase.logiClient({ email, password })
             
             const data = {
                 email: createdUser.email,

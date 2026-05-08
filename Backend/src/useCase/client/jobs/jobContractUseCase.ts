@@ -13,8 +13,7 @@ export class JobContractUseCase implements IJobContractUseCase {
         this._freelancerRepository = freelancerRepository
     }
     async contractDetails(input: JobContractInputDtos): Promise<JobContractOutPutDtos> {
-        try {
-            const { id } = input
+        const { id } = input
             console.log("id in useace con", id)
 
             const ifContract = await this._contractRepository.findContractByJobId(id)
@@ -44,9 +43,5 @@ export class JobContractUseCase implements IJobContractUseCase {
                 profileImage: ifFreelancer?.profileImage
             }
             return { contract, freelancer }
-
-        } catch (error) {
-            throw error
-        }
     }
 }

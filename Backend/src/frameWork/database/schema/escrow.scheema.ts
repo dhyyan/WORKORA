@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema} from "mongoose";
 import { Escrow } from "../../../domain/entities/escrow.entity";
 
 export const escrowScheema= new Schema<Escrow>({

@@ -8,8 +8,7 @@ export class ListBidUsecase implements IListBidUsecase {
         this._bidRepository = bidRepository
     }
     async listBids(input: ListBidInputDtos): Promise<ListBidOutputDtos> {
-        try {
-            const bidList = await this._bidRepository.findAllBids(input.freelancerId)
+        const bidList = await this._bidRepository.findAllBids(input.freelancerId)
             if (!bidList) throw new Error("bids in this freelancer id not found")
                 console.log("bidsse ",bidList)
             
@@ -24,8 +23,5 @@ export class ListBidUsecase implements IListBidUsecase {
             }))
 
             return { bids }
-        } catch (error) {
-            throw error
-        }
     }
 }

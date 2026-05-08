@@ -23,7 +23,7 @@ export class FreelancerForgotPassUseCase implements IFreelancerForgotPassUseCase
         console.log("emailll",email)
         if(!email)throw new Error("email field are missing")
         const fExist=await this._freelancerRepo.findByEmail(email)
-        const cExist=await this._clientRepo.findByEmail(email)
+        const _cExist=await this._clientRepo.findByEmail(email)
 
         console.log("before",fExist)
         if(!fExist)throw new Error("User in this email not found")

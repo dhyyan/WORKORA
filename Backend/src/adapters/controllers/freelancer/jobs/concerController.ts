@@ -17,7 +17,7 @@ export class ConcernController {
             else {
                 res.status(HttpStatus.BAD_REQUEST).json({ success: false, message: "Concern not created" })
             }
-        } catch (error) {
+        } catch (_error) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" })
         }
     }

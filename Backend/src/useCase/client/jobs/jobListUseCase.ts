@@ -8,8 +8,7 @@ export class JobListUseCase implements IJobListUseCase {
         this._jobRepository = jobRepository
     }
     async listJobs(input: JobListInputDtos): Promise<JobListOutPutDtos> {
-        try {
-            if (!input.id) {
+        if (!input.id) {
                 throw new Error("user id is missing");
             }
             console.log("id in use case", input.id);
@@ -33,9 +32,6 @@ export class JobListUseCase implements IJobListUseCase {
             }));
 
             return { jobs, totalJobs: response.totalJobs };
-        } catch (error) {
-            throw error;
-        }
     }
 
 }

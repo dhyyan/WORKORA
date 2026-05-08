@@ -11,8 +11,7 @@ export class ConcernUseCase implements IConcernUseCase {
         this._contractRepository = contractRepository
     }
     async create(input: IConcerInputDtos): Promise<IConcerOutputDtos> {
-        try {
-            const contract = await this._contractRepository.findById(input.contractId)
+        const contract = await this._contractRepository.findById(input.contractId)
             if (!contract) {
                 throw new Error("Contract not found")
             }
@@ -25,9 +24,6 @@ export class ConcernUseCase implements IConcernUseCase {
             })
             console.log("concern created", concern)
             return concern as IConcerOutputDtos
-        } catch (error) {
-            throw error
-        }
     }
 }
 

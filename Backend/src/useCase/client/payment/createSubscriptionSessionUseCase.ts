@@ -9,12 +9,9 @@ export class CreateSubscriptionSessionUseCase implements ICreateSubscriptionSess
     }
 
     async execute(input: SubscriptionInputDto): Promise<string | null> {
-        let priceId = "";
-        if (input.role === "client") {
-            priceId = process.env.STRIPE_CLIENT_PRICE_ID!;
-        } else {
-            priceId = process.env.STRIPE_FREELANCER_PRICE_ID!;
-        }
+        const priceId = input.role === "client" 
+            ? process.env.STRIPE_CLIENT_PRICE_ID! 
+            : process.env.STRIPE_FREELANCER_PRICE_ID!;
 
         if (!priceId || priceId.includes("placeholder")) {
             throw new Error("Stripe Price ID is not configured. Please check .env file.");

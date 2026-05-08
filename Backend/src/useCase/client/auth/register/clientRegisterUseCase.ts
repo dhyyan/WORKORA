@@ -1,4 +1,3 @@
-import { Client } from "../../../../domain/entities/client.entity";
 import { IWallet } from "../../../../domain/entities/wallet.entity";
 import { ClientRegisterInputDto, ClientRegisteroutputDto } from "../../../../domain/interface/DTOs/client/AuthDto";
 import { IClientRepository } from "../../../../domain/interface/repositoryInterface/IClientRepository";

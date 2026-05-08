@@ -35,7 +35,7 @@ export interface JobCreateInputDtos {
 
 export interface JobCreateOutPutDtos {
     job: BaseJobOutPutDtos,
-    success: Boolean
+    success: boolean
 }
 
 export interface JobListInputDtos {

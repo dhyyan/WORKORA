@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import  { Schema } from "";
 import { IChat } from "../../../domain/entities/chat.entity";
 
 export const chatSchema= new Schema<IChat>({

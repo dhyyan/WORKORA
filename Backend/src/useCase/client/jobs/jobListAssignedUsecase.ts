@@ -1,4 +1,3 @@
-import { title } from "process";
 import { JobListAssignInputDtos, JobListAssignOutputDtos } from "../../../domain/interface/DTOs/client/JobDto";
 import { IJobRepository } from "../../../domain/interface/repositoryInterface/IJobRepository";
 import { IJobListAssignedUseCase } from "../../../domain/interface/useCaseInterface/client/jobs/IJobListAssignedUsecase";
@@ -9,8 +8,7 @@ export class JobListAssignedUsecase implements IJobListAssignedUseCase {
         this._jobRepository = jobRepository
     }
     async listJobs(input: JobListAssignInputDtos): Promise<JobListAssignOutputDtos[]> {
-        try {
-            const joblist = await this._jobRepository.findAll({ clientId: input.clientId, status: { $in: ["assigned", "closed"] } })
+        const joblist = await this._jobRepository.findAll({ clientId: input.clientId, status: { $in: ["assigned", "closed"] } })
             if (!joblist) throw new Error("jobs in this client not found")
 
             // const jobs = 
@@ -26,10 +24,6 @@ export class JobListAssignedUsecase implements IJobListAssignedUseCase {
                 price: job.price,
                 status: job.status as "assigned" | "closed",
             }));
-
-        } catch (error) {
-            throw error
-        }
 
     }
 }

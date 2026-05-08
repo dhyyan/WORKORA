@@ -12,9 +12,7 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
         console.log("update Profile usecase data", input)
         // const {name,email,phone,bio,experience,skill}=input
 
-        try {
-
-            const exist = await this._freelancerRepository.findByEmail(input.email)
+        const exist = await this._freelancerRepository.findByEmail(input.email)
             if (!exist) throw new Error("user in this email not existed")
             const { name, phone, bio, experience, skills, gitHubUrl, linkedInUrl, profileImage } = input
             const update = await this._freelancerRepository.update(exist._id!, {
@@ -53,9 +51,5 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
                 updatedFreelancer,
                 success: true
             }
-
-        } catch (error) {
-            throw error
-        }
     }
 }

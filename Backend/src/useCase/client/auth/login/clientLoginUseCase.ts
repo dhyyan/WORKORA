@@ -1,9 +1,6 @@
-import { Client } from "../../../../domain/entities/client.entity";
-import { IWallet } from "../../../../domain/entities/wallet.entity";
 import { BaseClientOutputDtos, ClientLoginInputdDto, ClientLoginOutputdDto } from "../../../../domain/interface/DTOs/client/AuthDto";
 import { IClientRepository } from "../../../../domain/interface/repositoryInterface/IClientRepository";
 import { IFreelancerRepository } from "../../../../domain/interface/repositoryInterface/IFreelancerRepository";
-import { IWalletRepository } from "../../../../domain/interface/repositoryInterface/IWalletRepository";
 import { IHashPassword } from "../../../../domain/interface/serviceInterface/IHashPassword";
 import { IJwtService } from "../../../../domain/interface/serviceInterface/IJwtService";
 import { IClientLoginUseCase } from "../../../../domain/interface/useCaseInterface/client/auth/login/IClientLoginUseCase";

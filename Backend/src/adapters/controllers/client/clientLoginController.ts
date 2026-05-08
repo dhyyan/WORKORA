@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { IClientLoginUseCase } from "../../../domain/interface/useCaseInterface/client/auth/login/IClientLoginUseCase";
 import { HttpStatus } from "../../../domain/entities/httpStatus";
 import { setCookie } from "../../../frameWork/service/tokenCookes";
-import { profile } from "console";
 
 export class ClientLogin {
     private _clientLoginUseCase: IClientLoginUseCase

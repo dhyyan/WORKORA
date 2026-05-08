@@ -23,8 +23,7 @@ export class HireFreelancerUseCase implements IHireFreelancerUseCase {
         this._chatRepository = chatRepository
     }
     async hireFreelancer(input: HireFreelancerInputDtos): Promise<HireFreelancerOutputDtos> {
-        try {
-            const { bidId, jobId, freelancerId, totalAmount } = input
+        const { bidId, jobId, freelancerId } = input
             console.log("data in hired freeelancere", input)
 
             const freelancer = await this._freelancerRepository.findById(freelancerId)
@@ -40,7 +39,7 @@ export class HireFreelancerUseCase implements IHireFreelancerUseCase {
             if (!createContract || !createContract._id) throw new Error("error while creating new contract")
 
             const bid: Partial<Bid> = {
-                status: "accepted" as "accepted"
+                status: "accepted"
             }
             const id = bidId
             const updateBid = await this._bidRepository.updateBid(id, bid)
@@ -73,9 +72,5 @@ export class HireFreelancerUseCase implements IHireFreelancerUseCase {
                 status: "active"
             }
             return { contract }
-
-        } catch (error) {
-            throw error
-        }
     }
 }

@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema} from "mongoose";
 import { Job } from "../../../domain/entities/job.entity";
 
 export const jobSchema = new Schema<Job>(

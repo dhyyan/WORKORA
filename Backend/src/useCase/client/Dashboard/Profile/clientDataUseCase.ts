@@ -9,8 +9,7 @@ export class ClientDataUseCasse implements IClientDataUseCase {
         this._clientRepository = clientRepository
     }
     async fetchData(input: ClientDataInputDtos): Promise<ClientDataOutputDtos> {
-        try {
-            const user = await this._clientRepository.findById(input.userId)
+        const user = await this._clientRepository.findById(input.userId)
             if (!user) throw new Error("user in this id not found")
             const client: BaseClientOutputDtos = {
                 _id: user._id,
@@ -29,8 +28,5 @@ export class ClientDataUseCasse implements IClientDataUseCase {
                 client,
                 success:true
             }
-        } catch (error) {
-            throw error
-        }
     }
 }

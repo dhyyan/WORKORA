@@ -1,4 +1,4 @@
-import e from "cors";
+
 import { BlockUserInputDtos, BlockUserOutputDtos } from "../../../domain/interface/DTOs/admin/client/clientDtos";
 import { IClientRepository } from "../../../domain/interface/repositoryInterface/IClientRepository";
 import { IFreelancerRepository } from "../../../domain/interface/repositoryInterface/IFreelancerRepository";
@@ -12,8 +12,7 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
         this._freelancerRepository = freelancerRepository
     }
     async block(input: BlockUserInputDtos): Promise<BlockUserOutputDtos> {
-        try {
-            if (input.isBlocked==true) {
+        if (input.isBlocked==true) {
                  
                  const client = await this._clientRepository.findById(input.id);
                 console.log("clienttt",client)
@@ -21,7 +20,7 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
                 if (client) {
                     if (!client._id) throw new Error("Client id is missing");
     
-                    const blockedClient =await this._clientRepository.update(client._id, {isBlocked: false,});
+                    const _blockedClient =await this._clientRepository.update(client._id, {isBlocked: false,});
     
                     return {
                         success: true,
@@ -35,7 +34,7 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
                 if (freelancer) {
                     if (!freelancer._id) throw new Error("Freelancer id is missing");
     
-                    const blockedFreelancer =
+                    const _blockedFreelancer =
                         await this._freelancerRepository.update(freelancer._id, {
                             isBlocked: false,
                         });
@@ -55,7 +54,7 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
                  if (client) {
                      if (!client._id) throw new Error("Client id is missing");
                      
-                     const blockedClient =await this._clientRepository.update(client._id, {
+                     const _blockedClient =await this._clientRepository.update(client._id, {
                          isBlocked: true,
                         });
                         // console.log("blocked",blockedClient)
@@ -72,7 +71,7 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
                 if (freelancer) {
                     if (!freelancer._id) throw new Error("Freelancer id is missing");
 
-                    const blockedFreelancer =
+                    const _blockedFreelancer =
                         await this._freelancerRepository.update(freelancer._id, {
                             isBlocked: true,
                         });
@@ -86,8 +85,5 @@ export class UserBlockUseCase implements IBlockUserUSeCase {
 
             }
             throw new Error("User not found");
-        } catch (error) {
-            throw error;
-        }
     }
 }

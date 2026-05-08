@@ -9,13 +9,17 @@ export class MilestoneListController {
     }
     async list(req: Request, res: Response): Promise<void> {
         try {
-            const page = parseInt(req.query.page as string)
-            const limit = parseInt(req.query.limit as string)
+            const page = parseInt(req.query.page as string) || 1
+            const limit = parseInt(req.query.limit as string) || 10
             const response = await this._milestoneUsecase.listMilestone({page,limit})
-            if(!response)res.status(HttpStatus.FORBIDDEN).json({message:"error while listing milestones"})
-                res.status(HttpStatus.OK).json({message:"listing milestones success",response})
+            if(!response) {
+                res.status(HttpStatus.FORBIDDEN).json({message:"error while listing milestones"})
+                return;
+            }
+            res.status(HttpStatus.OK).json({message:"listing milestones success",response})
         } catch (error) {
-
+            console.error("Error in MilestoneListController.list:", error);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
         }
     }
 }

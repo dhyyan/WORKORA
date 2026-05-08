@@ -14,7 +14,7 @@ export class FreelancerUpdateProfileController{
 
         try {
             const response = await this._updateProfileUseCase.update({ name, email, phone, bio, experience, skills, gitHubUrl, linkedInUrl, profileImage })
-            const { updatedFreelancer, success } = response
+            const { updatedFreelancer} = response
             if (!updatedFreelancer) {
                 res.status(HttpStatus.BAD_REQUEST).json({ message: "user while updating error", success: false })
                 return

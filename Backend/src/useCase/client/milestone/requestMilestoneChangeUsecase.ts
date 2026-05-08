@@ -8,8 +8,7 @@ export class RequestMilestoneChangeUsecase implements IRequestMilestoneChangeUse
         this._milestoneRepository = milestoneRepository
     }
     async requestChange(input: IRequestMilestoneChangeInputDtos): Promise<IRequestMilestoneChangeOutputDtos> {
-        try {
-            const findMilestone = await this._milestoneRepository.findById(input.milestoneId)
+        const findMilestone = await this._milestoneRepository.findById(input.milestoneId)
             if (!findMilestone) throw new Error("milestone in this id not find")
             console.log("finde Milestone", findMilestone)
 
@@ -18,11 +17,5 @@ export class RequestMilestoneChangeUsecase implements IRequestMilestoneChangeUse
                 console.log("updateMilestone",updateMilestone)
 
             return{success:true}
-
-
-        } catch (error) {
-            throw error
-
-        }
     }
 }

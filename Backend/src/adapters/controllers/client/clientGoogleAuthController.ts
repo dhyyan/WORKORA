@@ -12,7 +12,7 @@ export class ClientGoogleController {
         try {
             const { token } = req.body
             console.log("google token in controller", token)
-            const { client, accessToken, refreshToken } = await this._googleAuthUseCase.googleSign({ token })
+            const { client, accessToken} = await this._googleAuthUseCase.googleSign({ token })
             if (client) {
                 res.status(HttpStatus.OK).json({ message: "google sign success", data: client, accessToken })
             }

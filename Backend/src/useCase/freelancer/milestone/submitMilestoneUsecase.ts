@@ -10,15 +10,13 @@ export class SubmitMilestoneUsecase implements ISubmitMilestoneUseCase{
     }
     async sumbitTask(input: SubmitMilestoneInputDtos): Promise<SubmitMilestoneOutputDtos> {
 
-        try {
-            
-            let id=input.milestoneId
+        const id=input.milestoneId
             console.log("mile id",id)
             const findMilestone=await this._milestoneRepository.findById(id)
             if(!findMilestone)throw new Error("milestone in this id not found")
     
-                let taskUrl=input.taskUrl
-                let description=input.description
+                const taskUrl=input.taskUrl
+                const description=input.description
 
 
                 const updateMilestone=await this._milestoneRepository.update(id,{taskUrl,description,status:"submited"})
@@ -26,9 +24,6 @@ export class SubmitMilestoneUsecase implements ISubmitMilestoneUseCase{
                     console.log("updated milestone",updateMilestone)
 
                 return{success:true}
-        } catch (error) {
-            throw error
-        }
 
             
 
