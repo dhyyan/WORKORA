@@ -9,7 +9,7 @@ interface RaiseDisputeModalProps {
     contractId: string;
     milestoneId: string;
     amount: number;
-    onSubmit: (data: { contractId: string, description: string, amount: number, milestoneId: string }) => void;
+    onSubmit: (data: { contractId: string, description: string, amount: number, milestoneId: string }) => Promise<void> | void;
 }
 
 const RaiseDisputeModal = ({ isOpen, onClose, milestoneTitle, contractId, milestoneId, amount, onSubmit }: RaiseDisputeModalProps) => {
@@ -19,10 +19,13 @@ const RaiseDisputeModal = ({ isOpen, onClose, milestoneTitle, contractId, milest
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        await onSubmit({ contractId, description, amount, milestoneId });
-        setDescription("");
-        setIsSubmitting(false);
-        onClose();
+        try {
+            await onSubmit({ contractId, description, amount, milestoneId });
+            setDescription("");
+            onClose();
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (

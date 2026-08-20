@@ -8,7 +8,7 @@ interface SubmitWorkModalProps {
     onClose: () => void;
     milestoneTitle: string;
     milestoneId:string;
-    onSubmit: (data:SubmitMiestone) => void;
+    onSubmit: (data:SubmitMiestone) => Promise<void> | void;
 }
 
 const SubmitWorkModal = ({ isOpen, onClose, milestoneTitle,milestoneId, onSubmit }: SubmitWorkModalProps) => {
@@ -19,12 +19,15 @@ const SubmitWorkModal = ({ isOpen, onClose, milestoneTitle,milestoneId, onSubmit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate real API submission delay if needed, or wait for parent
-        onSubmit({ milestoneId,taskUrl, description });
-        setTaskUrl("");
-        setDescription("");
-        setIsSubmitting(false);
-        onClose();
+        try {
+            // Simulate real API submission delay if needed, or wait for parent
+            await onSubmit({ milestoneId,taskUrl, description });
+            setTaskUrl("");
+            setDescription("");
+            onClose();
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (

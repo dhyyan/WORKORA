@@ -7,7 +7,7 @@ interface ApplyBidModalProps {
     onClose: () => void;
     jobTitle: string;
     jobBudget?: number | string;
-    onSubmit: (data: { coverLetter: string; bidAmount: string }) => void;
+    onSubmit: (data: { coverLetter: string; bidAmount: string }) => Promise<void> | void;
 }
 
 const ApplyBidModal = ({ isOpen, onClose, jobTitle, jobBudget, onSubmit }: ApplyBidModalProps) => {
@@ -18,13 +18,16 @@ const ApplyBidModal = ({ isOpen, onClose, jobTitle, jobBudget, onSubmit }: Apply
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate a small delay for better UX (feeling of "processing")
-        // await new Promise(resolve => setTimeout(resolve, 800));
-        onSubmit({ coverLetter, bidAmount });
-        setCoverLetter("")
-        setBidAmount("")
-        setIsSubmitting(false);
-        onClose();
+        try {
+            // Simulate a small delay for better UX (feeling of "processing")
+            // await new Promise(resolve => setTimeout(resolve, 800));
+            await onSubmit({ coverLetter, bidAmount });
+            setCoverLetter("")
+            setBidAmount("")
+            onClose();
+        } finally {
+            setIsSubmitting(false);
+        }
     }; 
 
     return (
