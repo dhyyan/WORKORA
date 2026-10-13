@@ -3,7 +3,7 @@
 
 **Workora** is an enterprise-grade, full-stack freelancing marketplace platform that seamlessly connects **Clients** looking to post projects with **Freelancers** bidding on opportunities. Engineered with strict **Clean Architecture**, real-time **Socket.IO messaging**, automated **Stripe Escrow Payments**, milestone tracking, subscription tiers, and administrative dispute resolution.
 
----
+--
 
 ## 📌 Table of Contents
 
@@ -295,7 +295,7 @@ Workora uses **Husky** and **Lint-Staged** to maintain strict code quality stand
   ```bash
   cd Backend
   npm run lint
-  ```
+  ``` 
 
 - **Lint Frontend**:
   ```bash
@@ -306,5 +306,5 @@ Workora uses **Husky** and **Lint-Staged** to maintain strict code quality stand
 ---
 
 <p center>
-  Developed with ❤️ by <a href="https://github.com/dhyyan">Dhyan</a>
+  Developed with Dhyan by <a href="https://github.com/dhyyan">Dhyan</a>
 </p>
